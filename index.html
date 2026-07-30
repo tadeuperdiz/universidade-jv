@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Universidade JV — Jerônimo da Veiga</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:#F4F3FB;min-height:100vh;color:#1a1035}
+
+/* LOGIN */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#1a1035;padding:20px}
+.login-box{background:white;border-radius:20px;padding:40px;width:100%;max-width:380px;text-align:center}
+.login-logo{font-size:13px;font-weight:700;color:#534AB7;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.login-nome{font-size:22px;font-weight:700;color:#1a1035;margin-bottom:4px}
+.login-sub{font-size:13px;color:#888;margin-bottom:28px}
+.login-box input{width:100%;padding:12px 16px;border:1.5px solid #E8E6F8;border-radius:10px;font-size:14px;margin-bottom:12px;outline:none;color:#1a1035}
+.login-box input:focus{border-color:#534AB7}
+.login-btn{width:100%;padding:13px;background:#534AB7;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px}
+.login-btn:hover{background:#3C3489}
+.login-err{color:#E24B4A;font-size:12px;margin-top:8px;display:none}
+.login-adm{font-size:12px;color:#aaa;margin-top:16px;cursor:pointer;text-decoration:underline}
+
+/* LAYOUT PRINCIPAL */
+.app{display:none;min-height:100vh;flex-direction:row}
+.app.active{display:flex}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:#1a1035;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:50}
+.sidebar-logo{padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sidebar-tag{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px}
+.sidebar-name{font-size:15px;font-weight:700;color:#F5D98A}
+.sidebar-nav{flex:1;padding:12px 8px;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;margin-bottom:3px;transition:all .15s;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,.07)}
+.nav-item.active{background:rgba(245,217,138,.12);border-left:3px solid #F5D98A}
+.nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+.nav-label{font-size:13px;color:rgba(255,255,255,.55);font-weight:400}
+.nav-item.active .nav-label{color:#F5D98A;font-weight:600}
+.sidebar-user{padding:12px 16px;border-top:1px solid rgba(255,255,255,.08)}
+.user-row{display:flex;align-items:center;gap:10px}
+.user-av{width:34px;height:34px;border-radius:50%;background:#534AB7;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.user-name{font-size:12px;color:rgba(255,255,255,.7);font-weight:600}
+.user-role{font-size:10px;color:rgba(255,255,255,.35)}
+.user-sair{font-size:10px;color:rgba(255,255,255,.3);cursor:pointer;margin-top:2px;text-decoration:underline}
+
+/* MAIN */
+.main{margin-left:220px;flex:1;min-height:100vh}
+
+/* PÁGINAS */
+.page{display:none;padding:32px}
+.page.active{display:block}
+
+/* HOME */
+.home-banner{background:#1a1035;border-radius:16px;padding:28px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between}
+.home-ola{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
+.home-sub{font-size:13px;color:rgba(255,255,255,.5)}
+.home-prog-circle{width:64px;height:64px;border-radius:50%;border:3px solid #F5D98A;display:flex;align-items:center;justify-content:center;color:#F5D98A;font-size:16px;font-weight:700;flex-shrink:0}
+
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.stat-card{background:white;border-radius:12px;padding:16px;border:1px solid #EEEDFE}
+.stat-n{font-size:28px;font-weight:700;color:#534AB7;margin-bottom:2px}
+.stat-l{font-size:11px;color:#888;font-weight:500}
+
+.section-title{font-size:12px;font-weight:700;color:#534AB7;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.section-title::after{content:'';flex:1;height:1px;background:#E8E6F8}
+
+/* CARDS SEÇÕES */
+.secoes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.secao-card{background:white;border:1px solid #EEEDFE;border-radius:14px;padding:20px;cursor:pointer;transition:all .2s}
+.secao-card:hover{border-color:#534AB7;transform:translateY(-2px);box-shadow:0 4px 20px rgba(83,74,183,.1)}
+.secao-icon{font-size:32px;margin-bottom:10px}
+.secao-nome{font-size:14px;font-weight:700;color:#1a1035;margin-bottom:4px}
+.secao-desc{font-size:12px;color:#888;line-height:1.5}
+.secao-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:#EEEDFE;color:#534AB7;margin-top:8px}
+
+/* CULTURA */
+.pilares-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.pilar-card{border-radius:14px;padding:20px;border:1px solid var(--border-cor)}
+.pilar-num{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.pilar-nome{font-size:16px;font-weight:700;margin-bottom:8px}
+.pilar-frase{font-size:13px;font-weight:600;padding:10px 14px;border-radius:8px;margin-bottom:10px;line-height:1.5}
+.pilar-items{display:flex;flex-direction:column;gap:5px}
+.pilar-item{font-size:11px;padding-left:10px;border-left:2px solid;opacity:.75;line-height:1.5}
+.pilar-destaque{background:#1a1035;border-radius:14px;padding:20px 24px}
+.pilar-destaque-nome{font-size:18px;font-weight:700;color:#fff;margin-bottom:8px}
+.pilar-destaque-frase{font-size:13px;font-weight:600;color:#F5D98A;padding:10px 14px;background:rgba(245,217,138,.1);border-radius:8px;border-left:3px solid #F5D98A;margin-bottom:10px;line-height:1.5}
+.pilar-destaque-item{font-size:11px;color:rgba(255,255,255,.6);padding-left:10px;border-left:2px solid rgba(245,217,138,.4);line-height:1.5;margin-bottom:4px}
+.frase-guarda{background:#EEEDFE;border-radius:12px;padding:16px 20px;text-align:center;font-size:13px;font-style:italic;color:#3C3489;line-height:1.7;margin-top:16px}
+
+/* DOCUMENTOS */
+.links-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.link-card{background:white;border:1px solid #EEEDFE;border-radius:12px;padding:16px;display:flex;flex-direction:column;align-items:center;text-align:center;text-decoration:none;transition:all .2s}
+.link-card:hover{border-color:#534AB7;transform:translateY(-2px)}
+.link-icon-wrap{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:10px}
+.link-nome{font-size:13px;font-weight:700;color:#1a1035;margin-bottom:4px}
+.link-desc{font-size:11px;color:#888;line-height:1.5;margin-bottom:10px;flex:1}
+.link-btn-a{font-size:11px;font-weight:700;padding:7px 14px;border-radius:8px;border:none;cursor:pointer;width:100%;text-decoration:none;display:block;text-align:center}
+
+.docs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.doc-card{background:white;border:1px solid #EEEDFE;border-radius:14px;overflow:hidden;transition:all .2s}
+.doc-card:hover{border-color:#534AB7;transform:translateY(-2px);box-shadow:0 4px 20px rgba(83,74,183,.1)}
+.doc-img{width:100%;height:200px;object-fit:cover;object-position:top;border-bottom:1px solid #EEEDFE}
+.doc-pdf-prev{width:100%;height:200px;background:linear-gradient(135deg,#E6F1FB,#B5D4F4);display:flex;flex-direction:column;align-items:center;justify-content:center;border-bottom:1px solid #EEEDFE}
+.doc-info{padding:14px 16px}
+.doc-tag{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+.tag-jv{background:#EEEDFE;color:#534AB7}
+.tag-cef{background:#E6F1FB;color:#185FA5}
+.doc-nome{font-size:13px;font-weight:700;color:#1a1035;margin-bottom:4px}
+.doc-desc{font-size:11px;color:#888;line-height:1.5;margin-bottom:10px}
+.doc-dl{width:100%;padding:9px;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;transition:all .2s}
+
+/* EM BREVE */
+.em-breve{text-align:center;padding:60px 20px}
+.em-breve-icon{font-size:56px;margin-bottom:16px}
+.em-breve-title{font-size:20px;font-weight:700;color:#1a1035;margin-bottom:8px}
+.em-breve-sub{font-size:14px;color:#888}
+
+/* ACADEMY EMBED */
+.academy-frame{background:white;border-radius:16px;padding:24px;border:1px solid #EEEDFE}
+.academy-info{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #EEEDFE}
+.academy-icon{width:48px;height:48px;border-radius:12px;background:#EEEDFE;display:flex;align-items:center;justify-content:center;font-size:24px}
+.academy-title{font-size:16px;font-weight:700;color:#1a1035}
+.academy-sub{font-size:12px;color:#888;margin-top:2px}
+.academy-btn{background:#534AB7;color:white;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+.academy-btn:hover{background:#3C3489}
+.modulos-lista{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mod-item{background:#F4F3FB;border-radius:10px;padding:12px;border:1px solid #EEEDFE}
+.mod-item.done{border-color:#C9920A;background:#FAEEDA}
+.mod-item-icon{font-size:20px;margin-bottom:6px}
+.mod-item-nome{font-size:12px;font-weight:700;color:#1a1035}
+.mod-item-status{font-size:10px;color:#888;margin-top:3px}
+.mod-item.done .mod-item-status{color:#C9920A}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">Universidade</div>
+    <div class="login-nome">Jerônimo da Veiga</div>
+    <div class="login-sub">Acesse com seu nome e CRECI</div>
+    <input type="text" id="inp-nome" placeholder="Seu nome completo" onkeydown="if(event.key==='Enter')fazerLogin()"/>
+    <input type="text" id="inp-creci" placeholder="CRECI" onkeydown="if(event.key==='Enter')fazerLogin()"/>
+    <button class="login-btn" onclick="fazerLogin()">Entrar na Universidade</button>
+    <div class="login-err" id="login-err">Preencha seu nome e CRECI para continuar.</div>
+    <div class="login-adm" onclick="loginAdm()">Acesso administrador</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-tag">Universidade</div>
+      <div class="sidebar-name">Jerônimo da Veiga</div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-item active" onclick="irPara('home',this)">
+        <span class="nav-icon">🏠</span><span class="nav-label">Home</span>
+      </div>
+      <div class="nav-item" onclick="irPara('academy',this)">
+        <span class="nav-icon">🎓</span><span class="nav-label">Academy</span>
+      </div>
+      <div class="nav-item" onclick="irPara('cultura',this)">
+        <span class="nav-icon">🧬</span><span class="nav-label">Cultura JV</span>
+      </div>
+      <div class="nav-item" onclick="irPara('vendas',this)">
+        <span class="nav-icon">🎯</span><span class="nav-label">Escola de Vendas</span>
+      </div>
+      <div class="nav-item" onclick="irPara('documentos',this)">
+        <span class="nav-icon">📁</span><span class="nav-label">Documentos</span>
+      </div>
+      <div class="nav-item" onclick="irPara('agenda',this)">
+        <span class="nav-icon">📅</span><span class="nav-label">Agenda</span>
+      </div>
+      <div class="nav-item" onclick="irPara('aniversariantes',this)">
+        <span class="nav-icon">🎂</span><span class="nav-label">Aniversariantes</span>
+      </div>
+      <div class="nav-item" onclick="irPara('campanhas',this)">
+        <span class="nav-icon">📱</span><span class="nav-label">Campanhas</span>
+      </div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-row">
+        <div class="user-av" id="user-av">?</div>
+        <div>
+          <div class="user-name" id="user-name">Colaborador</div>
+          <div class="user-role">Comercial JV</div>
+          <div class="user-sair" onclick="sair()">Sair</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+      <div class="home-banner">
+        <div>
+          <div class="home-ola" id="home-ola">Olá! 👋</div>
+          <div class="home-sub">Bem-vindo à Universidade Jerônimo da Veiga</div>
+        </div>
+        <div class="home-prog-circle">JV</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-n" style="color:#534AB7">8</div><div class="stat-l">Seções disponíveis</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:#C9920A">5</div><div class="stat-l">Módulos Academy</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:#3B6D11">4</div><div class="stat-l">Documentos</div></div>
+        <div class="stat-card"><div class="stat-n" style="color:#185FA5">3</div><div class="stat-l">Links úteis</div></div>
+      </div>
+      <div class="section-title">Navegue pela plataforma</div>
+      <div class="secoes-grid">
+        <div class="secao-card" onclick="irParaClick('academy')">
+          <div class="secao-icon">🎓</div>
+          <div class="secao-nome">Academy</div>
+          <div class="secao-desc">Treinamento e certificação Conceito Poá — módulos completos com quiz e certificado</div>
+          <span class="secao-badge">5 módulos</span>
+        </div>
+        <div class="secao-card" onclick="irParaClick('cultura')">
+          <div class="secao-icon">🧬</div>
+          <div class="secao-nome">Cultura JV</div>
+          <div class="secao-desc">Os 5 pilares que definem quem somos — valores, comportamentos e o jeito JV de ser</div>
+          <span class="secao-badge">5 pilares</span>
+        </div>
+        <div class="secao-card" onclick="irParaClick('vendas')">
+          <div class="secao-icon">🎯</div>
+          <div class="secao-nome">Escola de Vendas</div>
+          <div class="secao-desc">Playbooks, scripts, técnicas e tratamento de objeções para o time comercial</div>
+          <span class="secao-badge" style="background:#EAF3DE;color:#3B6D11">Em breve</span>
+        </div>
+        <div class="secao-card" onclick="irParaClick('documentos')">
+          <div class="secao-icon">📁</div>
+          <div class="secao-nome">Documentos</div>
+          <div class="secao-desc">Listas de documentos CLT e Autônomo, modelos e formulários para baixar</div>
+          <span class="secao-badge">4 documentos</span>
+        </div>
+        <div class="secao-card" onclick="irParaClick('agenda')">
+          <div class="secao-icon">📅</div>
+          <div class="secao-nome">Agenda</div>
+          <div class="secao-desc">Calendário de treinamentos, eventos e convenções do time comercial JV</div>
+          <span class="secao-badge" style="background:#EAF3DE;color:#3B6D11">Em breve</span>
+        </div>
+        <div class="secao-card" onclick="irParaClick('campanhas')">
+          <div class="secao-icon">📱</div>
+          <div class="secao-nome">Campanhas</div>
+          <div class="secao-desc">Materiais de redes sociais, artes prontas e posts para corretores parceiros</div>
+          <span class="secao-badge" style="background:#EAF3DE;color:#3B6D11">Em breve</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACADEMY -->
+    <div class="page" id="page-academy">
+      <div class="section-title">🎓 Academy — Conceito Poá</div>
+      <div class="academy-frame">
+        <div class="academy-info">
+          <div class="academy-icon">🎓</div>
+          <div>
+            <div class="academy-title">Certificação Conceito Poá</div>
+            <div class="academy-sub">Complete todos os módulos e obtenha seu certificado de habilitação comercial</div>
+          </div>
+          <a class="academy-btn" href="https://boisterous-arithmetic-c6ff20.netlify.app" target="_blank">Acessar Academy →</a>
+        </div>
+        <div class="modulos-lista">
+          <div class="mod-item"><div class="mod-item-icon">🏢</div><div class="mod-item-nome">Produto Conceito Poá</div><div class="mod-item-status">Módulo 1</div></div>
+          <div class="mod-item"><div class="mod-item-icon">🤝</div><div class="mod-item-nome">Atendimento</div><div class="mod-item-status">Módulo 2</div></div>
+          <div class="mod-item"><div class="mod-item-icon">💰</div><div class="mod-item-nome">Simulação Caixa</div><div class="mod-item-status">Módulo 3</div></div>
+          <div class="mod-item"><div class="mod-item-icon">📊</div><div class="mod-item-nome">Fluxo de Pagamento</div><div class="mod-item-status">Módulo 4</div></div>
+          <div class="mod-item"><div class="mod-item-icon">💻</div><div class="mod-item-nome">Sistema CV</div><div class="mod-item-status">Módulo 5</div></div>
+          <div class="mod-item"><div class="mod-item-icon">📝</div><div class="mod-item-nome">Prova Final</div><div class="mod-item-status">Módulo 6</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CULTURA -->
+    <div class="page" id="page-cultura">
+      <div class="section-title">🧬 Os 5 Pilares da Cultura JV</div>
+      <div class="pilares-grid">
+        <div class="pilar-card" style="background:#EEEDFE;--border-cor:#CECBF6;border-color:#CECBF6">
+          <div class="pilar-num" style="color:#534AB7">Pilar 01</div>
+          <div class="pilar-nome" style="color:#3C3489">🤝 Companheirismo</div>
+          <div class="pilar-frase" style="background:#CECBF6;color:#26215C">"Aqui, ninguém vende sozinho."</div>
+          <div class="pilar-items">
+            <div class="pilar-item" style="color:#3C3489;border-color:#534AB7">O sucesso do meu parceiro também é o meu sucesso.</div>
+            <div class="pilar-item" style="color:#3C3489;border-color:#534AB7">Celebramos a vitória do colega como se fosse nossa.</div>
+            <div class="pilar-item" style="color:#3C3489;border-color:#534AB7">Em dias difíceis, o time aparece. Sempre.</div>
+          </div>
+        </div>
+        <div class="pilar-card" style="background:#FAEEDA;--border-cor:#FAC775;border-color:#FAC775">
+          <div class="pilar-num" style="color:#C9920A">Pilar 02</div>
+          <div class="pilar-nome" style="color:#854F0B">💡 Boas Ideias</div>
+          <div class="pilar-frase" style="background:#FAC775;color:#412402">"Toda grande ideia começa com coragem de falar."</div>
+          <div class="pilar-items">
+            <div class="pilar-item" style="color:#854F0B;border-color:#C9920A">Inovação não é privilégio de cargo — é de quem observa e compartilha.</div>
+            <div class="pilar-item" style="color:#854F0B;border-color:#C9920A">A melhor ideia da empresa pode ser a sua. Fale.</div>
+            <div class="pilar-item" style="color:#854F0B;border-color:#C9920A">Quem sugere melhora. Quem melhora cresce.</div>
+          </div>
+        </div>
+        <div class="pilar-card" style="background:#EAF3DE;--border-cor:#C0DD97;border-color:#C0DD97">
+          <div class="pilar-num" style="color:#3B6D11">Pilar 03</div>
+          <div class="pilar-nome" style="color:#27500A">🌿 Verdade</div>
+          <div class="pilar-frase" style="background:#C0DD97;color:#173404">"A verdade vende. A mentira quebra."</div>
+          <div class="pilar-items">
+            <div class="pilar-item" style="color:#27500A;border-color:#3B6D11">Prefiro perder uma venda a perder a confiança do cliente.</div>
+            <div class="pilar-item" style="color:#27500A;border-color:#3B6D11">Nossa palavra vale mais que qualquer contrato.</div>
+            <div class="pilar-item" style="color:#27500A;border-color:#3B6D11">Não prometemos o que não podemos entregar.</div>
+          </div>
+        </div>
+        <div class="pilar-card" style="background:#FAECE7;--border-cor:#F5C4B3;border-color:#F5C4B3">
+          <div class="pilar-num" style="color:#D85A30">Pilar 04</div>
+          <div class="pilar-nome" style="color:#712B13">🛡️ Honestidade</div>
+          <div class="pilar-frase" style="background:#F5C4B3;color:#4A1B0C">"Transparência não é opção, é padrão."</div>
+          <div class="pilar-items">
+            <div class="pilar-item" style="color:#712B13;border-color:#D85A30">Cliente bem informado confia — e indica.</div>
+            <div class="pilar-item" style="color:#712B13;border-color:#D85A30">Fazemos o certo mesmo quando ninguém está vendo.</div>
+            <div class="pilar-item" style="color:#712B13;border-color:#D85A30">Honestidade é o nosso diferencial competitivo.</div>
+          </div>
+        </div>
+      </div>
+      <div class="pilar-destaque">
+        <div style="font-size:10px;color:#F5D98A;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px">Pilar 05</div>
+        <div class="pilar-destaque-nome">🔰 Cobertura de Time</div>
+        <div class="pilar-destaque-frase">"Cobrimos as costas de quem está ao nosso lado."</div>
+        <div class="pilar-destaque-item">Não existe concorrência dentro de casa — somos um time.</div>
+        <div class="pilar-destaque-item">Quem está ao meu lado sabe que pode contar comigo.</div>
+        <div class="pilar-destaque-item">Time que se cobre junto, cresce junto.</div>
+      </div>
+      <div class="frase-guarda">"Vendemos com verdade, crescemos com companheirismo, construímos com honestidade, evoluímos com boas ideias e cobrimos as costas de quem está ao nosso lado."</div>
+    </div>
+
+    <!-- ESCOLA DE VENDAS -->
+    <div class="page" id="page-vendas">
+      <div class="em-breve">
+        <div class="em-breve-icon">🎯</div>
+        <div class="em-breve-title">Escola de Vendas</div>
+        <div class="em-breve-sub">Playbooks, scripts e técnicas de vendas em breve por aqui!</div>
+      </div>
+    </div>
+
+    <!-- DOCUMENTOS -->
+    <div class="page" id="page-documentos">
+      <div class="section-title">🔗 Ferramentas e Links Úteis</div>
+      <div class="links-grid">
+        <a class="link-card" href="https://www.ilovepdf.com/pt" target="_blank">
+          <div class="link-icon-wrap" style="background:#FCEBEB">📄</div>
+          <div class="link-nome">iLovePDF</div>
+          <div class="link-desc">Converter, comprimir e editar PDFs antes de subir para análise</div>
+          <div class="link-btn-a" style="background:#E24B4A;color:#fff">Abrir ferramenta →</div>
+        </a>
+        <a class="link-card" href="https://restituicao.receita.fazenda.gov.br/#/" target="_blank">
+          <div class="link-icon-wrap" style="background:#EAF3DE">🏛️</div>
+          <div class="link-nome">Receita Federal</div>
+          <div class="link-desc">Consultar se o cliente declarou IR e situação da restituição</div>
+          <div class="link-btn-a" style="background:#3B6D11;color:#fff">Consultar IR →</div>
+        </a>
+        <a class="link-card" href="https://www.bcb.gov.br/meubc/registrato" target="_blank">
+          <div class="link-icon-wrap" style="background:#E6F1FB">🏦</div>
+          <div class="link-nome">Registrato — BACEN</div>
+          <div class="link-desc">Envie ao cliente para consultar histórico de crédito no Banco Central</div>
+          <div class="link-btn-a" style="background:#185FA5;color:#fff">Acessar BACEN →</div>
+        </a>
+      </div>
+      <div class="section-title">📥 Documentos para Download</div>
+      <div class="docs-grid">
+        <div class="doc-card">
+          <img class="doc-img" src="docs_clt_jv.jpg" alt="Documentos CLT"/>
+          <div class="doc-info">
+            <span class="doc-tag tag-jv">✦ Arte JV</span>
+            <div class="doc-nome">Documentos — Cliente CLT</div>
+            <div class="doc-desc">Lista completa para cliente assalariado com carteira assinada</div>
+            <a class="doc-dl" style="background:#534AB7;color:#fff" href="docs_clt_jv.jpg" download="Documentos_CLT_JV.jpg">⬇ Baixar arte</a>
+          </div>
+        </div>
+        <div class="doc-card">
+          <img class="doc-img" src="docs_autonomo_jv.jpg" alt="Documentos Autônomo"/>
+          <div class="doc-info">
+            <span class="doc-tag tag-jv">✦ Arte JV</span>
+            <div class="doc-nome">Documentos — Cliente Autônomo</div>
+            <div class="doc-desc">Lista completa para profissional liberal ou trabalhador autônomo</div>
+            <a class="doc-dl" style="background:#534AB7;color:#fff" href="docs_autonomo_jv.jpg" download="Documentos_Autonomo_JV.jpg">⬇ Baixar arte</a>
+          </div>
+        </div>
+        <div class="doc-card">
+          <img class="doc-img" src="carta_cancelamento_jv.jpg" alt="Carta de Cancelamento"/>
+          <div class="doc-info">
+            <span class="doc-tag tag-jv">✦ Modelo JV</span>
+            <div class="doc-nome">Carta de Cancelamento</div>
+            <div class="doc-desc">Usar quando o cliente possui avaliação de crédito ativa na Caixa</div>
+            <a class="doc-dl" style="background:#534AB7;color:#fff" href="carta_cancelamento_jv.jpg" download="Carta_Cancelamento_JV.jpg">⬇ Baixar modelo</a>
+          </div>
+        </div>
+        <div class="doc-card">
+          <div class="doc-pdf-prev">
+            <div style="font-size:48px;margin-bottom:8px">📋</div>
+            <div style="font-size:12px;font-weight:700;color:#185FA5">PDF — Documento Oficial</div>
+          </div>
+          <div class="doc-info">
+            <span class="doc-tag tag-cef">🏦 Padrão Caixa</span>
+            <div class="doc-nome">M.O. Autorização Consulta CEF</div>
+            <div class="doc-desc">Autorização para pesquisa cadastral — assinada pelo cliente antes da análise</div>
+            <a class="doc-dl" style="background:#185FA5;color:#fff" href="mo_autorizacao_cef.pdf" download="MO_Autorizacao_CEF.pdf">⬇ Baixar PDF</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGENDA -->
+    <div class="page" id="page-agenda">
+      <div class="em-breve">
+        <div class="em-breve-icon">📅</div>
+        <div class="em-breve-title">Agenda & Treinamentos</div>
+        <div class="em-breve-sub">Calendário de eventos e treinamentos em breve!</div>
+      </div>
+    </div>
+
+    <!-- ANIVERSARIANTES -->
+    <div class="page" id="page-aniversariantes">
+      <div class="em-breve">
+        <div class="em-breve-icon">🎂</div>
+        <div class="em-breve-title">Aniversariantes do Mês</div>
+        <div class="em-breve-sub">Em breve você verá quem faz aniversário este mês!</div>
+      </div>
+    </div>
+
+    <!-- CAMPANHAS -->
+    <div class="page" id="page-campanhas">
+      <div class="em-breve">
+        <div class="em-breve-icon">📱</div>
+        <div class="em-breve-title">Campanhas & Redes Sociais</div>
+        <div class="em-breve-sub">Artes e materiais para redes sociais em breve!</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+var USER = {nome:'', creci:'', isAdm:false};
+var ADM_SENHA = 'conceito2025';
+
+function fazerLogin(){
+  var n = document.getElementById('inp-nome').value.trim();
+  var c = document.getElementById('inp-creci').value.trim();
+  if(!n || !c){document.getElementById('login-err').style.display='block';return;}
+  USER.nome = n; USER.creci = c; USER.isAdm = false;
+  entrar();
+}
+
+function loginAdm(){
+  var senha = prompt('Senha do administrador:');
+  if(senha === ADM_SENHA){
+    USER.nome = 'Administrador'; USER.creci = 'ADM'; USER.isAdm = true;
+    entrar();
+  } else if(senha !== null){
+    alert('Senha incorreta.');
+  }
+}
+
+function entrar(){
+  var iniciais = USER.nome.split(' ').slice(0,2).map(function(w){return w[0];}).join('').toUpperCase();
+  document.getElementById('user-av').textContent = iniciais;
+  document.getElementById('user-name').textContent = USER.nome.split(' ')[0];
+  document.getElementById('home-ola').textContent = 'Olá, ' + USER.nome.split(' ')[0] + '! 👋';
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').classList.add('active');
+}
+
+function sair(){
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').classList.remove('active');
+  document.getElementById('inp-nome').value = '';
+  document.getElementById('inp-creci').value = '';
+}
+
+function irPara(id, el){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+  document.getElementById('page-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+}
+
+function irParaClick(id){
+  var items = document.querySelectorAll('.nav-item');
+  var target = null;
+  items.forEach(function(item){
+    if(item.getAttribute('onclick') && item.getAttribute('onclick').includes("'"+id+"'")){
+      target = item;
+    }
+  });
+  irPara(id, target);
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
