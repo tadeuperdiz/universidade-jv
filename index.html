@@ -39,6 +39,10 @@
     --glass-border: rgba(245,217,138,0.24);
     --glass-border-strong: rgba(245,217,138,0.42);
     --shadow-deep: 0 30px 80px -20px rgba(0,0,0,0.45);
+    --cream: #F7F2E9;
+    --cream-soft: #FBF8F2;
+    --text-dark: #2A1B45;
+    --text-dark-muted: #6E6280;
   }
 
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -55,24 +59,25 @@
     min-height:100vh;
   }
 
-  /* Simple flat tone behind the features section — no glow clutter */
+  /* Light, clean cream backdrop for content sections */
   .features-section{
     position:relative;
-    background: linear-gradient(180deg, #2d1657 0%, #37196a 100%);
+    background: var(--cream);
     overflow:hidden;
   }
   .features-section::before{
     content:'';
-    position:absolute; top:0; left:0; right:0; height:1px;
-    background: linear-gradient(90deg, transparent, rgba(245,217,138,0.35), transparent);
+    position:absolute; top:0; left:0; right:0; height:3px;
+    background: var(--purple-mid);
   }
 
   .page-section{
     padding: 80px 5vw;
-    border-top: 1px solid rgba(245,217,138,0.08);
+    background: var(--cream);
+    border-top: 1px solid rgba(42,27,69,0.08);
   }
   .page-section:nth-of-type(even){
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    background: var(--cream-soft);
   }
 
   .bg-lines{
@@ -83,47 +88,46 @@
   #login-screen{
     position:relative;
     z-index:1;
-    display:grid;
-    grid-template-columns: 272px 1fr;
+    display:block;
     min-height:100vh;
   }
 
-  .site-sidebar{
-    background: rgba(20,11,42,0.55);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border-right:1px solid rgba(245,217,138,0.12);
-    padding: 30px 20px;
-    display:flex;
-    flex-direction:column;
+  .top-nav{
     position:sticky;
     top:0;
-    height:100vh;
-    z-index:20;
+    z-index:50;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    padding: 16px 5vw;
+    background: var(--purple-mid);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
   }
-  .site-sidebar .brand-mark{margin-bottom:36px; padding-left:6px;}
-  .site-sidebar .brand-name{font-size:16px;}
-
-  .sidebar-cta{
-    margin-top:auto;
-    padding-top:18px;
-    border-top:1px solid rgba(245,217,138,0.10);
+  .top-nav .brand-mark{ flex-shrink:0; }
+  .top-nav-links{
+    display:flex; align-items:center; gap:6px;
+    flex-wrap:wrap;
+    list-style:none;
   }
-  .sidebar-cta p{
-    font-size:12px;
-    color:var(--ink-muted);
-    margin-bottom:12px;
-    line-height:1.5;
-  }
-  .sidebar-cta .nav-cta{
+  .top-nav-links a{
     display:block;
-    text-align:center;
-    width:100%;
+    color: rgba(255,255,255,0.85);
+    text-decoration:none;
+    font-size:13.5px;
+    font-weight:600;
+    padding:9px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    transition: background .15s, color .15s;
   }
+  .top-nav-links a:hover{ background: rgba(255,255,255,0.1); color:#fff; }
 
   .site-content{
     min-width:0;
   }
+
+  section[id], header[id]{ scroll-margin-top: 74px; }
 
   .brand-mark{
     display:flex; align-items:center; gap:14px;
@@ -312,13 +316,14 @@
   }
   .section-eyebrow{
     font-size:12.5px; letter-spacing:0.18em; text-transform:uppercase;
-    color:var(--gold); font-weight:700; margin-bottom:14px;
+    color:var(--purple-soft); font-weight:700; margin-bottom:14px;
   }
   .section-title{
     font-family:'Fraunces', serif;
     font-size: clamp(28px, 3vw, 40px);
     font-weight:600;
     line-height:1.15;
+    color: var(--text-dark);
   }
 
   /* Login modal (separate "tab", overlays the page instead of living on the homepage) */
@@ -579,10 +584,10 @@
     color: var(--ink-muted);
   }
   .modulo-feito{
-    border-color: rgba(245,217,138,0.3);
+    border-color: var(--gold-bright);
   }
-  .modulo-feito .card-icon{ color: var(--gold); }
-  .modulo-feito h3{ color: var(--gold); }
+  .modulo-feito .card-icon{ background: var(--gold-bright); }
+  .modulo-feito h3{ color: var(--purple-mid); }
 
   .card-grid{
     display:grid;
@@ -591,32 +596,38 @@
   }
 
   .glass-card{
-    background: rgba(20,10,42,0.55);
-    border:1px solid rgba(255,255,255,0.14);
+    background: #fff;
+    border:1px solid rgba(42,27,69,0.08);
     border-radius:16px;
     padding:28px;
-    transition: border-color .2s, background .2s;
+    box-shadow: 0 4px 18px rgba(42,27,69,0.06);
+    transition: border-color .2s, box-shadow .2s, transform .2s;
   }
   .glass-card:hover{
-    border-color: rgba(245,217,138,0.35);
-    background: rgba(20,10,42,0.7);
+    border-color: rgba(69,34,128,0.25);
+    box-shadow: 0 10px 30px rgba(42,27,69,0.12);
+    transform: translateY(-2px);
   }
 
   .card-icon{
-    width:22px;height:22px;
+    width:44px;height:44px;
+    border-radius:50%;
+    background: var(--purple-mid);
+    display:flex; align-items:center; justify-content:center;
     margin-bottom:18px;
   }
-  .card-icon svg{width:22px;height:22px; color:var(--gold);}
+  .card-icon svg{width:20px;height:20px; color:#fff;}
 
   .glass-card h3{
     font-family:'Fraunces', serif;
     font-size:17px;
     font-weight:600;
     margin-bottom:8px;
+    color: var(--text-dark);
   }
   .glass-card p{
     font-size:13.5px;
-    color: rgba(246,243,252,0.82);
+    color: var(--text-dark-muted);
     line-height:1.6;
   }
 
@@ -631,7 +642,7 @@
     left:38px;
     top:8px; bottom:8px;
     width:1px;
-    background: rgba(245,217,138,0.25);
+    background: rgba(69,34,128,0.18);
   }
   .agenda-item{
     display:flex;
@@ -643,8 +654,7 @@
   .agenda-date{
     width:76px; flex-shrink:0;
     display:flex; flex-direction:column; align-items:center;
-    background: rgba(245,217,138,0.1);
-    border:1px solid rgba(245,217,138,0.3);
+    background: var(--purple-mid);
     border-radius:12px;
     padding:10px 0;
     position:relative;
@@ -658,36 +668,38 @@
   }
   .agenda-month{
     font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
-    color: var(--ink-muted);
+    color: rgba(255,255,255,0.8);
     margin-top:4px;
   }
   .agenda-content{
-    background: rgba(20,10,42,0.55);
-    border:1px solid rgba(255,255,255,0.1);
+    background: #fff;
+    border:1px solid rgba(42,27,69,0.08);
+    box-shadow: 0 4px 18px rgba(42,27,69,0.06);
     border-radius:14px;
     padding:18px 22px;
     flex:1;
   }
   .agenda-tag{
     font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
-    color: var(--gold); font-weight:700; margin-bottom:6px;
+    color: var(--purple-soft); font-weight:700; margin-bottom:6px;
   }
   .agenda-content h3{
     font-family:'Fraunces', serif;
     font-size:17px; font-weight:600; margin-bottom:6px;
+    color: var(--text-dark);
   }
   .agenda-content p{
-    font-size:13.5px; color: rgba(246,243,252,0.8); line-height:1.55;
+    font-size:13.5px; color: var(--text-dark-muted); line-height:1.55;
   }
 
   .doc-subhead{
     font-size:12px; letter-spacing:0.12em; text-transform:uppercase;
-    color: var(--ink-muted); font-weight:700; margin-bottom:18px;
+    color: var(--text-dark-muted); font-weight:700; margin-bottom:18px;
   }
   .doc-download{
     display:inline-block; margin-top:6px;
-    font-size:11.5px; letter-spacing:0.06em; font-weight:600;
-    color: var(--gold);
+    font-size:11.5px; letter-spacing:0.06em; font-weight:700;
+    color: var(--purple-soft);
   }
   a.doc-link{
     display:block;
@@ -695,7 +707,7 @@
     color:inherit;
     cursor:pointer;
   }
-  a.doc-link:hover h3{ color: var(--gold); }
+  a.doc-link:hover h3{ color: var(--purple-soft); }
 
   .culture-quote{
     max-width:760px;
@@ -704,8 +716,8 @@
     font-style:italic;
     font-size: clamp(19px, 2.1vw, 25px);
     line-height:1.5;
-    color:#fff;
-    border-left:2px solid var(--gold);
+    color: var(--text-dark);
+    border-left:2px solid var(--purple-mid);
     padding-left:24px;
   }
 
@@ -714,13 +726,13 @@
   }
   .pillar-eyebrow{
     font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
-    color:var(--gold); font-weight:700; margin-bottom:10px;
+    color:var(--purple-soft); font-weight:700; margin-bottom:10px;
   }
   .pillar-phrase{
     font-family:'Fraunces', serif;
     font-style:italic;
     font-size:15.5px;
-    color:#fff !important;
+    color: var(--text-dark) !important;
     line-height:1.5;
     margin: 4px 0 18px;
   }
@@ -732,7 +744,7 @@
   }
   .pillar-list li{
     font-size:13.5px;
-    color: rgba(246,243,252,0.85);
+    color: var(--text-dark-muted);
     line-height:1.6;
     padding-left:16px;
     position:relative;
@@ -742,39 +754,32 @@
     position:absolute; left:0; top:8px;
     width:5px; height:5px;
     border-radius:50%;
-    background: var(--gold);
+    background: var(--purple-soft);
   }
 
   .empty-state{
     text-align:center;
     padding: 80px 20px;
-    border-top:1px solid rgba(255,255,255,0.08);
+    border-top:1px solid rgba(42,27,69,0.08);
   }
   .empty-state .crest-lg{width:40px;height:40px; margin:0 auto 22px; opacity:0.55;}
   .empty-state h3{
     font-family:'Fraunces', serif;
     font-size:21px; font-weight:600; margin-bottom:10px;
+    color: var(--text-dark);
   }
-  .empty-state p{color:var(--ink-muted); font-size:14px; max-width:360px; margin:0 auto; line-height:1.6;}
+  .empty-state p{color:var(--text-dark-muted); font-size:14px; max-width:360px; margin:0 auto; line-height:1.6;}
   .empty-tag{
     display:inline-block; margin-top:20px;
     font-size:11px; letter-spacing:0.12em; text-transform:uppercase;
-    color:var(--gold); opacity:0.85;
+    color: var(--purple-soft); opacity:0.9;
   }
 
   /* Responsive */
   @media (max-width: 980px){
-    #login-screen{grid-template-columns:1fr;}
-    .site-sidebar{
-      position:relative; height:auto; width:100%;
-      flex-direction:row; flex-wrap:wrap; align-items:center;
-      overflow-x:auto; padding:16px 20px;
-    }
-    .site-sidebar .brand-mark{margin-bottom:0; margin-right:16px;}
-    .site-sidebar .nav-group{display:flex; gap:4px; margin-bottom:0;}
-    .site-sidebar .nav-label{display:none;}
-    .site-sidebar .nav-item{white-space:nowrap;}
-    .sidebar-cta{display:none;}
+    .top-nav{ padding:14px 20px; flex-wrap:wrap; }
+    .top-nav-links{ width:100%; overflow-x:auto; justify-content:flex-start; gap:2px; }
+    .top-nav-links a{ white-space:nowrap; padding:8px 10px; font-size:12.5px; }
     .hero-stats-inline{flex-wrap:wrap; gap:20px;}
     .academy-topbar{flex-wrap:wrap; gap:14px; padding:16px 20px;}
     .topbar-back{order:3; width:100%;}
@@ -787,7 +792,7 @@
 <!-- ============ LANDING / LOGIN SCREEN ============ -->
 <div id="login-screen">
 
-  <aside class="site-sidebar">
+  <nav class="top-nav">
     <div class="brand-mark">
       <svg class="crest" viewBox="0 0 48 48" fill="none" style="width:34px;height:34px;">
         <circle cx="24" cy="24" r="22" stroke="#F5D98A" stroke-width="1.2" opacity="0.5"/>
@@ -798,51 +803,18 @@
       <div class="brand-name">UNIVERSIDADE <span>JV</span></div>
     </div>
 
-    <nav class="nav-group">
-      <div class="nav-label">Principal</div>
-      <div class="nav-item active" onclick="document.getElementById('topo').scrollIntoView({behavior:'smooth'})">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11L12 4l9 7"/><path d="M5 10v9a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1v-9"/></svg>
-        Home
-      </div>
-      <div class="nav-item" onclick="abrirLogin()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z"/><path d="M7 10.5V16c0 1.5 2.5 3 5 3s5-1.5 5-3v-5.5"/></svg>
-        Academy
-      </div>
+    <ul class="top-nav-links">
+      <li><a onclick="document.getElementById('topo').scrollIntoView({behavior:'smooth'})">Home</a></li>
+      <li><a onclick="document.getElementById('cultura').scrollIntoView({behavior:'smooth'})">Cultura JV</a></li>
+      <li><a onclick="document.getElementById('escola').scrollIntoView({behavior:'smooth'})">Escola de Vendas</a></li>
+      <li><a onclick="document.getElementById('documentos').scrollIntoView({behavior:'smooth'})">Documentos</a></li>
+      <li><a onclick="document.getElementById('agenda').scrollIntoView({behavior:'smooth'})">Agenda</a></li>
+      <li><a onclick="document.getElementById('aniversariantes').scrollIntoView({behavior:'smooth'})">Aniversariantes</a></li>
+      <li><a onclick="document.getElementById('campanhas').scrollIntoView({behavior:'smooth'})">Campanhas</a></li>
+    </ul>
 
-      <div class="nav-label">Comunidade</div>
-      <div class="nav-item" onclick="document.getElementById('cultura').scrollIntoView({behavior:'smooth'})">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.35-9.5-8.5C.7 8.8 2.5 5 6 5c2 0 3.3 1 4 2 .7-1 2-2 4-2 3.5 0 5.3 3.8 3.5 7.5C19 16.65 12 21 12 21z"/></svg>
-        Cultura JV
-      </div>
-      <div class="nav-item" onclick="document.getElementById('escola').scrollIntoView({behavior:'smooth'})">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-        Escola de Vendas
-      </div>
-
-      <div class="nav-label">Recursos</div>
-      <div class="nav-item" onclick="document.getElementById('documentos').scrollIntoView({behavior:'smooth'})">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>
-        Documentos
-      </div>
-      <div class="nav-item" onclick="document.getElementById('agenda').scrollIntoView({behavior:'smooth'})">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-        Agenda
-      </div>
-      <div class="nav-item" onclick="document.getElementById('aniversariantes').scrollIntoView({behavior:'smooth'})">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v4M8 6h8l2 4H6l2-4z"/><path d="M4 22V12h16v10"/><path d="M4 17h16"/></svg>
-        Aniversariantes
-      </div>
-      <div class="nav-item" onclick="document.getElementById('campanhas').scrollIntoView({behavior:'smooth'})">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l18-7-7 18-3-8-8-3z"/></svg>
-        Campanhas
-      </div>
-    </nav>
-
-    <div class="sidebar-cta">
-      <p>Acesse as trilhas de formação da Conceito Academy.</p>
-      <a class="nav-cta" onclick="abrirLogin()">Entrar na Academy</a>
-    </div>
-  </aside>
+    <a class="nav-cta" onclick="abrirLogin()">Academy</a>
+  </nav>
 
   <div class="site-content">
 
@@ -1341,14 +1313,6 @@
       const dados = await buscarOuCriarCorretor(nomeSalvo, creciSalvo);
       entrarNaAcademy(dados);
     }
-  });
-
-  // Destaque visual do item clicado na sidebar pública
-  document.querySelectorAll('.site-sidebar .nav-item').forEach(item => {
-    item.addEventListener('click', () => {
-      document.querySelectorAll('.site-sidebar .nav-item').forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-    });
   });
 
   // Data de hoje
