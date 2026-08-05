@@ -507,9 +507,9 @@ function vThumb(url,label,barClass,emoji){
 // ============================================================
 function openAdmModal(){document.getElementById('adm-modal').classList.add('active');setTimeout(()=>document.getElementById('adm-pw').focus(),100);}
 function closeAdmModal(){document.getElementById('adm-modal').classList.remove('active');document.getElementById('adm-pw').value='';document.getElementById('adm-err').style.display='none';}
-function checkAdm(){
+async function checkAdm(){
   if(document.getElementById('adm-pw').value===ADM_SENHA){
-    closeAdmModal();G.isAdm=true;G.user='Administrador';renderAdmin();show('s-admin');
+    closeAdmModal();G.isAdm=true;G.user='Administrador';show('s-admin');await renderAdmin();
   }else{document.getElementById('adm-err').style.display='block';}
 }
 
@@ -1173,8 +1173,8 @@ function showCert(){
 // ============================================================
 // ADMIN PANEL
 // ============================================================
-function renderAdmin(){
-  const corretores=getAllCorretores();
+async function renderAdmin(){
+  const corretores=await getAllCorretores();
   const cert=corretores.filter(c=>c.data&&c.data.cert).length;
   const prog=corretores.filter(c=>c.data&&!c.data.cert&&(c.data.prog||0)>0).length;
   document.getElementById('adm-total').textContent=corretores.length;
@@ -1187,8 +1187,8 @@ function renderAdmin(){
     return'<div class="brow" onclick="verRelatorio('+idx+')"><div class="bhead"><div class="bname">'+c.nome+'</div><div class="bstat '+s+'">'+lb+'</div></div><div class="bpw"><div class="bpf '+(d.cert?'c':'')+'" style="width:'+pct+'%"></div></div><div class="bpl">CRECI: '+c.creci+' · '+(d.prog||0)+' de 7 módulos · '+pct+'% · Nota prova: '+(d.nota?d.nota+'/10':'—')+'</div><button class="ver-btn">Ver relatório detalhado →</button></div>';
   }).join('');
 }
-function verRelatorio(idx){
-  const corretores=getAllCorretores();const c=corretores[idx];const d=c.data||{};
+async function verRelatorio(idx){
+  const corretores=await getAllCorretores();const c=corretores[idx];const d=c.data||{};
   const pct=Math.round(((d.prog||0)/7)*100);
   const notas=d.modNotas||{};
   const modLabels={m1:'Módulo 1 — Produto',m2:'Módulo 2 — Atendimento',m3:'Módulo 3 — Simulação Caixa',m4:'Módulo 4 — Fluxo de Pagamento',m5:'Módulo 5 — Sistema CV',prova:'Prova Final (20 questões)'};
