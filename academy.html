@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Conceito Academy</title>
+<style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--roxo:#534AB7;--roxo-dark:#3C3489;--roxo-light:#EEEDFE;--roxo-mid:#AFA9EC;--dourado:#C9920A;--dourado-light:#F5D98A;--dourado-bg:#FAEEDA;--dourado-dark:#854F0B;--laranja:#D85A30;--verde:#3B6D11;--verde-bg:#EAF3DE;--azul:#185FA5;--azul-light:#E6F1FB;--azul-mid:#378ADD;--chumbo:#2D3748;--chumbo-light:#EDF2F7;--chumbo-mid:#4A5568;--am:#854F0B;--am-light:#FAEEDA;--am-mid:#C9920A}
+body{font-family:system-ui,-apple-system,sans-serif;background:#F0EFF8;min-height:100vh}
+.screen{display:none}.screen.active{display:block}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;padding:1rem}
+.lightbox.active{display:flex}
+.lb-header{width:100%;max-width:820px;display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.lb-title{color:white;font-size:14px;font-weight:700}
+.lb-close{background:rgba(255,255,255,.15);border:none;color:white;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer}
+.lb-close:hover{background:rgba(255,255,255,.3)}
+.lb-frame{width:100%;max-width:820px;border-radius:12px;overflow:hidden;background:#000}
+.lb-frame iframe{width:100%;aspect-ratio:16/9;border:none;display:block}
+.lb-footer{margin-top:.75rem;color:rgba(255,255,255,.45);font-size:11px;text-align:center}
+.video-thumb{border-radius:12px;overflow:hidden;position:relative;cursor:pointer;background:#1a1a2e;margin-bottom:6px}
+.vt-bg{width:100%;height:175px;display:flex;align-items:center;justify-content:center}
+.play-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.play-btn-big{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;border:2.5px solid white;background:rgba(255,255,255,.15);transition:transform .2s}
+.video-thumb:hover .play-btn-big{transform:scale(1.1);background:rgba(255,255,255,.28)}
+.play-label{color:white;font-size:12px;font-weight:600}.play-hint{color:rgba(255,255,255,.65);font-size:10px}
+.video-label-bar{padding:7px 12px;font-size:11px;font-weight:600;border-radius:0 0 8px 8px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.video-label-bar.az{background:var(--azul-light);color:var(--azul)}.video-label-bar.ch{background:var(--chumbo-light);color:var(--chumbo)}.video-label-bar.am{background:var(--am-light);color:var(--am)}
+.hdr{background:var(--roxo-dark);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.hlogo{color:white;font-size:14px;font-weight:700;letter-spacing:1px}.hlogo span{color:var(--dourado-light)}
+.hright{display:flex;align-items:center;gap:8px}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--dourado);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0}
+.hname{font-size:12px;color:rgba(255,255,255,.8)}.btn-out{font-size:11px;color:rgba(255,255,255,.5);background:none;border:none;cursor:pointer;text-decoration:underline}
+#s-login{min-height:100vh;background:linear-gradient(135deg,#26215C,#534AB7);display:none;flex-direction:column;align-items:center;justify-content:center;padding:2rem}
+#s-login.active{display:flex}
+.lbox{background:white;border-radius:16px;padding:2rem 1.75rem;width:100%;max-width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.lcrown{font-size:40px;margin-bottom:.5rem}
+.ltitle{font-size:22px;font-weight:800;color:var(--roxo-dark)}.ltitle span{color:var(--dourado)}
+.lsub{font-size:10px;color:var(--dourado);font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:1.5rem}
+.lbox p{font-size:13px;color:#888;margin-bottom:1.25rem}
+.lbox input{width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:9px;font-size:14px;margin-bottom:10px;outline:none;transition:border .2s}
+.lbox input:focus{border-color:var(--roxo)}
+.btn-pri{width:100%;padding:13px;background:var(--roxo);color:white;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer}
+.btn-pri:hover{background:var(--roxo-dark)}
+.alink{margin-top:.875rem;font-size:12px;color:#aaa;cursor:pointer;text-decoration:underline}
+.lerr{color:#A32D2D;font-size:12px;margin-top:8px;display:none}
+.dash-hero{background:linear-gradient(135deg,#3C3489,#534AB7);padding:1.75rem 1.25rem}
+.dash-hero h1{color:white;font-size:20px;font-weight:700;margin-bottom:4px}.dash-hero p{color:rgba(255,255,255,.75);font-size:13px}
+.dpbar-wrap{background:rgba(255,255,255,.2);border-radius:20px;height:8px;margin:.875rem 0 .25rem}
+.dpbar-fill{background:var(--dourado);height:8px;border-radius:20px;transition:width .6s}
+.dpbar-label{color:rgba(255,255,255,.75);font-size:11px}
+.mods-list{padding:1.25rem;display:flex;flex-direction:column;gap:10px}
+.mcard{background:white;border-radius:12px;border:1px solid #eee;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .2s}
+.mcard:hover:not(.mlocked){border-color:var(--roxo-mid);box-shadow:0 2px 12px rgba(83,74,183,.12)}
+.mcard.mdone{border-color:var(--dourado);background:var(--dourado-bg)}.mcard.mlocked{opacity:.55;cursor:not-allowed}
+.micon{width:46px;height:46px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;background:var(--roxo-light)}.micon.g{background:var(--dourado-bg)}
+.minfo{flex:1}.mnum{font-size:10px;color:#888;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.mtitle{font-size:14px;font-weight:700;color:#222;margin:2px 0}.mdesc{font-size:11px;color:#888}
+.mpw{background:#e8e8e8;border-radius:10px;height:4px;margin-top:5px}
+.mpf{height:4px;border-radius:10px;background:var(--roxo)}.mpf.done{background:var(--dourado)}
+.mpl{font-size:10px;color:#999;margin-top:2px}
+.mbadge{font-size:11px;padding:4px 10px;border-radius:20px;font-weight:700;flex-shrink:0}
+.mbadge.done{background:var(--dourado-bg);color:var(--dourado-dark)}.mbadge.next{background:var(--roxo-light);color:var(--roxo)}.mbadge.locked{background:#f0f0f0;color:#999}
+.mod-hero{padding:1.25rem}
+.mod-hero.p1{background:linear-gradient(135deg,#3C3489,#534AB7)}.mod-hero.p2{background:linear-gradient(135deg,#993C1D,#D85A30)}
+.mod-hero.p3{background:linear-gradient(135deg,#185FA5,#378ADD)}.mod-hero.p4{background:linear-gradient(135deg,#854F0B,#C9920A)}
+.mod-hero.p5{background:linear-gradient(135deg,#2D3748,#4A5568)}.mod-hero.p6{background:linear-gradient(135deg,#26215C,#3C3489)}
+.mtag{font-size:10px;color:rgba(255,255,255,.8);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px}
+.mod-hero h1{color:white;font-size:18px;font-weight:700;margin-bottom:3px}.mod-hero p{color:rgba(255,255,255,.8);font-size:12px}
+.back-btn{background:none;border:none;color:rgba(255,255,255,.7);font-size:12px;cursor:pointer;margin-bottom:8px}.back-btn:hover{color:white}
+.oprog{padding:.75rem 1rem;background:white;border-bottom:1px solid #eee}
+.oprog-head{display:flex;justify-content:space-between;margin-bottom:4px}
+.oprog-head span{font-size:11px;color:#888}.oprog-head strong{font-size:11px;color:var(--roxo);font-weight:700}
+.obar{background:var(--roxo-light);border-radius:20px;height:5px}
+.obar-fill{height:5px;border-radius:20px;background:var(--roxo);transition:width .4s}
+.tnav{display:flex;gap:6px;padding:10px 1rem;overflow-x:auto;background:white;border-bottom:1px solid #eee}
+.tpill{flex-shrink:0;padding:5px 11px;border-radius:20px;font-size:11px;font-weight:700;border:1.5px solid #ddd;background:#f5f5f5;color:#888;cursor:pointer;white-space:nowrap;transition:all .15s}
+.tpill.active{background:var(--roxo);color:white;border-color:var(--roxo)}.tpill.active.az{background:var(--azul-mid);border-color:var(--azul-mid)}
+.tpill.active.ch{background:var(--chumbo-mid);border-color:var(--chumbo-mid)}.tpill.active.am{background:var(--am-mid);border-color:var(--am-mid)}
+.tpill.tdone{background:var(--dourado-bg);color:var(--dourado-dark);border-color:var(--dourado)}
+.carea{padding:1rem;max-width:700px;margin:0 auto}
+.tcard{background:white;border-radius:12px;border:1px solid #eee;overflow:hidden;margin-bottom:.875rem;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.tcard-head{padding:12px 14px;display:flex;align-items:center;gap:9px}
+.tcard-head.cp{background:var(--roxo-light);border-bottom:1px solid var(--roxo-mid)}.tcard-head.cp h2{color:var(--roxo-dark)}.tcard-head.cp p{color:var(--roxo)}
+.tcard-head.co{background:#FAECE7;border-bottom:1px solid #F0997B}.tcard-head.co h2{color:#993C1D}.tcard-head.co p{color:#D85A30}
+.tcard-head.cg{background:var(--verde-bg);border-bottom:1px solid #C0DD97}.tcard-head.cg h2{color:var(--verde)}.tcard-head.cg p{color:var(--verde)}
+.tcard-head.ca{background:var(--azul-light);border-bottom:1px solid #B5D4F4}.tcard-head.ca h2{color:#0C447C}.tcard-head.ca p{color:var(--azul)}
+.tcard-head.cc{background:var(--chumbo-light);border-bottom:1px solid #CBD5E0}.tcard-head.cc h2{color:var(--chumbo)}.tcard-head.cc p{color:var(--chumbo-mid)}
+.tcard-head.cam{background:var(--am-light);border-bottom:1px solid #E8C97A}.tcard-head.cam h2{color:var(--am)}.tcard-head.cam p{color:var(--am-mid)}
+.tcard-head .tico{font-size:22px}.tcard-head h2{font-size:14px;font-weight:700}.tcard-head p{font-size:11px}
+.tcard-body{padding:14px}
+.hbox{border-radius:9px;padding:11px 13px;margin-bottom:10px;font-size:12px;line-height:1.65}
+.hbox.roxo{background:var(--roxo-light);border-left:3px solid var(--roxo);color:var(--roxo-dark)}
+.hbox.orange{background:#FAECE7;border-left:3px solid #D85A30;color:#993C1D}
+.hbox.green{background:var(--verde-bg);border-left:3px solid var(--verde);color:var(--verde)}
+.hbox.azul{background:var(--azul-light);border-left:3px solid var(--azul-mid);color:#0C447C}
+.hbox.gold{background:var(--dourado-bg);border-left:3px solid var(--dourado);color:var(--dourado-dark)}
+.hbox.cinza{background:var(--chumbo-light);border-left:3px solid var(--chumbo-mid);color:var(--chumbo)}
+.hbox.amber{background:#FFF3CD;border-left:3px solid #FFCA28;color:#856404}
+.igrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
+.iitem{background:#f8f8f8;border-radius:9px;padding:10px}
+.iitem .lbl{font-size:10px;color:#888;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.iitem .val{font-size:14px;font-weight:700;color:#222}.iitem .sub{font-size:10px;color:#999;margin-top:1px}
+.agrid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
+.aitem{background:var(--roxo-light);border-radius:9px;padding:9px 7px;text-align:center}
+.aitem .ai{font-size:18px;margin-bottom:3px}.aitem .an{font-size:10px;font-weight:700;color:var(--roxo-dark);line-height:1.3}
+.feat-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
+.feat-item{background:var(--chumbo-light);border-radius:10px;padding:11px;text-align:center}
+.feat-item .fi{font-size:22px;margin-bottom:4px}.feat-item .fn{font-size:11px;font-weight:700;color:var(--chumbo);line-height:1.3}.feat-item .fd{font-size:10px;color:var(--chumbo-mid);margin-top:2px}
+.parc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.parc-item{background:#f8f8f8;border-radius:10px;padding:11px;border:1.5px solid #eee}
+.parc-item.dest{background:var(--dourado-bg);border-color:var(--dourado)}
+.parc-item .pi-icon{font-size:18px;margin-bottom:4px}.parc-item .pi-title{font-size:12px;font-weight:700;color:#222;margin-bottom:3px}
+.parc-item.dest .pi-title{color:var(--dourado-dark)}.parc-item .pi-desc{font-size:11px;color:#888;line-height:1.4}.parc-item.dest .pi-desc{color:var(--dourado-dark)}
+.pitem{background:#f8f8f8;border-radius:9px;padding:11px;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px}
+.pbadge{background:var(--roxo);color:white;border-radius:7px;padding:5px 9px;font-size:11px;font-weight:700;flex-shrink:0;text-align:center;min-width:58px}.pbadge.o{background:var(--laranja)}
+.pinfo{font-size:12px;color:#222;line-height:1.5}.pinfo strong{display:block;font-weight:700;margin-bottom:1px}
+.dlist{list-style:none}.dlist li{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid #f0f0f0;font-size:12px;color:#222}.dlist li:last-child{border-bottom:none}
+.dck{color:var(--dourado);font-size:15px;flex-shrink:0}
+.dgrp{margin-bottom:11px}.dgrp h4{font-size:10px;font-weight:700;color:var(--roxo);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.drow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:11px}
+.drow .pl{color:#222}.drow .tm{color:var(--roxo);font-weight:700}
+.step-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.step-list li{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#222;line-height:1.5}
+.sli-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;margin-top:1px}
+.sli-num.p1{background:var(--roxo);color:white}.sli-num.p2{background:#D85A30;color:white}.sli-num.p3{background:var(--verde);color:white}
+.sli-num.az{background:var(--azul-mid);color:white}.sli-num.ch{background:var(--chumbo-mid);color:white}.sli-num.am{background:var(--am-mid);color:white}
+.sli-text strong{display:block;font-weight:700;margin-bottom:1px}
+.pasta-steps{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.pasta-step{background:white;border:1.5px solid var(--chumbo-light);border-radius:10px;padding:11px 13px;display:flex;align-items:flex-start;gap:10px}
+.pasta-num{background:var(--chumbo-mid);color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+.pasta-info{font-size:12px;color:#222;line-height:1.5}.pasta-info strong{display:block;font-weight:700;color:var(--chumbo);margin-bottom:2px}
+.steps-ov{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:1rem;background:white;border-bottom:1px solid #eee}
+.schip{border-radius:10px;padding:10px 8px;text-align:center;cursor:pointer;border:2px solid transparent;transition:all .2s}
+.schip.s1{background:#EEEDFE}.schip.s2{background:#FAECE7}.schip.s3{background:var(--verde-bg)}
+.schip.active.s1{border-color:#534AB7}.schip.active.s2{border-color:#D85A30}.schip.active.s3{border-color:var(--verde)}
+.schip-num{font-size:18px;font-weight:800;margin-bottom:2px}
+.schip-num.s1{color:#534AB7}.schip-num.s2{color:#D85A30}.schip-num.s3{color:var(--verde)}
+.schip-name{font-size:10px;font-weight:700;line-height:1.3}
+.schip-name.s1{color:var(--roxo-dark)}.schip-name.s2{color:#993C1D}.schip-name.s3{color:var(--verde)}.stick{font-size:10px;margin-top:3px}
+.sbadge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;margin-bottom:10px}
+.sbadge.p1{background:var(--roxo-light);color:var(--roxo)}.sbadge.p2{background:#FAECE7;color:#993C1D}.sbadge.p3{background:var(--verde-bg);color:var(--verde)}
+.sim-box{background:var(--roxo-dark);border-radius:10px;padding:14px;color:white;margin-bottom:10px;text-align:center}
+.sim-box .sp{font-size:28px;font-weight:800;color:var(--dourado-light)}.sim-box .sl{font-size:11px;color:rgba(255,255,255,.75)}
+.sim-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.sim-item{border-radius:9px;padding:11px;text-align:center}
+.sim-item.jv{background:var(--roxo-light)}.sim-item.bk{background:var(--dourado-bg)}
+.sim-item .sip{font-size:20px;font-weight:800}
+.sim-item.jv .sip{color:var(--roxo)}.sim-item.bk .sip{color:var(--dourado-dark)}.sim-item .sil{font-size:10px;color:#888;margin-top:2px}
+.gatilho-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}
+.gatilho-item{background:var(--roxo-light);border-radius:9px;padding:9px;text-align:center}
+.gatilho-item .gi{font-size:18px;margin-bottom:3px}.gatilho-item .gn{font-size:10px;font-weight:700;color:var(--roxo-dark);line-height:1.3}
+.sim5-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.sim5-list li{background:var(--verde-bg);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--verde);font-weight:600;display:flex;align-items:center;gap:8px}
+.validade-badge{background:var(--azul-mid);color:white;border-radius:10px;padding:10px 14px;text-align:center;margin-bottom:14px;font-size:12px;font-weight:700}
+.validade-badge span{font-size:16px;font-weight:800;display:block;margin-top:2px}
+.faixas-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.faixa-card{border-radius:11px;overflow:hidden;border:1.5px solid}
+.faixa-card.f1{border-color:#185FA5}.faixa-card.f2{border-color:#378ADD}.faixa-card.f3{border-color:#0C447C}.faixa-card.f4{border-color:#042C53}
+.faixa-header{padding:10px 14px;display:flex;align-items:center;gap:8px}
+.faixa-card.f1 .faixa-header{background:#185FA5}.faixa-card.f2 .faixa-header{background:#378ADD}.faixa-card.f3 .faixa-header{background:#0C447C}.faixa-card.f4 .faixa-header{background:#042C53}
+.faixa-title{color:white;font-size:14px;font-weight:800}.faixa-icon{font-size:20px}
+.faixa-body{padding:12px 14px;background:white}
+.faixa-row{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5;font-size:12px;color:#222;line-height:1.4}
+.faixa-row:last-child{border-bottom:none}
+.faixa-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.f1 .faixa-dot{background:#185FA5}.f2 .faixa-dot{background:#378ADD}.f3 .faixa-dot{background:#0C447C}.f4 .faixa-dot{background:#042C53}
+.resp-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:14px}
+.resp-card{border-radius:11px;overflow:hidden;border:2px solid}
+.resp-card.rep{border-color:#A32D2D}.resp-card.cond{border-color:#FFCA28}.resp-card.ap{border-color:var(--verde)}
+.resp-header{padding:10px 14px;display:flex;align-items:center;gap:8px}
+.resp-card.rep .resp-header{background:#A32D2D}.resp-card.cond .resp-header{background:#F59E0B}.resp-card.ap .resp-header{background:var(--verde)}
+.resp-title{color:white;font-size:13px;font-weight:800}.resp-icon{font-size:18px}
+.resp-body{padding:12px 14px;background:white;font-size:12px;color:#222;line-height:1.6}
+.calc-box{border-radius:12px;padding:16px;margin-bottom:12px;color:white}
+.calc-box.roxo-dark{background:linear-gradient(135deg,#26215C,#534AB7)}.calc-box.laranja{background:linear-gradient(135deg,#993C1D,#D85A30)}
+.calc-title{font-size:12px;color:rgba(255,255,255,.75);margin-bottom:10px;font-weight:600}
+.calc-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.calc-row:last-child{border-bottom:none}
+.calc-label{font-size:12px;color:rgba(255,255,255,.8)}.calc-val{font-size:14px;font-weight:800;color:var(--dourado-light)}
+.calc-highlight{background:rgba(255,255,255,.1);border-radius:8px;padding:10px 12px;margin-top:8px;display:flex;justify-content:space-between;align-items:center}
+.calc-highlight .cl{font-size:12px;color:rgba(255,255,255,.8)}.calc-highlight .cv{font-size:18px;font-weight:800;color:var(--dourado-light)}
+.regra-ouro{background:linear-gradient(135deg,#412402,#633806);border-radius:12px;padding:14px 16px;margin-bottom:1rem;position:relative;overflow:hidden}
+.ro-tag{font-size:10px;color:var(--dourado-light);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.ro-title{font-size:15px;font-weight:800;color:var(--dourado-light);margin-bottom:8px}
+.ro-items{display:flex;flex-direction:column;gap:5px}
+.ro-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:rgba(255,255,255,.9);line-height:1.4}
+.ro-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.qsec{background:white;border-radius:12px;border:2px solid var(--roxo-mid);overflow:hidden;margin-bottom:.875rem}
+.qsec.azul-q{border-color:#B5D4F4}.qsec.azul-q .qsec-head{background:var(--azul-mid)}
+.qsec.ch-q{border-color:#CBD5E0}.qsec.ch-q .qsec-head{background:var(--chumbo-mid)}
+.qsec.am-q{border-color:#E8C97A}.qsec.am-q .qsec-head{background:var(--am-mid)}
+.qsec-head{background:var(--roxo);padding:10px 14px}.qsec-head h3{color:white;font-size:13px;font-weight:700}
+.qbody{padding:14px}
+.qtxt{font-size:13px;font-weight:700;color:#222;margin-bottom:10px;line-height:1.5}
+.qopts{display:flex;flex-direction:column;gap:7px;margin-bottom:10px}
+.qopt{padding:10px 13px;border:1.5px solid #ddd;border-radius:9px;font-size:12px;cursor:pointer;text-align:left;background:#f8f8f8;color:#222;transition:all .15s;line-height:1.4}
+.qopt:hover{border-color:var(--roxo-mid);background:var(--roxo-light)}
+.qopt.sel{border-color:var(--roxo);background:var(--roxo-light);color:var(--roxo-dark);font-weight:700}
+.qopt.ok{background:#EAF3DE;border-color:#3B6D11;color:#3B6D11;font-weight:700}.qopt.no{background:#FCEBEB;border-color:#A32D2D;color:#A32D2D}
+.qfb{font-size:12px;padding:10px 12px;border-radius:8px;margin-bottom:9px;display:none;line-height:1.5}
+.qfb.ok{background:#EAF3DE;color:#3B6D11}.qfb.no{background:#FCEBEB;color:#A32D2D}
+.btn-cfm{color:white;border:none;border-radius:8px;padding:10px 18px;font-size:12px;font-weight:700;cursor:pointer;display:none;background:var(--roxo)}
+.btn-cfm.az{background:var(--azul-mid)}.btn-cfm.ch{background:var(--chumbo-mid)}.btn-cfm.am{background:var(--am-mid)}
+.fqsec{background:white;border-radius:12px;border:2px solid var(--dourado);overflow:hidden;margin-bottom:.875rem}
+.fqhead{background:var(--dourado);padding:12px 14px}.fqhead h3{color:white;font-size:13px;font-weight:700}.fqhead p{color:rgba(255,255,255,.85);font-size:11px}
+.navrow{display:flex;gap:8px;margin-bottom:.875rem}
+.btn-prev{flex:1;padding:11px;border:1.5px solid var(--roxo-mid);background:white;color:var(--roxo);border-radius:9px;font-size:13px;font-weight:700;cursor:pointer}
+.btn-adv{flex:2;padding:11px;background:var(--roxo);color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer}
+.btn-adv:disabled{opacity:.4;cursor:not-allowed}.btn-adv.g{background:var(--dourado)}
+.rbox{padding:2rem 1.25rem;text-align:center}
+.rico{font-size:52px;margin-bottom:.875rem}
+.rscore{font-size:42px;font-weight:800}.rscore.pass{color:var(--dourado)}.rscore.fail{color:#A32D2D}
+.rmsg{font-size:15px;font-weight:700;margin:.5rem 0}.rsub{font-size:12px;color:#888;margin-bottom:1.25rem}
+.btn-retry{width:100%;padding:12px;background:#A32D2D;color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:9px}
+.btn-fin{width:100%;padding:12px;background:var(--dourado);color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer}
+.q6-opt{width:100%;text-align:left;padding:12px 14px;background:white;border:1.5px solid #eee;border-radius:9px;font-size:13px;cursor:pointer;margin-bottom:9px;color:#222;transition:all .15s;line-height:1.4}
+.q6-opt:hover{border-color:var(--roxo-mid);background:var(--roxo-light)}
+.q6-opt.sel{border-color:var(--roxo);background:var(--roxo-light);font-weight:700}
+.q6-opt.ok{background:#EAF3DE;border-color:#3B6D11;color:#3B6D11}.q6-opt.no{background:#FCEBEB;border-color:#A32D2D;color:#A32D2D}
+.q6-next{width:100%;padding:12px;background:var(--roxo);color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer;display:none;margin-top:.5rem}
+.cert-wrap{border:4px solid var(--dourado);border-radius:16px;padding:1.75rem 1.25rem;text-align:center;background:white;position:relative;overflow:hidden;margin:1.25rem 1.25rem .5rem}
+.cert-crown{font-size:36px;margin-bottom:.25rem}.cert-ac{font-size:10px;letter-spacing:4px;color:var(--dourado);font-weight:700;text-transform:uppercase}
+.cert-main{font-size:20px;font-weight:800;color:var(--roxo-dark);margin:.875rem 0 .25rem}
+.cert-sub{font-size:13px;color:#888;margin-bottom:.875rem}
+.cert-name{font-size:24px;font-weight:800;color:var(--dourado-dark);border-bottom:2px solid var(--dourado);display:inline-block;padding-bottom:3px;margin:.5rem 0 .875rem}
+.cert-desc{font-size:12px;color:#666;max-width:300px;margin:0 auto 1rem;line-height:1.6}
+.cert-seal{font-size:44px;margin:.75rem 0}.cert-date{font-size:11px;color:#888}
+.cert-footer{display:flex;justify-content:space-around;margin-top:1.25rem;padding-top:.875rem;border-top:1px solid var(--dourado-light)}
+.csign{text-align:center}.csign-line{width:90px;border-top:1px solid #333;margin:0 auto 3px}
+.csign-n{font-size:10px;font-weight:700;color:#222}.csign-r{font-size:9px;color:#888}
+.cert-btns{padding:0 1.25rem 1.25rem;display:flex;flex-direction:column;gap:8px}
+.btn-share{width:100%;padding:12px;background:var(--roxo);color:white;border:none;border-radius:9px;font-size:13px;font-weight:700;cursor:pointer}
+.btn-back-dash{width:100%;padding:12px;background:white;color:var(--roxo);border:1.5px solid var(--roxo);border-radius:9px;font-size:13px;font-weight:700;cursor:pointer}
+.adm-body{padding:1.25rem;max-width:700px;margin:0 auto}.adm-title{font-size:17px;font-weight:700;color:#222;margin-bottom:1rem}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:1.25rem}
+.scard{background:#f8f8f8;border-radius:9px;padding:12px;text-align:center}
+.scard .sn{font-size:22px;font-weight:800;color:var(--roxo)}.scard .sl{font-size:10px;color:#888;margin-top:2px}
+.stitle{font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.brow{background:white;border-radius:9px;border:1px solid #eee;padding:11px 13px;margin-bottom:9px;cursor:pointer;transition:all .2s}
+.brow:hover{border-color:var(--roxo-mid)}
+.bhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.bname{font-size:13px;font-weight:700;color:#222}
+.bstat{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:700}
+.bstat.c{background:var(--dourado-bg);color:var(--dourado-dark)}.bstat.p{background:var(--roxo-light);color:var(--roxo)}.bstat.n{background:#f0f0f0;color:#999}
+.bpw{background:#eee;border-radius:10px;height:5px;margin-bottom:3px}.bpf{height:5px;border-radius:10px;background:var(--roxo)}.bpf.c{background:var(--dourado)}
+.bpl{font-size:10px;color:#999}
+.ver-btn{font-size:11px;color:var(--roxo);font-weight:700;margin-top:5px;background:none;border:none;cursor:pointer;padding:0;text-decoration:underline}
+.rel-header{background:var(--roxo-dark);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.rel-back{background:none;border:none;color:rgba(255,255,255,.7);font-size:12px;cursor:pointer}
+.rel-body{padding:1.25rem;max-width:700px;margin:0 auto}
+.rel-name{font-size:20px;font-weight:800;color:#222;margin-bottom:.25rem}
+.rel-sub{font-size:12px;color:#888;margin-bottom:1rem}
+.rel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:1.25rem}
+.rel-card{border-radius:10px;padding:12px;text-align:center}
+.rel-card.total{background:var(--roxo-light)}.rel-card.nota{background:var(--dourado-bg)}.rel-card.tempo{background:var(--verde-bg)}
+.rel-card .rv{font-size:22px;font-weight:800}
+.rel-card.total .rv{color:var(--roxo)}.rel-card.nota .rv{color:var(--dourado-dark)}.rel-card.tempo .rv{color:var(--verde)}
+.rel-card .rl{font-size:10px;color:#888;margin-top:2px}
+.mod-perf{background:white;border-radius:10px;border:1px solid #eee;overflow:hidden;margin-bottom:10px}
+.mod-perf-head{padding:10px 13px;display:flex;align-items:center;justify-content:space-between;background:#f8f8f8;border-bottom:1px solid #eee}
+.mod-perf-title{font-size:13px;font-weight:700;color:#222}
+.mod-perf-nota{font-size:13px;font-weight:800;border-radius:20px;padding:2px 10px}
+.mod-perf-nota.ok{background:var(--verde-bg);color:var(--verde)}.mod-perf-nota.fail{background:#FCEBEB;color:#A32D2D}.mod-perf-nota.pend{background:#f0f0f0;color:#999}
+.mod-perf-body{padding:10px 13px;font-size:12px}
+.erro-item{font-size:11px;color:#A32D2D;margin-bottom:4px;padding:7px 9px;background:#FCEBEB;border-radius:7px;line-height:1.4}
+.area-critica{display:flex;align-items:center;gap:8px;background:#FCEBEB;border-radius:8px;padding:9px 12px;margin-bottom:6px;font-size:12px;color:#A32D2D;font-weight:600}
+.adm-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;display:none;align-items:center;justify-content:center;padding:1rem}
+.adm-modal.active{display:flex}
+.adm-modal-box{background:white;border-radius:16px;padding:2rem;width:100%;max-width:340px;text-align:center}
+.adm-modal-box h3{font-size:16px;font-weight:700;color:var(--roxo-dark);margin-bottom:.5rem}
+.adm-modal-box p{font-size:13px;color:#888;margin-bottom:1.25rem}
+.adm-modal-box input{width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:9px;font-size:14px;margin-bottom:10px;outline:none}
+.adm-modal-box input:focus{border-color:var(--roxo)}
+@media(max-width:480px){.igrid{grid-template-columns:1fr}.sim-row{grid-template-columns:1fr}}
+@media print{.hdr,.back-btn,.cert-btns{display:none!important}}
+
+</style>
+  
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script>
+  window._fbOk=false;
+  try{
+    firebase.initializeApp({apiKey:"AIzaSyCrmtQ6VEHVBke1AGt9MZEjDr80bX5HtMI",authDomain:"conceito-academy.firebaseapp.com",projectId:"conceito-academy",storageBucket:"conceito-academy.firebasestorage.app",messagingSenderId:"891144484760",appId:"1:891144484760:web:e02099229f01c24c7ddded"});
+    window._db=firebase.firestore();
+    window._fbOk=true;
+    console.log('Firebase OK!');
+  }catch(e){console.warn('Firebase erro:',e);}
+  </script>
+</head>
+<body>
+
+<div class="lightbox" id="lightbox">
+  <div class="lb-header"><div class="lb-title" id="lb-title">Videoaula</div><button class="lb-close" onclick="closeLB()">X</button></div>
+  <div class="lb-frame"><iframe id="lb-iframe" src="" allowfullscreen allow="autoplay; fullscreen"></iframe></div>
+  <div class="lb-footer">Pressione ESC para fechar</div>
+</div>
+
+<div class="adm-modal" id="adm-modal">
+  <div class="adm-modal-box">
+    <div style="font-size:32px;margin-bottom:.5rem">&#128272;</div>
+    <h3>Acesso Administrador</h3>
+    <p>Digite a senha para acessar o painel do gestor</p>
+    <input type="password" id="adm-pw" placeholder="Senha" onkeydown="if(event.key==='Enter')checkAdm()"/>
+    <button class="btn-pri" onclick="checkAdm()">Entrar como ADM</button>
+    <div class="lerr" id="adm-err">Senha incorreta.</div>
+    <div style="margin-top:10px"><button onclick="closeAdmModal()" style="background:none;border:none;color:#aaa;cursor:pointer;font-size:12px">Cancelar</button></div>
+  </div>
+</div>
+
+<div id="s-login" class="screen active">
+  <div class="lbox">
+    <div class="lcrown">&#127891;</div>
+    <div class="ltitle">CONCEITO <span>ACADEMY</span></div>
+    <div class="lsub">Treinamento &amp; Certificacao</div>
+    <p>Acesse com seu nome e CRECI para iniciar</p>
+    <input type="text" id="inp-name" placeholder="Seu nome completo" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <input type="text" id="inp-creci" placeholder="CRECI (obrigatorio)" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="btn-pri" onclick="doLogin()">Entrar na Academy</button>
+    <div class="lerr" id="login-err">Por favor preencha seu nome e CRECI.</div>
+    <div class="alink" onclick="openAdmModal()">Acesso administrador</div>
+  </div>
+</div>
+
+<div id="s-dash" class="screen">
+  <div class="hdr"><div class="hlogo">CONCEITO <span>ACADEMY</span></div><div class="hright"><div class="avatar" id="av1">?</div><div><div class="hname" id="hname">Corretor</div><button class="btn-out" onclick="doLogout()">Sair</button></div></div></div>
+  <div class="dash-hero"><h1 id="dash-ola">Bem-vindo</h1><p>Complete todos os modulos em sequencia para obter sua certificacao</p><div class="dpbar-wrap"><div class="dpbar-fill" id="dpfill" style="width:0%"></div></div><div class="dpbar-label" id="dplabel">0 de 7 modulos concluidos</div></div>
+  <div class="mods-list" id="mods-list"></div>
+</div>
+
+<div id="s-mod1" class="screen">
+  <div class="hdr"><div class="hlogo">CONCEITO <span>ACADEMY</span></div><div class="avatar" id="av2">?</div></div>
+  <div class="mod-hero p1"><button class="back-btn" onclick="goBack()">&#8592; Voltar</button><div class="mtag">Modulo 1</div><h1>&#127970; Produto Conceito Poa</h1><p>Conheca o empreendimento</p></div>
+  <div class="oprog"><div class="oprog-head"><span id="m1-label">Topico 1 de 5</span><strong id="m1-pct">0%</strong></div><div class="obar"><div class="obar-fill" id="m1-fill" style="width:0%"></div></div></div>
+  <div class="tnav" id="m1-nav"></div><div class="carea" id="m1-area"></div>
+</div>
+
+<div id="s-mod2" class="screen">
+  <div class="hdr"><div class="hlogo">CONCEITO <span>ACADEMY</span></div><div class="avatar" id="av3">?</div></div>
+  <div class="mod-hero p2"><button class="back-btn" onclick="goBack()">&#8592; Voltar</button><div class="mtag">Modulo 2</div><h1>&#129309; Atendimento 3 Passos da Venda</h1><p>Do primeiro contato ao fechamento</p></div>
+  <div class="steps-ov">
+    <div class="schip s1 active" onclick="m2Jump(0)"><div class="schip-num s1">1</div><div class="schip-name s1">Apresentacao</div><div class="stick" id="stk0"></div></div>
+    <div class="schip s2" onclick="m2Jump(1)"><div class="schip-num s2">2</div><div class="schip-name s2">Simulacao</div><div class="stick" id="stk1"></div></div>
+    <div class="schip s3" onclick="m2Jump(2)"><div class="schip-num s3">3</div><div class="schip-name s3">Fechamento</div><div class="stick" id="stk2"></div></div>
+  </div>
+  <div class="oprog"><div class="oprog-head"><span id="m2-label">Topico 1 de 6</span><strong id="m2-pct">0%</strong></div><div class="obar"><div class="obar-fill" id="m2-fill" style="width:0%"></div></div></div>
+  <div class="tnav" id="m2-nav"></div><div class="carea" id="m2-area"></div>
+</div>
+
+<div id="s-mod3" class="screen">
+  <div class="hdr"><div class="hlogo">CONCEITO <span>ACADEMY</span></div><div class="avatar" id="av4">?</div></div>
+  <div class="mod-hero p3"><button class="back-btn" onclick="goBack()">&#8592; Voltar</button><div class="mtag">Modulo 3</div><h1>&#128176; Simulacao Caixa</h1><p>MCMV 2026 e boas praticas</p></div>
+  <div class="oprog"><div class="oprog-head"><span id="m3-label">Topico 1 de 5</span><strong id="m3-pct">0%</strong></div><div class="obar"><div class="obar-fill" id="m3-fill" style="width:0%;background:var(--azul-mid)"></div></div></div>
+  <div class="tnav" id="m3-nav"></div><div class="carea" id="m3-area"></div>
+</div>
+
+<div id="s-mod4" class="screen">
+  <div class="hdr"><div class="hlogo">CONCEITO <span>ACADEMY</span></div><div class="avatar" id="av5">?</div></div>
+  <div class="mod-hero p4"><button class="back-btn" onclick="goBack()">&#8592; Voltar</button><div class="mtag">Modulo 4</div><h1>&#128202; Fluxo de Pagamento</h1><p>Pro Soluto e parcelamento</p></div>
+  <div class="oprog"><div class="oprog-head"><span id="m4-label">Topico 1 de 5</span><strong id="m4-pct">0%</strong></div><div class="obar"><div class="obar-fill" id="m4-fill" style="width:0%;background:var(--am-mid)"></div></div></div>
+  <div class="tnav" id="m4-nav"></div><div class="carea" id="m4-area"></div>
+</div>
+
+<div id="s-mod5" class="screen">
+  <div class="hdr"><div class="hlogo">CONCEITO <span>ACADEMY</span></div><div class="avatar" id="av6">?</div></div>
+  <div class="mod-hero p5"><button class="back-btn" onclick="goBack()">&#8592; Voltar</button><div class="mtag">Modulo 5</div><h1>&#128187; Sistema CV</h1><p>Pastas, leads e propostas</p></div>
+  <div class="oprog"><div class="oprog-head"><span id="m5-label">Topico 1 de 4</span><strong id="m5-pct">0%</strong></div><div class="obar"><div class="obar-fill" id="m5-fill" style="width:0%;background:var(--chumbo-mid)"></div></div></div>
+  <div class="tnav" id="m5-nav"></div><div class="carea" id="m5-area"></div>
+</div>
+
+<div id="s-quiz6" class="screen">
+  <div class="hdr"><div class="hlogo">CONCEITO <span>ACADEMY</span></div></div>
+  <div class="mod-hero p6"><button class="back-btn" onclick="goBack()">&#8592; Voltar</button><div class="mtag">Modulo 6 - Prova Final</div><h1>&#128221; Prova de Conhecimentos</h1><p>20 questoes - nota minima 6,0</p></div>
+  <div class="oprog"><div class="oprog-head"><span id="q6-label">Questao 1 de 20</span><strong id="q6-pct">0%</strong></div><div class="obar"><div class="obar-fill" id="q6-fill" style="width:0%;background:var(--dourado)"></div></div></div>
+  <div class="carea" id="quiz6-body"></div>
+</div>
+
+<div id="s-cert" class="screen">
+  <div class="hdr"><div class="hlogo">CONCEITO <span>ACADEMY</span></div><div class="avatar" id="av7">?</div></div>
+  <div class="cert-wrap">
+    <div class="cert-crown">&#127942;</div><div class="cert-ac">Conceito Academy</div>
+    <div class="cert-main">Certificado de Habilitacao Comercial</div>
+    <div class="cert-sub">Este certificado atesta que</div>
+    <div class="cert-name" id="cname">-</div>
+    <div class="cert-desc">concluiu o Programa de Certificacao Conceito Academy, estando habilitado a comercializar os produtos <strong>Conceito Poa by JV</strong>.</div>
+    <div class="cert-seal">&#129351;</div><div class="cert-date" id="cdate">-</div>
+    <div class="cert-footer">
+      <div class="csign"><div class="csign-line"></div><div class="csign-n">Gestao Comercial</div><div class="csign-r">Conceito Poa by JV</div></div>
+      <div class="csign"><div class="csign-line"></div><div class="csign-n">Coord. Academy</div><div class="csign-r">Treinamento e Certificacao</div></div>
+    </div>
+  </div>
+  <div class="cert-btns">
+    <button class="btn-share" onclick="window.print()">Imprimir Certificado</button>
+    <button class="btn-back-dash" onclick="goBack()">&#8592; Voltar ao Menu</button>
+  </div>
+</div>
+
+<div id="s-admin" class="screen">
+  <div class="hdr"><div class="hlogo">CONCEITO <span>ACADEMY</span> <span style="font-size:10px;color:var(--dourado-light);font-weight:400">GESTOR</span></div><button class="btn-out" onclick="doLogout()" style="color:rgba(255,255,255,.6)">Sair</button></div>
+  <div class="adm-body">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+      <div class="adm-title" style="margin-bottom:0">Painel do Gestor</div>
+      <button onclick="goAdmDash()" style="background:var(--roxo);color:white;border:none;border-radius:9px;padding:9px 16px;font-size:12px;font-weight:700;cursor:pointer">Ver Modulos</button>
+    </div>
+    <div class="stats-row">
+      <div class="scard"><div class="sn" id="adm-total">0</div><div class="sl">Corretores</div></div>
+      <div class="scard"><div class="sn" style="color:var(--dourado)" id="adm-cert">0</div><div class="sl">Certificados</div></div>
+      <div class="scard"><div class="sn" style="color:#639922" id="adm-prog">0</div><div class="sl">Em andamento</div></div>
+    </div>
+    <div class="stitle">Clique em um corretor para ver o relatorio detalhado</div>
+    <div id="blist"><div style="text-align:center;padding:2rem;color:#aaa;font-size:13px">Nenhum corretor registrou acesso ainda.</div></div>
+  </div>
+</div>
+
+<div id="s-relatorio" class="screen">
+  <div class="rel-header"><div class="hlogo" style="color:white">CONCEITO <span style="color:var(--dourado-light)">ACADEMY</span></div><button class="rel-back" onclick="show('s-admin');renderAdmin()">&#8592; Voltar</button></div>
+  <div class="rel-body" id="rel-body"></div>
+</div>
+
+<script>
+
+// ============================================================
+// CONFIGURAÇÃO — EDITE AQUI
+// ============================================================
+const ADM_SENHA = 'conceito2025';
+const VIDEO_M3  = 'https://drive.google.com/file/d/1AYsR61PO5tE2zN1VwU2_DgCs3S3i9j6D/preview';
+const VIDEO_M5  = 'https://drive.google.com/file/d/1KttzCyJecdP1jSWJZ8CFnnlAR8v2EpE7/preview';
+const VIDEO_M4  = ''; // Adicione o link do vídeo do Módulo 4 aqui
+const PDF_M3    = ''; // Adicione o link do PDF do Guia de Simulação aqui
+const PDF_M4    = ''; // Adicione o link do PDF da Campanha Comercial aqui
+
+// ============================================================
+// BANCO DE DADOS — Firebase Firestore + localStorage
+// ============================================================
+function getDB(){try{return JSON.parse(localStorage.getItem('ca_db')||'{}');}catch{return{};}}
+function saveDB(db){try{localStorage.setItem('ca_db',JSON.stringify(db));}catch{}}
+function getKey(n,c){return(n+c).toLowerCase().replace(/\s/g,'');}
+
+function saveCorretor(nome,creci,data){
+  // localStorage imediato
+  const db=getDB();const key=getKey(nome,creci);
+  if(!db[key]){db[key]={nome,creci,data,ts:Date.now()};}else{db[key].ts=Date.now();}
+  saveDB(db);
+  // Firebase em background — nao bloqueia
+  try{if(window._fbOk){window._db.collection('corretores').doc(key).set({nome,creci,data,ts:Date.now(),updatedAt:new Date().toISOString()}).catch(function(e){console.warn('FB save:',e);});}}catch(e){}
+}
+
+function updateCorretor(nome,creci,updates){
+  const db=getDB();const key=getKey(nome,creci);
+  if(db[key]){Object.assign(db[key].data,updates);saveDB(db);}
+  try{
+    if(window._fbOk){
+      window._db.collection('corretores').doc(key).get().then(function(snap){
+        if(snap.exists){
+          var d=snap.data();
+          var nd=Object.assign({},d.data||{},updates);
+          // Preservar errosFixacao existentes ao atualizar
+          var errosFixacaoExistentes=d.errosFixacao||[];
+          window._db.collection('corretores').doc(key).set(
+            Object.assign({},d,{data:nd,errosFixacao:errosFixacaoExistentes,updatedAt:new Date().toISOString()})
+          );
+        }
+      }).catch(function(e){console.warn('FB update:',e);});
+    }
+  }catch(e){}
+}
+
+async function getAllCorretores(){
+  try{if(window._fbOk){var s=await window._db.collection('corretores').get();if(!s.empty){return s.docs.map(function(d){return d.data();}).sort(function(a,b){return b.ts-a.ts;});}}}catch(e){console.warn(e);}
+  return Object.values(getDB()).sort(function(a,b){return b.ts-a.ts;});
+}
+
+// ============================================================
+// ESTADO GLOBAL
+// ============================================================
+const G={
+  user:null,creci:null,isAdm:false,
+  m1:{cur:0,done:new Set(),sel:null,fAns:[],fDone:false,fScore:0,erros:[],sh:{}},
+  m2:{cur:0,done:new Set(),sel:null,fAns:[],fDone:false,fScore:0,erros:[],sh:{}},
+  m3:{cur:0,done:new Set(),sel:null,fAns:[],fDone:false,fScore:0,erros:[],sh:{}},
+  m4:{cur:0,done:new Set(),sel:null,fAns:[],fDone:false,fScore:0,erros:[],sh:{}},
+  m5:{cur:0,done:new Set(),sel:null,fAns:[],fDone:false,fScore:0,erros:[],sh:{}},
+  q6:{idx:0,score:0,sel:null,answered:false,erros:[],acertos:[],sh:{}},
+  modDone:new Set(),q6Done:false,q6Score:0,
+  errosFixacao:[] // acumula erros de fixação da sessão
+};
+
+// ============================================================
+// LIGHTBOX
+// ============================================================
+function openLB(url,title){
+  if(!url){alert('Vídeo em breve! Por favor aguarde.');return;}
+  document.getElementById('lb-iframe').src=url;
+  document.getElementById('lb-title').textContent=title;
+  document.getElementById('lightbox').classList.add('active');
+}
+function closeLB(){document.getElementById('lightbox').classList.remove('active');document.getElementById('lb-iframe').src='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLB();});
+function vThumb(url,label,barClass,emoji){
+  return`<div class="video-thumb" onclick="openLB('${url}','${emoji} ${label}')"><div class="vt-bg" style="background:linear-gradient(135deg,#1a1a2e,#2d3561)"><span style="font-size:52px;opacity:.3">${emoji}</span></div><div class="play-overlay"><div class="play-btn-big">▶</div><div class="play-label">${label}</div><div class="play-hint">Clique para assistir em tela ampliada</div></div></div><div class="video-label-bar ${barClass}">🎬 ${label}<span style="font-size:10px;color:#999">⛶ Tela ampliada</span></div>`;
+}
+
+// ============================================================
+// ADM
+// ============================================================
+function openAdmModal(){document.getElementById('adm-modal').classList.add('active');setTimeout(()=>document.getElementById('adm-pw').focus(),100);}
+function closeAdmModal(){document.getElementById('adm-modal').classList.remove('active');document.getElementById('adm-pw').value='';document.getElementById('adm-err').style.display='none';}
+function checkAdm(){
+  if(document.getElementById('adm-pw').value===ADM_SENHA){
+    closeAdmModal();G.isAdm=true;G.user='Administrador';renderAdmin();show('s-admin');
+  }else{document.getElementById('adm-err').style.display='block';}
+}
+
+// ============================================================
+// LOGIN / LOGOUT
+// ============================================================
+function doLogin(){
+  const n=document.getElementById('inp-name').value.trim();
+  const c=document.getElementById('inp-creci').value.trim();
+  if(!n||!c){document.getElementById('login-err').style.display='block';return;}
+  document.getElementById('login-err').style.display='none';
+  G.user=n;G.creci=c;G.isAdm=false;
+  const init=n.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+  ['av1','av2','av3','av4','av5','av6','av7'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=init;});
+  document.getElementById('hname').textContent=n.split(' ')[0];
+  document.getElementById('dash-ola').textContent='Olá, '+n.split(' ')[0]+'! 👋';
+  // Tenta carregar progresso salvo antes de criar novo registro
+  carregarProgressoCorretor(n,c);
+}
+
+async function carregarProgressoCorretor(nome,creci){
+  const key=(nome+creci).toLowerCase().replace(/\s/g,'');
+  let dadosSalvos=null;
+
+  // 1. Tenta Firebase primeiro
+  try{
+    if(window._fbOk){
+      const snap=await window._db.collection('corretores').doc(key).get();
+      if(snap.exists){dadosSalvos=snap.data();console.log('Progresso carregado do Firebase!');}
+    }
+  }catch(e){console.warn('Firebase load:',e);}
+
+  // 2. Fallback localStorage
+  if(!dadosSalvos){
+    try{
+      const db=JSON.parse(localStorage.getItem('ca_db')||'{}');
+      if(db[key]){dadosSalvos=db[key];console.log('Progresso carregado do localStorage!');}
+    }catch(e){}
+  }
+
+  if(dadosSalvos&&dadosSalvos.data){
+    // Restaurar progresso nos módulos
+    const d=dadosSalvos.data;
+    const notas=d.modNotas||{};
+
+    // Restaurar todos os módulos com quiz feito (qualquer nota — mesmo abaixo de 6)
+    if(notas.m1!=null){G.m1.fDone=true;G.m1.fScore=notas.m1;for(let i=0;i<5;i++)G.m1.done.add(i);}
+    if(notas.m2!=null){G.m2.fDone=true;G.m2.fScore=notas.m2;for(let i=0;i<6;i++)G.m2.done.add(i);}
+    if(notas.m3!=null){G.m3.fDone=true;G.m3.fScore=notas.m3;for(let i=0;i<5;i++)G.m3.done.add(i);}
+    if(notas.m4!=null){G.m4.fDone=true;G.m4.fScore=notas.m4;for(let i=0;i<5;i++)G.m4.done.add(i);}
+    if(notas.m5!=null){G.m5.fDone=true;G.m5.fScore=notas.m5;for(let i=0;i<4;i++)G.m5.done.add(i);}
+
+    // Restaurar prova e certificado
+    if(notas.prova!=null&&notas.prova>=6){G.q6Done=true;G.q6Score=notas.prova;G.modDone.add(6);}
+    if(d.cert){G.modDone.add(7);}
+
+    // Restaurar erros de fixação da sessão anterior
+    if(dadosSalvos.errosFixacao){G.errosFixacao=[...dadosSalvos.errosFixacao];}
+    console.log('Progresso restaurado! Modulos concluidos:',d.prog);
+  } else {
+    // Novo corretor — criar registro
+    saveCorretor(nome,creci,{prog:0,cert:false,nota:null,modNotas:{m1:null,m2:null,m3:null,m4:null,m5:null,prova:null},erros:[],areas:[]});
+  }
+
+  renderDash();
+  show('s-dash');
+}
+function doLogout(){location.reload();}
+
+// ============================================================
+// SHUFFLE (questões embaralhadas por corretor)
+// ============================================================
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function getSh(q,key,g){
+  if(!g.sh[key]){const idx=shuffle([...Array(q.o.length).keys()]);g.sh[key]={idx,na:idx.indexOf(q.a)};}
+  const {idx,na}=g.sh[key];
+  return{...q,o:idx.map(i=>q.o[i]),a:na};
+}
+
+// ============================================================
+// DADOS — MODS
+// ============================================================
+const MODS=[
+  {id:1,title:'Produto — Conceito Poá',icon:'🏢',col:'p',desc:'Book do empreendimento e especificações técnicas',type:'mod1'},
+  {id:2,title:'Atendimento e Passo a Passo da Venda',icon:'🤝',col:'p',desc:'Fluxo de atendimento e processo comercial',type:'mod2'},
+  {id:3,title:'Simulação Caixa',icon:'💰',col:'p',desc:'Simulador, MCMV 2026 e boas práticas',type:'mod3'},
+  {id:4,title:'Montagem de Fluxo de Pagamento',icon:'📊',col:'p',desc:'Pro Soluto, parcelamento e soluções para o cliente',type:'mod4'},
+  {id:5,title:'Sistema CV — Construtor de Vendas',icon:'💻',col:'p',desc:'Pastas, leads, propostas e boas práticas',type:'mod5'},
+  {id:6,title:'Prova de Conhecimentos',icon:'📝',col:'g',desc:'20 questões — nota mínima 6,0 para aprovação',type:'quiz6'},
+  {id:7,title:'Certificação',icon:'🏆',col:'g',desc:'Certificado de habilitação comercial',type:'cert'},
+];
+
+const M1T=[
+  {id:0,icon:'🏢',title:'Visão Geral',sub:'Dados técnicos do empreendimento',body:'overview',q:{t:'Quantas unidades possui o Conceito Poá?',o:['240 unidades','360 unidades','480 unidades','600 unidades'],a:2,ok:'✓ 480 unidades em 4 blocos de 15 pavimentos com 8 unidades por andar.',no:'✗ O Conceito Poá possui 480 unidades — 4 blocos × 15 pavimentos × 8 unidades por andar.'}},
+  {id:1,icon:'🏊',title:'Área de Lazer',sub:'19 espaços de lazer',body:'lazer',q:{t:'Qual item NÃO faz parte da área de lazer do Conceito Poá?',o:['Sala Gamer','Quadra Poliesportiva','Boliche','Pet Place'],a:2,ok:'✓ Não há boliche. O empreendimento possui 19 espaços de lazer, mas boliche não é um deles.',no:'✗ Boliche não existe no empreendimento. Confira os 19 espaços de lazer disponíveis.'}},
+  {id:2,icon:'📐',title:'Plantas',sub:'4 tipos de plantas disponíveis',body:'plantas',q:{t:'Qual é a metragem do apartamento Tipo A padrão?',o:['38,50 m²','47,11 m²','55,00 m²','62,32 m²'],a:1,ok:'✓ O Tipo A padrão possui 47,11 m².',no:'✗ O Tipo A padrão possui 47,11 m². O Garden A tem 62,32 m² e o Garden B tem 72,72 m².'}},
+  {id:3,icon:'⭐',title:'Diferenciais',sub:'O que nos diferencia da concorrência',body:'diferenciais',q:{t:'Qual diferencial garante que cada morador pague exatamente pelo que consumir de água?',o:['Caixa d\'água individual por apartamento','Água individualizada com medição exclusiva','Hidrômetro coletivo por bloco','Poço artesiano compartilhado'],a:1,ok:'✓ Água individualizada — cada apartamento tem medição própria, sem rateio.',no:'✗ O diferencial é a Água Individualizada — cada apto tem medição exclusiva, evitando rateio.'}},
+  {id:4,icon:'📍',title:'Localização',sub:'Entorno e pontos de referência',body:'localizacao',q:{t:'Qual supermercado fica a apenas 1 minuto a pé do Conceito Poá?',o:['Carrefour','Extra','Supermercado Nagumo','Atacadão'],a:2,ok:'✓ O Supermercado Nagumo fica a apenas 1 minuto a pé!',no:'✗ O Supermercado Nagumo fica a 1 minuto a pé — ótimo argumento de localização!'}},
+];
+const M1F=[
+  {t:'Quantos blocos compõem o Conceito Poá?',o:['2 blocos','3 blocos','4 blocos','5 blocos'],a:2},
+  {t:'Qual é a metragem do apartamento Tipo A padrão?',o:['38,50 m²','47,11 m²','55,00 m²','72,72 m²'],a:1},
+  {t:'Sobre as vagas de garagem, o que está correto?',o:['Nenhuma vaga inclusa','Vagas opcionais por adicional','1 vaga inclusa para todos os apartamentos','2 vagas inclusas'],a:2},
+  {t:'Qual destes é um diferencial real do Conceito Poá?',o:['Piscina térmica aquecida','Heliporto no rooftop','Varanda integrada com ponto grill','Coworking com cabines privativas'],a:2},
+  {t:'Em qual cidade fica o Conceito Poá?',o:['São Paulo-SP','Mogi das Cruzes-SP','Poá-SP','Suzano-SP'],a:2},
+];
+const M2T=[
+  {id:0,step:1,col:'cp',icon:'🎯',title:'Apresentação & Rapport',sub:'Passo 1',body:'rapport',q:{t:'O que é Rapport no contexto do atendimento comercial?',o:['Técnica de pressão para acelerar o fechamento','Criação de conexão verdadeira e vínculo de confiança com o cliente','Envio da tabela de preços no início','Apresentar o produto antes de ouvir o cliente'],a:1,ok:'✓ Rapport é criar uma conexão verdadeira — o cliente só compra de quem ele confia.',no:'✗ Rapport é criar conexão verdadeira e vínculo de confiança. Sem rapport, não há venda sustentável.'}},
+  {id:1,step:1,col:'cp',icon:'🔍',title:'Mesa & Aprovação',sub:'Passo 1',body:'mesa',q:{t:'Qual é a base de cálculo do SFH (Sistema Financeiro da Habitação)?',o:['50% da renda bruta','40% da renda bruta','30% da renda bruta','20% da renda bruta'],a:2,ok:'✓ O SFH permite comprometer até 30% da renda bruta no financiamento.',no:'✗ SFH = 30% da renda bruta. Limite máximo de comprometimento de renda.'}},
+  {id:2,step:1,col:'cp',icon:'📋',title:'Coleta de Dados',sub:'Passo 1',body:'coleta',q:{t:'Qual informação NÃO é relevante na coleta de dados do cliente?',o:['Renda bruta mensal','Data de nascimento','Histórico de viagens internacionais','Saldo de FGTS'],a:2,ok:'✓ Histórico de viagens não tem relevância para a análise de crédito imobiliário.',no:'✗ Histórico de viagens não tem relevância. Foque em: renda, nascimento, dependentes e FGTS.'}},
+  {id:3,step:2,col:'co',icon:'📊',title:'Técnica 20/80',sub:'Passo 2',body:'simulacao',q:{t:'Na Técnica 20/80, o que representam os 20%?',o:['A parcela mensal do financiamento','A entrada do cliente — ato + parcelas de obra','A taxa de juros acumulada','A comissão do corretor'],a:1,ok:'✓ 20% = entrada do cliente (ato + obra). 80% = financiamento bancário.',no:'✗ Os 20% são a entrada do cliente. Os 80% são o financiamento. Apresente de forma lúdica!'}},
+  {id:4,step:2,col:'co',icon:'🧠',title:'Perguntas Retóricas & Gatilhos',sub:'Passo 2',body:'gatilhos',q:{t:'Qual técnica guia o cliente ao próximo passo sem que ele perceba como pressão?',o:['Técnica 20/80','Perguntas Retóricas','Test Drive','Técnica 101%'],a:1,ok:'✓ Perguntas Retóricas criam na mente do cliente a resposta que o guia ao próximo passo.',no:'✗ São as Perguntas Retóricas — elas criam na mente do cliente a conclusão de que deve avançar.'}},
+  {id:5,step:3,col:'cg',icon:'🏁',title:'Fechamento — 5 SIM',sub:'Passo 3',body:'fechamento',q:{t:'Qual é o objetivo principal do Passo 3 do atendimento?',o:['Enviar a tabela de preços por WhatsApp','Marcar nova visita ao estande','Coletar documentação e fechar o negócio','Pedir indicações de outros clientes'],a:2,ok:'✓ Passo 3 = fechamento + coleta de documentação. É onde a venda se concretiza.',no:'✗ O Passo 3 é o fechamento — coletar a documentação e concretizar o negócio.'}},
+];
+const M2F=[
+  {t:'Qual é a Regra de Ouro que se aplica a todos os passos?',o:['Enviar tabela por e-mail antes da visita','Nunca consultar Serasa na presença do cliente','Nunca enviar tabela por e-mail/WhatsApp, não simular na frente do cliente, atendimento presencial sempre','Simular online antes para mostrar ao cliente'],a:2},
+  {t:'O que é a Técnica do Perguntador Profissional?',o:['Fazer perguntas rápidas para economizar tempo','Fazer perguntas eficazes para colher informações e criar vínculo verdadeiro','Questionar o cliente sobre concorrentes','Perguntar o orçamento máximo logo no início'],a:1},
+  {t:'O que é a Técnica dos 5 SIM?',o:['Fazer 5 simulações diferentes','Obter 5 confirmações positivas antes de propor o fechamento','Pedir 5 documentos de uma vez','Ligar 5 vezes antes de desistir'],a:1},
+  {t:'Por que o corretor NUNCA deve simular na frente do cliente?',o:['Por questões de segurança','Para não gerar expectativas incorretas antes da aprovação real pelo banco','Porque o sistema é lento','Porque os números são confidenciais'],a:1},
+  {t:'O que significa "deixar o mico da venda com o cliente"?',o:['Fazer o cliente pagar reserva imediata','A ansiedade pelo próximo passo deve estar com o cliente, não com o corretor','O corretor deve pressionar insistentemente','O cliente deve assinar no mesmo dia'],a:1},
+];
+const M3T=[
+  {id:0,icon:'▶',title:'Vídeo-aula — Simulador Habitacional Caixa',sub:'Assista ao tutorial completo antes de avançar',body:'video3',q:{t:'Qual é o endereço correto do portal da Caixa para simulações habitacionais?',o:['habitacao.caixa.gov.br','simulador.caixa.gov.br','caixa.gov.br/simulador','minhacasa.caixa.gov.br'],a:1,ok:'✓ O portal oficial é simulador.caixa.gov.br.',no:'✗ O portal correto é simulador.caixa.gov.br — memorize este endereço!'}},
+  {id:1,icon:'🏠',title:'MCMV — Novas Regras 2026',sub:'Válidas a partir de 22 de abril de 2026',body:'mcmv',q:{t:'Pelo MCMV 2026, qual é o limite de renda mensal para a Faixa 2?',o:['Até R$ 3.200,00','Até R$ 4.700,00','Até R$ 5.500,00','Até R$ 8.600,00'],a:2,ok:'✓ Faixa 2 = até R$ 5.500,00/mês (era R$ 4.700,00 antes de abril/2026).',no:'✗ Faixa 2 = até R$ 5.500,00/mês — novo limite válido desde 22/04/2026!'}},
+  {id:2,icon:'📋',title:'O Que Precisar Antes de Simular',sub:'Dados essenciais para uma simulação correta',body:'prereqs3',q:{t:'Qual documento confirma com mais precisão a renda bruta do cliente?',o:['Extrato bancário dos últimos 3 meses','Holerite (contracheque) mais recente','Declaração de Imposto de Renda','Carteira de Trabalho assinada'],a:1,ok:'✓ O holerite mostra a renda bruta com precisão e é aceito pelos bancos.',no:'✗ O holerite é o documento mais indicado — mostra a renda bruta, base do cálculo.'}},
+  {id:3,icon:'⚙️',title:'Passo a Passo da Simulação',sub:'Como preencher cada campo corretamente',body:'passos3',q:{t:'Por que a data de nascimento do cliente é fundamental na simulação?',o:['Para calcular o saldo FGTS disponível','Quanto mais jovem, maior o prazo máximo de financiamento disponível','Para verificar o score de crédito','Para calcular o valor de entrada'],a:1,ok:'✓ A data de nascimento define o prazo máximo — o financiamento termina antes dos 80 anos.',no:'✗ A data de nascimento define o prazo máximo do financiamento. Fundamental preencher corretamente.'}},
+  {id:4,icon:'💡',title:'Dicas e Boas Práticas',sub:'Como apresentar resultados sem errar',body:'dicas3',q:{t:'Por que o corretor NÃO deve mostrar a tela de simulação para o cliente?',o:['Porque o sistema costuma travar','A simulação é estimativa — mostrar antes da aprovação pode criar expectativas incorretas que o banco não confirme','Porque os números mudam a cada minuto','Porque é norma interna proibida pela construtora'],a:1,ok:'✓ Simulação é estimativa — o banco pode aprovar valor diferente. Apresente de forma lúdica!',no:'✗ Simulação é estimativa! Mostrar a tela pode criar expectativas que o banco não confirma.'}},
+];
+const M3F=[
+  {t:'Qual é o limite de renda para a Faixa 1 do MCMV (2026)?',o:['Até R$ 2.850,00','Até R$ 3.200,00','Até R$ 4.700,00','Até R$ 5.500,00'],a:1},
+  {t:'Na Faixa 3 do MCMV, qual é a taxa de juros anual?',o:['4% a 5,25% ao ano','4,75% a 7% ao ano','7,66% a 8,16% ao ano','10% ao ano'],a:2},
+  {t:'Na região Sudeste, qual é o percentual máximo financiado na Faixa 3?',o:['80% do valor do imóvel','70% do valor do imóvel','65% do valor do imóvel','50% do valor do imóvel'],a:2},
+  {t:'Qual é o limite máximo de comprometimento de renda no SFH?',o:['20% da renda bruta','30% da renda bruta','40% da renda bruta','50% da renda bruta'],a:1},
+  {t:'O que é o FGTS e como ele pode ajudar?',o:['Imposto mensal descontado no holerite','Fundo de Garantia que pode ser usado como entrada ou para amortizar o saldo devedor','Taxa de juros cobrada pelo banco','Índice de correção das parcelas durante a obra'],a:1},
+];
+const M4T=[
+  {id:0,icon:'🏦',title:'Entendendo a Resposta da Caixa',sub:'Os 3 cenários e o que fazer em cada um',body:'resposta',q:{t:'O cliente teve condicionamento de 70% em um imóvel de R$ 300.000,00. Qual é o Pro Soluto?',o:['R$ 30.000,00','R$ 60.000,00','R$ 90.000,00','R$ 70.000,00'],a:2,ok:'✓ Caixa aprovou 70% (R$ 210k). Pro Soluto = 30% = R$ 90.000,00.',no:'✗ Caixa aprovou 70% de R$300k = R$210k. O Pro Soluto é 30% = R$ 90.000,00.'}},
+  {id:1,icon:'🧮',title:'Calculando o Pro Soluto',sub:'O valor que cabe ao corretor resolver',body:'prosoluto',q:{t:'O que é o "Pro Soluto" na venda de imóveis na planta?',o:['O valor total aprovado e financiado pelo banco','O valor de entrada pago antes da aprovação','O valor que sobra do preço do imóvel após o financiamento aprovado, a ser pago à construtora','O valor da comissão paga ao corretor'],a:2,ok:'✓ Pro Soluto é o valor residual após o financiamento — aqui o trabalho do corretor faz diferença!',no:'✗ Pro Soluto = valor que sobra após o financiamento. Ex: Caixa aprovou 70%, os 30% restantes são o Pro Soluto.'}},
+  {id:2,icon:'💡',title:'Fontes de Recurso do Cliente',sub:'O que o cliente pode usar para cobrir o Pro Soluto',body:'recursos',q:{t:'Quais são as principais fontes para cobrir o Pro Soluto?',o:['Apenas dinheiro em conta corrente','FGTS, recurso próprio à vista e/ou adição de outro comprador para elevar o valor financiado','Somente o saldo de FGTS disponível','Apenas crédito pessoal em outro banco'],a:1,ok:'✓ Explore todas as opções: FGTS, recurso próprio E/OU adicionar outro comprador.',no:'✗ O cliente pode usar: FGTS, recurso próprio E/OU adicionar outro comprador. Explore todas!'}},
+  {id:3,icon:'📋',title:'Política de Parcelamento',sub:'Regras e formatos disponíveis com a construtora',body:'parcelamento',q:{t:'Qual é o percentual máximo que pode ser parcelado com a construtora?',o:['10% do valor do imóvel','15% do valor do imóvel','20% do valor do imóvel','30% do valor do imóvel'],a:1,ok:'✓ Política: até 15% com a construtora. O restante precisa vir de FGTS ou recurso próprio.',no:'✗ Limite de parcelamento com a construtora: 15% do valor do imóvel.'}},
+  {id:4,icon:'🏆',title:'Montando o Fluxo — Boas Práticas',sub:'Como construir a melhor solução para fechar',body:'praticas4',q:{t:'Por que quanto mais entrada o cliente der, melhor é para a venda?',o:['Porque aumenta a comissão do corretor','Reduz o saldo devedor, diminui a parcela e torna a venda mais saudável e segura para todos','Porque o banco exige entrada mínima de 30%','Porque facilita a liberação do FGTS'],a:1,ok:'✓ Mais entrada = menor saldo devedor = menor parcela = venda mais saudável para todos!',no:'✗ Mais entrada reduz o saldo devedor e a parcela — beneficia o cliente, a empresa e a venda.'}},
+];
+const M4F=[
+  {t:'O cliente recebeu aprovação de 80% pela Caixa em imóvel de R$ 250.000,00. Qual é o Pro Soluto?',o:['R$ 25.000,00','R$ 50.000,00','R$ 80.000,00','R$ 40.000,00'],a:1},
+  {t:'Cliente com condicionamento de 60% em R$ 300.000,00 e R$ 20.000,00 de FGTS. Qual é o valor que ainda falta resolver?',o:['R$ 60.000,00','R$ 100.000,00','R$ 80.000,00','R$ 120.000,00'],a:2},
+  {t:'Quais são os formatos de parcelamento com a construtora?',o:['Apenas parcelas mensais fixas','Mensais, anuais, semestrais em até 24 ou 48 vezes, limitados a 15% do imóvel','Apenas entrada à vista','Parcelamento livre de até 10 anos'],a:1},
+  {t:'O Pro Soluto é alto e o cliente não tem FGTS. Que estratégia o corretor deve propor?',o:['Recomendar que o cliente desista','Adicionar outro comprador para aumentar a renda composta e o valor financiado','Aguardar nova análise da Caixa','Solicitar desconto no preço do imóvel'],a:1},
+  {t:'Qual é a Regra de Ouro ao montar o fluxo de pagamento?',o:['Parcele sempre o máximo possível','Pergunte objetivamente o real potencial de pagamento — entrada à vista, FGTS e capacidade de parcelamento','Nunca pergunte sobre situação financeira','Ofereça sempre o mesmo fluxo padrão para todos'],a:1},
+];
+const M5T=[
+  {id:0,icon:'▶',title:'Vídeo-aula — CV Construtor de Vendas',sub:'Assista ao tutorial completo do sistema',body:'video5',q:{t:'Para que serve o sistema CV (Construtor de Vendas)?',o:['Controle de estoque de materiais da obra','Gestão de leads, pastas, propostas e acompanhamento do funil de vendas','Publicação de anúncios em portais imobiliários','Contabilidade e folha de pagamento'],a:1,ok:'✓ O CV é a plataforma de gestão comercial completa — leads, pastas, propostas e funil.',no:'✗ O CV é para gestão comercial: leads, pastas, propostas e acompanhamento do funil.'}},
+  {id:1,icon:'📁',title:'Como Subir uma Pasta no CV',sub:'Passo a passo completo para cadastrar um cliente',body:'pasta',q:{t:'Qual é a informação OBRIGATÓRIA ao subir uma pasta no CV?',o:['Foto do cliente','Dados completos do cliente, unidade de interesse e documentação exigida','Apenas CPF e telefone','Somente nome e e-mail'],a:1,ok:'✓ Dados completos, unidade de interesse e documentação são obrigatórios para a pasta avançar.',no:'✗ Ao subir a pasta você precisa de: dados completos, unidade de interesse e documentação.'}},
+  {id:2,icon:'👥',title:'Gestão de Leads no CV',sub:'Como registrar, acompanhar e converter leads',body:'leads',q:{t:'O que o corretor deve fazer IMEDIATAMENTE após registrar um novo lead?',o:['Aguardar o cliente entrar em contato','Registrar o histórico de atendimento e agendar o próximo contato no sistema','Enviar a tabela por WhatsApp sem mais registros','Reportar ao gerente verbalmente'],a:1,ok:'✓ Sempre registre o histórico e agende o próximo contato — mantém o funil vivo!',no:'✗ Após registrar o lead: registre o histórico e agende o próximo contato imediatamente.'}},
+  {id:3,icon:'⚠️',title:'Boas Práticas e Erros Comuns',sub:'O que fazer e o que evitar no sistema',body:'praticas',q:{t:'Por que é fundamental manter o CV sempre atualizado?',o:['Para evitar multas por descumprimento','Para que a gestão tenha visibilidade real do funil e possa apoiar o corretor no momento certo','Para o cliente acompanhar a negociação','Porque o sistema trava se não for atualizado'],a:1,ok:'✓ CV atualizado = gestão enxerga o funil = suporte no momento certo = mais vendas!',no:'✗ CV atualizado permite que a gestão apoie o corretor com mais eficácia e no momento certo.'}},
+];
+const M5F=[
+  {t:'O que é uma "pasta" no sistema CV?',o:['Proposta formal ao banco','Registro completo de um cliente interessado em uma unidade específica','Relatório mensal de vendas','Contrato de compra e venda assinado'],a:1},
+  {t:'Qual é o status correto para um cliente que assinou o contrato?',o:['Lead','Em negociação','Vendido / Contrato assinado','Prospect inicial'],a:2},
+  {t:'O que é o funil de vendas no sistema CV?',o:['Lista de preços por tipo de unidade','Visualização de cada lead em sua etapa (Prospect → Qualificado → Negociação → Vendido)','Relatório financeiro mensal','Sistema de cálculo de comissões'],a:1},
+  {t:'Ao subir uma pasta, qual unidade deve ser vinculada?',o:['Qualquer unidade disponível','A unidade de interesse específica que o cliente manifestou','A unidade mais barata','A indicada pelo gerente'],a:1},
+  {t:'Por que registrar TODAS as interações com o cliente no CV?',o:['Exigência do CRECI','Para manter histórico completo que permita à gestão acompanhar e apoiar o corretor','Para receber comissão corretamente','Para gerar relatórios automáticos para o banco'],a:1},
+];
+const Q6=[
+  {tema:'Produto',t:'O Conceito Poá possui 4 blocos com 8 unidades por andar e 15 pavimentos. Qual é o total correto de unidades?',o:['320 unidades','400 unidades','480 unidades','540 unidades'],a:2},
+  {tema:'Produto',t:'Um cliente pergunta a diferença entre o Garden A e o Tipo A padrão. O que você responde?',o:['São idênticos — apenas o preço difere','Garden A tem 62,32 m² com quintal privativo e ponto grill; Tipo A padrão tem 47,11 m²','Garden A fica exclusivamente no último andar','Garden A é disponível apenas para pagamento à vista'],a:1},
+  {tema:'Produto',t:'Qual diferencial garante que cada morador pague exatamente pelo que consumir de água?',o:['Poço artesiano compartilhado entre os blocos','Caixa d\'água coletiva com rateio automático','Água individualizada com medição exclusiva por apartamento','Sistema de reúso de água da chuva'],a:2},
+  {tema:'Produto',t:'Que argumento de mobilidade você utilizaria sobre o entorno do empreendimento?',o:['Apenas transporte por aplicativo na região','O empreendimento fica a mais de 20 minutos das estações','Estação Ferraz a 8 min e Estação Poá a 9 min, com acesso à linha Calmon Viana a 13 min','Acesso exclusivamente por automóvel'],a:2},
+  {tema:'Atendimento',t:'O cliente resiste ao valor do ato. O que a Técnica dos 5 Segundos recomenda?',o:['Reduzir imediatamente o valor','Insistir repetidamente até o cliente ceder','Apresentar o valor, manter silêncio por 5 segundos e deixar o cliente reagir primeiro','Mudar rapidamente de assunto'],a:2},
+  {tema:'Atendimento',t:'O que significa "deixar o mico com o cliente" no fechamento?',o:['O corretor deve pressionar o cliente','A ansiedade e responsabilidade pelo próximo passo devem estar com o cliente, não com o corretor','O cliente deve pagar reserva imediata','O corretor deve desaparecer após a proposta'],a:1},
+  {tema:'Atendimento',t:'O que é a Técnica 101%?',o:['Garantir 101% de desconto para fechar','Encontrar genuinamente 1% que o corretor admira no cliente e focar 100% nisso para criar conexão real','Fazer 101 tentativas de contato','Apresentar 101 características do imóvel'],a:1},
+  {tema:'Atendimento',t:'Por que o corretor nunca deve enviar a tabela de preços por WhatsApp ou e-mail?',o:['Porque a tabela é documento confidencial sigiloso','Para não criar objeções antes do atendimento presencial — o cliente precisa estar na mesa','Porque a tabela só pode ser entregue impressa pessoalmente','Por exigência legal do CRECI regional'],a:1},
+  {tema:'Simulação/MCMV',t:'Um casal com renda bruta conjunta de R$ 6.000,00 solicita financiamento pelo MCMV 2026. Em qual faixa se enquadram?',o:['Faixa 1 — até R$ 3.200,00','Faixa 2 — até R$ 5.500,00','Faixa 3 — até R$ 9.600,00','Faixa 4 — até R$ 13.000,00'],a:2},
+  {tema:'Simulação/MCMV',t:'Na região Sudeste, qual é o percentual máximo que a Caixa financia na Faixa 3 do MCMV 2026?',o:['80%','75%','65%','50%'],a:2},
+  {tema:'Simulação/MCMV',t:'Na Técnica 20/80, o que representam os 80%?',o:['A entrada paga em parcelas durante a obra','A taxa de juros acumulada ao longo do financiamento','O valor financiado pelo banco após a entrega das chaves','O lucro bruto da construtora'],a:2},
+  {tema:'Simulação/MCMV',t:'Por que o corretor NUNCA deve mostrar a tela de simulação para o cliente?',o:['Porque o sistema da Caixa é lento e trava','A simulação é estimativa — mostrar antes pode criar expectativas que o banco não confirme','Porque é proibido pelo Banco Central','Porque os números mudam a cada segundo'],a:1},
+  {tema:'Fluxo de Pagamento',t:'O cliente recebeu aprovação de 80% pela Caixa em imóvel de R$ 300.000,00. Qual é o Pro Soluto?',o:['R$ 30.000,00','R$ 60.000,00','R$ 80.000,00','R$ 24.000,00'],a:1},
+  {tema:'Fluxo de Pagamento',t:'Qual índice corrige o saldo devedor do cliente durante o período de obras?',o:['IPCA','CDI','INCC — Índice Nacional de Custo da Construção','Selic'],a:2},
+  {tema:'Fluxo de Pagamento',t:'Qual é o percentual máximo parcelável com a construtora?',o:['10%','15%','20%','25%'],a:1},
+  {tema:'Fluxo de Pagamento',t:'O Pro Soluto é alto e o cliente não tem FGTS. O que o corretor deve propor?',o:['Recomendar que o cliente desista','Adicionar outro comprador para aumentar a renda composta e elevar o valor financiado','Aguardar nova análise da Caixa','Solicitar desconto no preço do imóvel'],a:1},
+  {tema:'Sistema CV',t:'O que deve ser feito imediatamente após registrar um novo lead no CV?',o:['Aguardar que o cliente entre em contato','Registrar o histórico de atendimento e agendar o próximo contato no sistema','Enviar a tabela por WhatsApp sem outros registros','Reportar ao gerente verbalmente sem registros'],a:1},
+  {tema:'Sistema CV',t:'O que acontece quando um corretor sobe uma pasta com dados incompletos?',o:['O sistema completa com dados anteriores','A pasta fica travada e não avança, podendo prejudicar a venda','O gerente é notificado mas a venda continua','Nada — o sistema aceita qualquer dado'],a:1},
+  {tema:'Geral',t:'Um corretor recebe um lead e demora 3 dias para entrar em contato. O que ele fez de errado?',o:['Nada — 3 dias é prazo razoável','Deveria ter contatado em até 48h e registrado o lead no CV no mesmo dia','Deveria ter passado o lead para outro corretor','Deveria ter enviado apenas uma mensagem de WhatsApp'],a:1},
+  {tema:'Geral',t:'Para que serve o Certificado emitido pela Conceito Academy?',o:['Substitui o registro no CRECI','Garante exclusividade de vendas no empreendimento','Comprova que o corretor concluiu o treinamento e está habilitado para comercializar o Conceito Poá by JV com qualidade','Libera acesso ao estande somente no dia do plantão'],a:2},
+];
+
+
+// ============================================================
+// BANCO DE PERGUNTAS DE FIXAÇÃO — 4 por tópico
+// Sorteio fixo por corretor baseado no CRECI
+// ============================================================
+function getQFixacao(topico, creci){
+  const banco = BANCO_FIXACAO[topico] || [];
+  if(!banco.length) return null;
+  let hash = 0;
+  const str = (creci||'0') + topico;
+  for(let i=0;i<str.length;i++) hash = ((hash<<5)-hash)+str.charCodeAt(i);
+  return banco[Math.abs(hash) % banco.length];
+}
+
+const BANCO_FIXACAO = {
+  'm1_t0':[
+    {t:'Quantas unidades possui o Conceito Poa?',o:['240 unidades','360 unidades','480 unidades','600 unidades'],a:2,ok:'✓ 480 unidades — 4 blocos x 15 pavimentos x 8 unidades por andar.',no:'✗ O Conceito Poa possui 480 unidades.'},
+    {t:'Quantos andares possui cada bloco do Conceito Poa?',o:['10 pavimentos','12 pavimentos','15 pavimentos','18 pavimentos'],a:2,ok:'✓ 15 pavimentos por bloco.',no:'✗ Cada bloco possui 15 pavimentos.'},
+    {t:'Qual e a area total do terreno do Conceito Poa?',o:['5.200 m2','7.800 m2','9.253 m2','12.000 m2'],a:2,ok:'✓ O terreno possui 9.253 m2.',no:'✗ A area do terreno e de 9.253 m2.'},
+    {t:'Quantas unidades existem por andar em cada bloco do Conceito Poa?',o:['4 unidades','6 unidades','8 unidades','10 unidades'],a:2,ok:'✓ 8 unidades por andar em cada bloco.',no:'✗ Sao 8 unidades por andar.'},
+  ],
+  'm1_t1':[
+    {t:'Qual item NAO faz parte da area de lazer do Conceito Poa?',o:['Sala Gamer','Quadra Poliesportiva','Boliche','Pet Place'],a:2,ok:'✓ Nao ha boliche no empreendimento.',no:'✗ Boliche nao existe — confira os 19 espacos.'},
+    {t:'Quantos espacos de lazer o Conceito Poa oferece?',o:['12 espacos','15 espacos','19 espacos','24 espacos'],a:2,ok:'✓ Sao 19 espacos de lazer completos.',no:'✗ O Conceito Poa possui 19 espacos de lazer.'},
+    {t:'Qual destes espacos de lazer esta disponivel no Conceito Poa?',o:['Boliche','Pista de Skate','Redario','Sauna'],a:2,ok:'✓ O Redario e um dos 19 espacos de lazer.',no:'✗ O Redario faz parte dos 19 espacos.'},
+    {t:'Como se chama o espaco para recebimento de compras online no Conceito Poa?',o:['Sala de Encomendas','Espaco Delivery','Mini Deposito','Locker'],a:1,ok:'✓ O Espaco Delivery e um dos 19 espacos de lazer.',no:'✗ O espaco correto e o Espaco Delivery.'},
+  ],
+  'm1_t2':[
+    {t:'Qual e a metragem do apartamento Tipo A padrao?',o:['38,50 m2','47,11 m2','55,00 m2','62,32 m2'],a:1,ok:'✓ O Tipo A padrao possui 47,11 m2.',no:'✗ O Tipo A padrao possui 47,11 m2.'},
+    {t:'Qual e a metragem do apartamento Garden A?',o:['47,11 m2','55,00 m2','62,32 m2','72,72 m2'],a:2,ok:'✓ O Garden A possui 62,32 m2 com quintal privativo.',no:'✗ O Garden A possui 62,32 m2.'},
+    {t:'Qual e a metragem do apartamento Garden B?',o:['55,00 m2','62,32 m2','68,00 m2','72,72 m2'],a:3,ok:'✓ O Garden B possui 72,72 m2 com quintal privativo ampliado.',no:'✗ O Garden B possui 72,72 m2.'},
+    {t:'Qual diferencial exclusivo possuem os apartamentos Garden A e Garden B?',o:['Piscina privativa','Varanda dupla','Quintal privativo','Garagem dupla'],a:2,ok:'✓ Os Gardens possuem quintal privativo — grande diferencial de vendas!',no:'✗ Os Gardens possuem quintal privativo.'},
+  ],
+  'm1_t3':[
+    {t:'Qual diferencial garante medicao exclusiva de agua por apartamento?',o:['Caixa dagua individual','Agua individualizada com medicao exclusiva','Hidrometro coletivo por bloco','Poco artesiano'],a:1,ok:'✓ Agua individualizada — medicao exclusiva, sem rateio.',no:'✗ O diferencial e a Agua Individualizada.'},
+    {t:'O Conceito Poa possui ponto de ar-condicionado em quais ambientes?',o:['Apenas na sala','Apenas nos quartos','Em todos os ambientes','Apenas na varanda'],a:2,ok:'✓ Ponto de ar-condicionado em todos os ambientes.',no:'✗ O ponto de ar-condicionado esta em todos os ambientes.'},
+    {t:'Qual e o material das bancadas da cozinha no Conceito Poa?',o:['Marmore','Granito','Porcelanato','MDF revestido'],a:1,ok:'✓ As bancadas da cozinha sao em granito.',no:'✗ As bancadas sao em granito.'},
+    {t:'Quantas vagas de garagem estao inclusas em cada apartamento?',o:['Nenhuma — vagas opcionais','1 vaga inclusa','2 vagas inclusas','Vagas apenas para Garden'],a:1,ok:'✓ 1 vaga de garagem inclusa para todos os apartamentos.',no:'✗ Todos os apartamentos tem 1 vaga inclusa.'},
+  ],
+  'm1_t4':[
+    {t:'Qual supermercado fica a apenas 1 minuto a pe do Conceito Poa?',o:['Carrefour','Extra','Supermercado Nagumo','Atacadao'],a:2,ok:'✓ O Supermercado Nagumo fica a 1 minuto a pe.',no:'✗ O Supermercado Nagumo fica a 1 minuto a pe.'},
+    {t:'A que distancia fica a Estacao Ferraz de Vasconcelos do Conceito Poa?',o:['5 minutos','8 minutos','12 minutos','15 minutos'],a:1,ok:'✓ A Estacao Ferraz fica a 8 minutos.',no:'✗ A Estacao Ferraz fica a 8 minutos.'},
+    {t:'A que distancia fica a Estacao Poa do empreendimento?',o:['5 minutos','7 minutos','9 minutos','12 minutos'],a:2,ok:'✓ A Estacao Poa fica a 9 minutos.',no:'✗ A Estacao Poa fica a 9 minutos.'},
+    {t:'Em qual cidade esta localizado o Conceito Poa?',o:['Sao Paulo-SP','Mogi das Cruzes-SP','Poa-SP','Suzano-SP'],a:2,ok:'✓ O Conceito Poa esta localizado em Poa-SP.',no:'✗ O empreendimento fica em Poa-SP.'},
+  ],
+  'm2_t0':[
+    {t:'O que e Rapport no atendimento comercial?',o:['Tecnica de pressao para fechar rapido','Criacao de conexao verdadeira e vinculo de confianca','Envio da tabela no inicio','Apresentar o produto antes de ouvir'],a:1,ok:'✓ Rapport e criar conexao verdadeira — o cliente so compra de quem confia.',no:'✗ Rapport e criar conexao verdadeira e vinculo de confianca.'},
+    {t:'O que significa aplicar a Tecnica 101% no atendimento?',o:['Garantir 101% de desconto','Encontrar 1% que admira genuinamente no cliente e focar 100% nisso','Fazer 101 perguntas','Apresentar 101 caracteristicas do produto'],a:1,ok:'✓ A Tecnica 101% cria conexao genuina e facilita o vinculo.',no:'✗ A Tecnica 101% e encontrar 1% que admira no cliente e focar 100% nisso.'},
+    {t:'O que e o "Test Drive" no contexto do atendimento?',o:['Levar o cliente para um passeio','Deixar o cliente se imaginar morando no empreendimento','Mostrar todas as plantas','Apresentar o simulador'],a:1,ok:'✓ O Test Drive e deixar o cliente se imaginar morando ali — cria desejo.',no:'✗ O Test Drive e deixar o cliente se imaginar morando no empreendimento.'},
+    {t:'Qual e o objetivo principal do Passo 1 do atendimento?',o:['Mostrar o preco imediatamente','Enviar a tabela de precos','Colher informacoes e criar conexao verdadeira','Marcar proxima visita'],a:2,ok:'✓ Passo 1 = colher informacoes e criar conexao verdadeira.',no:'✗ O objetivo do Passo 1 e colher informacoes e criar conexao verdadeira.'},
+  ],
+  'm2_t1':[
+    {t:'Qual e a base de calculo do SFH?',o:['50% da renda bruta','40% da renda bruta','30% da renda bruta','20% da renda bruta'],a:2,ok:'✓ SFH = 30% da renda bruta.',no:'✗ SFH = 30% da renda bruta.'},
+    {t:'Por que fazer o condicionamento de mesa antes de simular?',o:['Para impressionar o cliente','Para evitar criar expectativas incorretas antes da aprovacao do banco','Para economizar tempo','Por exigencia da construtora'],a:1,ok:'✓ O condicionamento evita expectativas incorretas antes da aprovacao real.',no:'✗ O condicionamento evita criar expectativas antes da aprovacao do banco.'},
+    {t:'O que o corretor verifica no condicionamento de mesa?',o:['Apenas a renda','BACEN, Score/Rating e capacidade de comprometimento da renda','Historico de viagens','Quantos filhos tem'],a:1,ok:'✓ Verifica BACEN, Score/Rating e capacidade de comprometimento da renda.',no:'✗ Verifica BACEN, Score/Rating e capacidade de comprometimento da renda.'},
+    {t:'Qual e a frase correta do condicionamento de mesa?',o:['"Posso te mostrar a tabela agora."','"Mesmo que queira comprar, nao consigo te vender sem entender sua situacao."','"Vamos simular agora mesmo."','"Qual e o seu limite mensal?"'],a:1,ok:'✓ Esta frase posiciona o corretor como consultor, nao como vendedor.',no:'✗ A frase correta e: "Mesmo que queira comprar, nao consigo te vender sem entender sua situacao."'},
+  ],
+  'm2_t2':[
+    {t:'Qual informacao NAO e relevante na coleta de dados?',o:['Renda bruta mensal','Data de nascimento','Historico de viagens internacionais','Saldo de FGTS'],a:2,ok:'✓ Historico de viagens nao tem relevancia para analise de credito.',no:'✗ Historico de viagens nao e relevante.'},
+    {t:'Por que a data de nascimento e importante na coleta?',o:['Para calcular o FGTS','Para definir o prazo maximo de financiamento','Para verificar o score','Para calcular a entrada'],a:1,ok:'✓ A data de nascimento define o prazo maximo de financiamento.',no:'✗ A data de nascimento define o prazo maximo.'},
+    {t:'O que e a Tecnica dos 5 Segundos?',o:['Fazer 5 perguntas em 5 segundos','Apos apresentar o valor do ato, ficar em silencio e deixar o cliente reagir','Ligar 5 vezes antes de desistir','Esperar 5 segundos antes de responder'],a:1,ok:'✓ Apos apresentar o valor, silencio estrategico — deixe o cliente reagir.',no:'✗ Apos apresentar o valor, fique em silencio e deixe o cliente reagir.'},
+    {t:'Por que pedir o holerite e nao apenas perguntar a renda?',o:['Por exigencia do CRECI','Para ter o valor bruto exato — base do calculo do financiamento','Para impressionar o cliente','Para evitar que o cliente minta'],a:1,ok:'✓ O holerite mostra a renda bruta exata — base do calculo.',no:'✗ O holerite mostra a renda bruta exata, que e a base do calculo.'},
+  ],
+  'm2_t3':[
+    {t:'Na Tecnica 20/80, o que representam os 20%?',o:['A parcela mensal','A entrada do cliente — ato + parcelas de obra','A taxa de juros','A comissao do corretor'],a:1,ok:'✓ 20% = entrada do cliente (ato + obra). 80% = financiamento bancario.',no:'✗ Os 20% sao a entrada do cliente.'},
+    {t:'Por que a Tecnica 20/80 deve ser apresentada de forma ludica?',o:['Para economizar tempo','Para nao expor a tela e evitar expectativas incorretas','Para impressionar o cliente','Por exigencia legal'],a:1,ok:'✓ Apresentar de forma ludica evita expectativas incorretas.',no:'✗ Apresentar de forma ludica evita expectativas incorretas antes da aprovacao.'},
+    {t:'Na Tecnica 20/80, o banco financia qual percentual?',o:['20% da entrada','80% do valor do imovel apos a entrega','100% do imovel','50% durante a obra'],a:1,ok:'✓ O banco financia os 80% apos a entrega das chaves.',no:'✗ O banco financia os 80% do valor do imovel.'},
+    {t:'O que compoem os 20% que o cliente paga a JV?',o:['Apenas o ato de assinatura','O ato inicial mais as parcelas durante a obra','Apenas as parcelas mensais','A entrada mais o FGTS'],a:1,ok:'✓ Os 20% sao o ato inicial mais as parcelas mensais durante a obra.',no:'✗ Os 20% sao compostos pelo ato e pelas parcelas durante a obra.'},
+  ],
+  'm2_t4':[
+    {t:'Qual tecnica guia o cliente ao proximo passo sem pressao?',o:['Tecnica 20/80','Perguntas Retoricas','Test Drive','Tecnica 101%'],a:1,ok:'✓ Perguntas Retoricas criam na mente do cliente a conclusao de avancar.',no:'✗ Sao as Perguntas Retoricas.'},
+    {t:'Qual e um exemplo de Pergunta Retorica no atendimento?',o:['"Quanto voce pode pagar?"','"Se eu deixar meus documentos aqui, quer dizer que eu comprei?"','"Voce prefere o Tipo A ou o Garden?"','"Qual e o prazo maximo do banco para voce?"'],a:1,ok:'✓ Esta pergunta cria na mente do cliente a resposta que o guia ao proximo passo.',no:'✗ Exemplo correto: "Se eu deixar meus documentos aqui, quer dizer que eu comprei?"'},
+    {t:'Qual gatilho mental e ativado com "so temos 2 unidades nesse andar"?',o:['Recompensa','Oportunidade','Escassez','Reciprocidade'],a:2,ok:'✓ O gatilho de Escassez gera urgencia e acelera a decisao.',no:'✗ O gatilho ativado e o de Escassez.'},
+    {t:'Por que usar Perguntas Retoricas ao inves de perguntas diretas no fechamento?',o:['Para confundir o cliente','Para criar na mente do cliente a conclusao de avancar, sem pressao explicita','Para ganhar tempo','Por exigencia do CRECI'],a:1,ok:'✓ Perguntas Retoricas criam a conclusao internamente — sem pressao.',no:'✗ As Perguntas Retoricas criam a conclusao no cliente sem pressao explicita.'},
+  ],
+  'm2_t5':[
+    {t:'O que significa "deixar o mico com o cliente" no fechamento?',o:['O corretor pressiona o cliente','A ansiedade pelo proximo passo deve estar com o cliente, nao com o corretor','O cliente paga reserva imediata','O corretor some apos a proposta'],a:1,ok:'✓ O mico fica com o cliente — ele deve sentir a necessidade de avancar.',no:'✗ O mico da venda fica com o cliente.'},
+    {t:'O que e a Tecnica dos 5 SIM?',o:['Fazer 5 simulacoes','Obter 5 confirmacoes positivas antes de propor o fechamento','Pedir 5 documentos','Ligar 5 vezes'],a:1,ok:'✓ Os 5 SIM criam momentum positivo antes do fechamento.',no:'✗ A Tecnica dos 5 SIM e obter 5 confirmacoes positivas antes do fechamento.'},
+    {t:'Qual e o objetivo do Passo 3 do atendimento?',o:['Enviar tabela por WhatsApp','Marcar nova visita','Coletar documentacao e fechar o negocio','Pedir indicacoes'],a:2,ok:'✓ Passo 3 = fechamento e coleta de documentacao.',no:'✗ O Passo 3 e fechar o negocio e coletar a documentacao.'},
+    {t:'Por que o corretor NAO deve pressionar o cliente a assinar no mesmo dia?',o:['Por exigencia legal','Porque o mico deve ficar com o cliente — pressao destroi a conexao','Para dar tempo','Porque a assinatura demora'],a:1,ok:'✓ Pressionar destroi a conexao. O mico deve ficar com o cliente.',no:'✗ Pressionar destroi a conexao. O mico deve ficar com o cliente.'},
+  ],
+  'm3_t0':[
+    {t:'Qual e o endereco correto do portal da Caixa para simulacoes?',o:['habitacao.caixa.gov.br','simulador.caixa.gov.br','caixa.gov.br/simulador','minhacasa.caixa.gov.br'],a:1,ok:'✓ O portal oficial e simulador.caixa.gov.br.',no:'✗ O portal correto e simulador.caixa.gov.br.'},
+    {t:'O resultado do simulador da Caixa e uma aprovacao definitiva?',o:['Sim, e a aprovacao oficial','Nao, e uma estimativa — a aprovacao real pode ser diferente','Sim, se o CPF estiver limpo','Depende da agencia'],a:1,ok:'✓ Simulacao e estimativa — a aprovacao real pode variar.',no:'✗ Simulacao e apenas estimativa — a aprovacao real pode ser diferente.'},
+    {t:'Para que serve o simulador habitacional da Caixa?',o:['Para aprovar oficialmente o financiamento','Para estimar a parcela e o prazo antes da analise oficial','Para calcular o FGTS','Para emitir o contrato'],a:1,ok:'✓ O simulador estima a parcela e o prazo — nao e aprovacao oficial.',no:'✗ O simulador e uma estimativa — nao e aprovacao oficial do banco.'},
+    {t:'Por que o corretor deve simular ANTES do atendimento?',o:['Para ganhar tempo','Para nao criar expectativas incorretas mostrando a tela durante o atendimento','Por exigencia da construtora','Para calcular a comissao'],a:1,ok:'✓ Simular antes evita mostrar a tela e criar expectativas que o banco pode nao confirmar.',no:'✗ Simular antes evita criar expectativas incorretas.'},
+  ],
+  'm3_t1':[
+    {t:'Qual e o limite de renda para a Faixa 2 do MCMV 2026?',o:['Ate R$ 3.200,00','Ate R$ 4.700,00','Ate R$ 5.500,00','Ate R$ 8.600,00'],a:2,ok:'✓ Faixa 2 = ate R$ 5.500,00/mes.',no:'✗ Faixa 2 = ate R$ 5.500,00/mes (nova regra de abril/2026).'},
+    {t:'A partir de quando valem as novas regras do MCMV 2026?',o:['01/01/2026','22/04/2026','01/07/2026','01/09/2026'],a:1,ok:'✓ As novas regras valem a partir de 22 de abril de 2026.',no:'✗ As novas regras valem a partir de 22 de abril de 2026.'},
+    {t:'Na Faixa 3 do MCMV 2026, qual e o limite de valor do imovel?',o:['Ate R$ 250.000','Ate R$ 300.000','Ate R$ 400.000','Ate R$ 500.000'],a:2,ok:'✓ Na Faixa 3 o limite e R$ 400.000.',no:'✗ Na Faixa 3 o limite do imovel e R$ 400.000.'},
+    {t:'Na Faixa 4 do MCMV 2026, qual e a taxa de juros anual?',o:['4% ao ano','7,66% ao ano','8,16% ao ano','10% ao ano'],a:3,ok:'✓ Faixa 4 = 10% ao ano.',no:'✗ A Faixa 4 tem taxa de 10% ao ano.'},
+  ],
+  'm3_t2':[
+    {t:'Qual documento confirma melhor a renda bruta do cliente?',o:['Extrato bancario','Holerite (contracheque)','Declaracao de IR','Carteira de Trabalho'],a:1,ok:'✓ O holerite mostra a renda bruta exata — base do calculo.',no:'✗ O holerite e o documento mais indicado.'},
+    {t:'Por que usar o valor BRUTO e nao o liquido da renda?',o:['Porque o liquido e confidencial','Porque o banco usa o valor bruto como base do calculo','Para aumentar o valor aprovado','Por exigencia do CRECI'],a:1,ok:'✓ O banco usa o valor bruto — usar o liquido geraria simulacao incorreta.',no:'✗ O banco usa o valor bruto como base do calculo.'},
+    {t:'Qual informacao define o prazo maximo do financiamento?',o:['O valor do imovel','A renda bruta','A data de nascimento','O saldo do FGTS'],a:2,ok:'✓ A data de nascimento define o prazo — o financiamento termina antes dos 80 anos.',no:'✗ A data de nascimento define o prazo maximo.'},
+    {t:'Como o FGTS pode ajudar no financiamento?',o:['Reduz a taxa de juros','Pode ser usado como entrada ou para amortizar o saldo devedor','Aumenta o prazo','Substitui o holerite'],a:1,ok:'✓ O FGTS pode ser usado como entrada ou para amortizar — sem comprometer a renda.',no:'✗ O FGTS pode ser usado como entrada ou para amortizar o saldo devedor.'},
+  ],
+  'm3_t3':[
+    {t:'Por que a data de nascimento e fundamental no simulador?',o:['Para calcular o FGTS','Quanto mais jovem, maior o prazo maximo disponivel','Para verificar o score','Para calcular a entrada'],a:1,ok:'✓ Mais jovem = maior prazo maximo disponivel.',no:'✗ A data define o prazo maximo disponivel.'},
+    {t:'Qual e o primeiro passo ao acessar o simulador da Caixa?',o:['Informar o CPF','Acessar simulador.caixa.gov.br e selecionar a modalidade correta','Informar o valor do imovel','Informar a renda'],a:1,ok:'✓ O primeiro passo e acessar o portal e selecionar a modalidade correta.',no:'✗ O primeiro passo e acessar simulador.caixa.gov.br e selecionar a modalidade.'},
+    {t:'O que acontece se marcar FGTS sem o cliente ter saldo disponivel?',o:['Nada — o sistema ignora','A simulacao fica incorreta e cria expectativas que nao serao confirmadas','O sistema cancela a simulacao','O FGTS e debitado automaticamente'],a:1,ok:'✓ Simulacao incorreta gera expectativas erradas — so marque FGTS se disponivel.',no:'✗ A simulacao ficara incorreta — so marque FGTS se o cliente tiver saldo.'},
+    {t:'Qual modalidade selecionar para cliente com renda de R$ 7.000,00?',o:['MCMV Faixa 1','MCMV Faixa 2','MCMV Faixa 3','SFH sem MCMV'],a:2,ok:'✓ Com R$ 7.000,00 o cliente esta na Faixa 3 (ate R$ 9.600,00).',no:'✗ Com R$ 7.000,00 o cliente se enquadra na Faixa 3 do MCMV.'},
+  ],
+  'm3_t4':[
+    {t:'Por que o corretor NAO deve mostrar a tela de simulacao ao cliente?',o:['O sistema trava','Simulacao e estimativa — mostrar pode criar expectativas que o banco nao confirme','E proibido pelo CRECI','Os numeros mudam a cada minuto'],a:1,ok:'✓ Simulacao e estimativa — apresentar de forma ludica evita frustracoes.',no:'✗ Simulacao e estimativa. Mostrar a tela pode criar expectativas que o banco nao confirma.'},
+    {t:'Como apresentar o resultado da simulacao ao cliente?',o:['Mostrando a tela do simulador','De forma ludica junto com a Tecnica 20/80','Enviando por WhatsApp','Imprimindo o relatorio'],a:1,ok:'✓ Apresente de forma ludica com a Tecnica 20/80 — nunca a tela do sistema.',no:'✗ Apresente de forma ludica com a Tecnica 20/80.'},
+    {t:'Quantos cenarios o corretor deve preparar antes do atendimento?',o:['Apenas 1 cenario','2 cenarios: com e sem FGTS','3 cenarios por faixa','Apenas se o cliente pedir'],a:1,ok:'✓ Prepare sempre 2 cenarios: com e sem FGTS.',no:'✗ Prepare sempre 2 cenarios: com e sem FGTS.'},
+    {t:'O que fazer se o resultado da simulacao for diferente do esperado?',o:['Mostrar o erro ao cliente','Nao mostrar — ajustar a abordagem e apresentar de forma ludica','Cancelar o atendimento','Pedir nova simulacao na hora'],a:1,ok:'✓ Nunca exponha a tela — ajuste a abordagem e apresente de forma ludica.',no:'✗ Nunca exponha a tela — apresente de forma ludica mesmo com resultado diferente.'},
+  ],
+  'm4_t0':[
+    {t:'Cliente com condicionamento de 70% em R$ 300.000,00. Qual e o Pro Soluto?',o:['R$ 30.000,00','R$ 60.000,00','R$ 90.000,00','R$ 70.000,00'],a:2,ok:'✓ Caixa aprovou 70% = R$210k. Pro Soluto = 30% = R$ 90.000,00.',no:'✗ Pro Soluto = 30% de R$300k = R$ 90.000,00.'},
+    {t:'Quais sao os 3 possiveis resultados da analise da Caixa?',o:['Aprovado, Recusado, Pendente','Reprovado, Condicionado e Aprovado (80%)','Aprovado, Em analise, Negado','Liberado, Restrito, Bloqueado'],a:1,ok:'✓ Os 3 resultados sao: Reprovado, Condicionado ou Aprovado (80%).',no:'✗ Os 3 resultados sao: Reprovado, Condicionado e Aprovado (80%).'},
+    {t:'O que fazer quando a Caixa reprova o cliente?',o:['Insistir em nova analise imediata','Documentar no CV e manter o relacionamento — situacoes mudam','Desistir imediatamente','Oferecer desconto no preco'],a:1,ok:'✓ Documente no CV e mantenha o relacionamento — situacoes financeiras mudam.',no:'✗ Documente no CV e mantenha o relacionamento.'},
+    {t:'O que representa a aprovacao de 80% pela Caixa no MCMV?',o:['O banco aprovou 80% para entrada','O banco financia 80% do valor — o melhor cenario possivel','O cliente da 80% de entrada','A taxa e de 80% do CDI'],a:1,ok:'✓ 80% e o maximo financiado pelo MCMV — o melhor cenario!',no:'✗ O banco financia 80% do valor do imovel — e o melhor cenario possivel.'},
+  ],
+  'm4_t1':[
+    {t:'O que e o Pro Soluto na venda de imoveis na planta?',o:['O valor total financiado pelo banco','O valor que sobra apos o financiamento aprovado, pago a construtora','O valor da comissao','O valor de entrada'],a:1,ok:'✓ Pro Soluto = valor residual apos o financiamento — e onde o corretor faz diferenca!',no:'✗ Pro Soluto e o valor que sobra apos o financiamento, pago a construtora.'},
+    {t:'Cliente com aprovacao de 80% em R$ 250.000,00. Qual e o Pro Soluto?',o:['R$ 25.000,00','R$ 50.000,00','R$ 80.000,00','R$ 40.000,00'],a:1,ok:'✓ 80% = R$200k. Pro Soluto = 20% = R$ 50.000,00.',no:'✗ Pro Soluto = 20% de R$250k = R$ 50.000,00.'},
+    {t:'Cliente com condicionamento de 60% em R$ 200.000,00. Qual e o Pro Soluto?',o:['R$ 60.000,00','R$ 80.000,00','R$ 40.000,00','R$ 120.000,00'],a:1,ok:'✓ 60% = R$120k. Pro Soluto = 40% = R$ 80.000,00.',no:'✗ Pro Soluto = 40% de R$200k = R$ 80.000,00.'},
+    {t:'Por que maior condicionamento exige mais criatividade do corretor?',o:['Porque ganha mais comissao','Porque o Pro Soluto fica maior e exige mais solucoes para cobri-lo','Porque o cliente fica desconfiado','Por exigencia da construtora'],a:1,ok:'✓ Maior condicionamento = maior Pro Soluto = mais solucoes necessarias.',no:'✗ Maior condicionamento = maior Pro Soluto = mais solucoes necessarias.'},
+  ],
+  'm4_t2':[
+    {t:'Quais sao as principais fontes para cobrir o Pro Soluto?',o:['Apenas dinheiro em conta','FGTS, recurso proprio e/ou adicao de outro comprador','Somente FGTS','Apenas credito pessoal'],a:1,ok:'✓ Explore todas: FGTS, recurso proprio E/OU adicionar outro comprador.',no:'✗ As fontes sao: FGTS, recurso proprio E/OU adicionar outro comprador.'},
+    {t:'Por que o FGTS e a fonte mais vantajosa para cobrir o Pro Soluto?',o:['Porque e o maior valor disponivel','Porque nao tem juros e nao compromete a renda mensal','Porque e obrigatorio usar','Porque aumenta o prazo'],a:1,ok:'✓ FGTS nao tem juros e nao compromete a renda mensal do cliente.',no:'✗ O FGTS e vantajoso pois nao tem juros e nao compromete a renda mensal.'},
+    {t:'Como adicionar um comprador resolve o Pro Soluto?',o:['Reduz o preco do imovel','Aumenta a renda composta, eleva o financiado e reduz o Pro Soluto','Aumenta o prazo','Elimina a necessidade de FGTS'],a:1,ok:'✓ Mais renda composta = mais financiamento = menos Pro Soluto a resolver.',no:'✗ Adicionar comprador aumenta a renda composta e reduz o Pro Soluto.'},
+    {t:'Qual deve ser a primeira pergunta ao mapear recursos do cliente?',o:['"Quanto tem em conta corrente?"','"Tem FGTS disponivel?"','"Qual e o limite do cartao?"','"Tem investimentos?"'],a:1,ok:'✓ FGTS e a melhor fonte — pergunte primeiro.',no:'✗ Pergunte sobre o FGTS primeiro — e a fonte mais vantajosa.'},
+  ],
+  'm4_t3':[
+    {t:'Qual e o percentual maximo parcelavel com a construtora?',o:['10%','15%','20%','30%'],a:1,ok:'✓ Ate 15% do valor do imovel pode ser parcelado com a construtora.',no:'✗ O limite e 15% do valor do imovel.'},
+    {t:'Quais sao os formatos de parcelamento com a construtora?',o:['Apenas mensais','Mensais, anuais, semestrais em ate 24 ou 48 vezes','Apenas anuais','Livre escolha'],a:1,ok:'✓ Mensais, anuais, semestrais em ate 24 ou 48 vezes.',no:'✗ Os formatos sao: mensais, anuais, semestrais em ate 24 ou 48 vezes.'},
+    {t:'Em imovel de R$ 300.000,00, qual e o valor maximo parcelavel com a construtora?',o:['R$ 30.000,00','R$ 45.000,00','R$ 60.000,00','R$ 90.000,00'],a:1,ok:'✓ 15% de R$300k = R$ 45.000,00.',no:'✗ 15% de R$300.000 = R$ 45.000,00.'},
+    {t:'O parcelamento com a construtora deve ser usado como:',o:['A principal fonte de recurso','Complemento ao FGTS e recurso proprio — nunca como unica solucao','Substituto do financiamento','Base do fluxo'],a:1,ok:'✓ O parcelamento e complemento — nunca a unica solucao.',no:'✗ O parcelamento e complemento — nunca use como unica solucao.'},
+  ],
+  'm4_t4':[
+    {t:'Por que quanto mais entrada o cliente der, melhor?',o:['Aumenta a comissao','Reduz o saldo devedor, a parcela e torna a venda mais saudavel','O banco exige minimo de 30%','Facilita o FGTS'],a:1,ok:'✓ Mais entrada = menor saldo devedor = menor parcela = venda mais saudavel.',no:'✗ Mais entrada reduz o saldo devedor e torna a venda mais saudavel.'},
+    {t:'Qual e a Regra de Ouro ao montar o fluxo de pagamento?',o:['Parcele sempre o maximo','Pergunte objetivamente o real potencial: entrada, FGTS e capacidade de parcelamento','Nunca pergunte sobre financas','Use sempre o mesmo fluxo'],a:1,ok:'✓ Pergunte objetivamente e construa o fluxo baseado na realidade do cliente.',no:'✗ Pergunte objetivamente o real potencial de pagamento do cliente.'},
+    {t:'O que o corretor deve fazer ao receber o resultado da aprovacao da Caixa?',o:['Ligar imediatamente para o cliente','Calcular o Pro Soluto e mapear os recursos antes de sentar com o cliente','Solicitar desconto na construtora','Aguardar o cliente'],a:1,ok:'✓ Calcule o Pro Soluto e mapeie os recursos antes de chamar o cliente.',no:'✗ Calcule o Pro Soluto e mapeie os recursos antes de chamar o cliente.'},
+    {t:'Uma venda saudavel e aquela que:',o:['Fecha rapido, independente das condicoes','O cliente consegue sustentar com tranquilidade ao longo do tempo','Tem o maior valor de parcelas','Usa todo o limite de parcelamento'],a:1,ok:'✓ Uma venda saudavel e aquela que o cliente consegue sustentar.',no:'✗ Uma venda saudavel e aquela que o cliente consegue sustentar com tranquilidade.'},
+  ],
+  'm5_t0':[
+    {t:'Para que serve o sistema CV (Construtor de Vendas)?',o:['Controle de estoque de obra','Gestao de leads, pastas, propostas e funil de vendas','Publicacao de anuncios','Contabilidade'],a:1,ok:'✓ CV = gestao comercial completa: leads, pastas, propostas e funil.',no:'✗ O CV e para gestao comercial: leads, pastas, propostas e funil.'},
+    {t:'O que acontece se o corretor nao registrar o lead no CV?',o:['Nada — o sistema registra automaticamente','A venda fica invisivel para a gestao, que nao pode apoiar o corretor','O lead vai para outro corretor','O gerente e notificado'],a:1,ok:'✓ CV desatualizado = venda invisivel para a gestao.',no:'✗ Sem registro no CV, a venda fica invisivel e a gestao nao pode apoiar.'},
+    {t:'Qual e a principal vantagem do sistema CV para o corretor?',o:['Gerar anuncios automaticamente','Permitir que a gestao enxergue o funil e ofereça suporte no momento certo','Calcular comissao automaticamente','Enviar tabelas de precos'],a:1,ok:'✓ O CV permite que a gestao enxergue o funil e apoie no momento certo.',no:'✗ A principal vantagem e que a gestao enxerga o funil e pode apoiar o corretor.'},
+    {t:'Quando o corretor deve registrar um lead no CV?',o:['Apenas quando visitar o estande','No mesmo dia do primeiro contato','So apos aprovacao do banco','Apenas com documentacao completa'],a:1,ok:'✓ Registre no mesmo dia do primeiro contato.',no:'✗ O lead deve ser registrado no mesmo dia do primeiro contato.'},
+  ],
+  'm5_t1':[
+    {t:'Qual e a informacao OBRIGATORIA ao subir uma pasta no CV?',o:['Foto do cliente','Dados completos, unidade de interesse e documentacao exigida','Apenas CPF e telefone','Somente nome e e-mail'],a:1,ok:'✓ Dados completos + unidade de interesse + documentacao = pasta completa.',no:'✗ Sao obrigatorios: dados completos, unidade de interesse e documentacao.'},
+    {t:'O que acontece quando uma pasta e subida com dados incompletos?',o:['O sistema completa automaticamente','A pasta fica travada e nao avanca no processo','O gerente completa os dados','Nada'],a:1,ok:'✓ Pasta incompleta = pasta travada. Preencha tudo de uma vez!',no:'✗ Pasta incompleta fica travada e prejudica o andamento da venda.'},
+    {t:'Ao subir uma pasta, qual unidade deve ser vinculada?',o:['Qualquer disponivel','A unidade de interesse especifica que o cliente manifestou','A mais barata','A indicada pelo gerente'],a:1,ok:'✓ Vincule sempre a unidade de interesse especifica do cliente.',no:'✗ Vincule a unidade de interesse especifica que o cliente manifestou.'},
+    {t:'Em qual momento subir a pasta no CV?',o:['Apos a venda ser concluida','Assim que o cliente manifestar interesse e entregar a documentacao','Apenas apos aprovacao do banco','So no dia do contrato'],a:1,ok:'✓ Suba a pasta assim que o cliente manifestar interesse.',no:'✗ Suba a pasta assim que o cliente manifestar interesse e entregar a documentacao.'},
+  ],
+  'm5_t2':[
+    {t:'O que fazer imediatamente apos registrar um novo lead?',o:['Aguardar o cliente ligar','Registrar o historico e agendar o proximo contato no sistema','Enviar tabela por WhatsApp','Reportar ao gerente verbalmente'],a:1,ok:'✓ Registre o historico e agende o proximo contato — mantem o funil vivo!',no:'✗ Registre o historico e agende o proximo contato imediatamente.'},
+    {t:'Qual e o prazo maximo para entrar em contato com um lead recebido?',o:['7 dias','5 dias','48 horas','30 dias'],a:2,ok:'✓ Contate em ate 48h — leads esfiam rapido!',no:'✗ O prazo maximo recomendado e 48 horas.'},
+    {t:'Qual e o status correto para cliente que assinou o contrato?',o:['Lead','Em negociacao','Vendido / Contrato assinado','Prospect'],a:2,ok:'✓ Apos assinar o contrato o status e "Vendido / Contrato assinado".',no:'✗ O status correto e "Vendido / Contrato assinado".'},
+    {t:'Por que registrar a ORIGEM do lead no CV?',o:['Por exigencia do CRECI','Para identificar quais canais geram mais resultados','Para calcular a comissao','Para enviar relatorios ao banco'],a:1,ok:'✓ Registrar a origem permite identificar os canais mais eficientes.',no:'✗ Registrar a origem permite identificar quais canais geram mais resultados.'},
+  ],
+  'm5_t3':[
+    {t:'Por que e fundamental manter o CV sempre atualizado?',o:['Para evitar multas','Para que a gestao tenha visibilidade real e possa apoiar o corretor','Para o cliente acompanhar','Porque o sistema trava'],a:1,ok:'✓ CV atualizado = gestao enxerga = suporte no momento certo = mais vendas!',no:'✗ CV atualizado permite que a gestao apoie o corretor com mais eficacia.'},
+    {t:'O que significa "CV desatualizado = venda invisivel"?',o:['O sistema apaga os dados','A gestao nao consegue ver o andamento e nao pode apoiar o corretor','O cliente nao recebe comunicacoes','A venda e cancelada'],a:1,ok:'✓ Sem atualizacao, a gestao fica cega e nao consegue apoiar.',no:'✗ Sem atualizacao, a gestao nao consegue ver e apoiar o corretor.'},
+    {t:'Qual erro deve ser evitado ao registrar uma pasta no CV?',o:['Registrar antes de ter todos os documentos','Subir a pasta as pressas sem conferir todos os dados obrigatorios','Registrar no mesmo dia','Vincular a unidade especifica'],a:1,ok:'✓ Pasta as pressas = dados incompletos = pasta travada. Confira tudo antes.',no:'✗ Evite subir a pasta as pressas sem conferir todos os dados.'},
+    {t:'O que fazer com cada interacao com o cliente (ligacao, visita, WhatsApp)?',o:['Registrar apenas as mais importantes','Registrar TODAS no historico do CV imediatamente','Registrar so se o cliente pedir','Registrar apenas apos aprovacao'],a:1,ok:'✓ Registre TODAS as interacoes — o historico completo e essencial.',no:'✗ Registre TODAS as interacoes no CV imediatamente.'},
+  ],
+};
+
+// ============================================================
+// HELPERS
+// ============================================================
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function getG(n){return G['m'+n];}
+function getT(n){return[null,M1T,M2T,M3T,M4T,M5T][n];}
+function getF(n){return[null,M1F,M2F,M3F,M4F,M5F][n];}
+function getTot(n){return[null,5,6,5,5,4][n];}
+function navLabels(n){
+  if(n===1)return['🏢 Visão Geral','🏊 Lazer','📐 Plantas','⭐ Diferenciais','📍 Localização'];
+  if(n===2)return['🎯 Apresentação','🔍 Aprovação','📋 Coleta','📊 Simulação','🧠 Gatilhos','🏁 Fechamento'];
+  if(n===3)return['▶ Vídeo','🏠 MCMV','📋 Pré-req.','⚙️ Passo a Passo','💡 Dicas'];
+  if(n===4)return['🏦 Resposta Caixa','🧮 Pro Soluto','💡 Recursos','📋 Parcelamento','🏆 Boas Práticas'];
+  if(n===5)return['▶ Vídeo','📁 Subir Pasta','👥 Leads','⚠️ Boas Práticas'];
+  return[];
+}
+function navCls(n){if(n===3)return'az';if(n===4)return'am';if(n===5)return'ch';return'';}
+function tcardCls(n){if(n===3)return'ca';if(n===4)return'cam';if(n===5)return'cc';return'cp';}
+function qSecCls(n){if(n===3)return'azul-q';if(n===4)return'am-q';if(n===5)return'ch-q';return'';}
+function cfmCls(n){if(n===3)return'az';if(n===4)return'am';if(n===5)return'ch';return'';}
+function navBtnBg(n){if(n===3)return'var(--azul-mid)';if(n===4)return'var(--am-mid)';if(n===5)return'var(--chumbo-mid)';return'var(--roxo)';}
+
+// ============================================================
+// TRAVAS SEQUENCIAIS
+// ============================================================
+function isMDone(m){
+  if(G.isAdm)return true;
+  if(m===1)return G.m1.fDone&&G.m1.fScore>=6;
+  if(m===2)return G.m2.fDone&&G.m2.fScore>=6;
+  if(m===3)return G.m3.fDone&&G.m3.fScore>=6;
+  if(m===4)return G.m4.fDone&&G.m4.fScore>=6;
+  if(m===5)return G.m5.fDone&&G.m5.fScore>=6;
+  if(m===6)return G.q6Done&&G.q6Score>=6;
+  if(m===7)return G.modDone.has(7);
+  return G.modDone.has(m);
+}
+function isMLocked(m){if(G.isAdm||m<=1)return false;return!isMDone(m-1);}
+function getMProg(m){
+  if(m===1)return isMDone(1)?100:Math.round((G.m1.done.size/5)*100);
+  if(m===2)return isMDone(2)?100:Math.round((G.m2.done.size/6)*100);
+  if(m===3)return isMDone(3)?100:Math.round((G.m3.done.size/5)*100);
+  if(m===4)return isMDone(4)?100:Math.round((G.m4.done.size/5)*100);
+  if(m===5)return isMDone(5)?100:Math.round((G.m5.done.size/4)*100);
+  return isMDone(m)?100:0;
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDash(){
+  let total=0;MODS.forEach(m=>{if(isMDone(m.id))total++;});
+  const pct=Math.round((total/7)*100);
+  document.getElementById('dpfill').style.width=pct+'%';
+  document.getElementById('dplabel').textContent=total+' de 7 módulos concluídos';
+  const list=document.getElementById('mods-list');list.innerHTML='';
+  MODS.forEach(m=>{
+    const done=isMDone(m.id);const locked=isMLocked(m.id);const prog=getMProg(m.id);
+    const card=document.createElement('div');
+    card.className='mcard'+(done?' mdone':locked?' mlocked':'');
+    const badge=done?'done':locked?'locked':'next';
+    const badgeText=done?'✓ Concluído':locked?'🔒 Bloqueado':'→ Aberto';
+    card.innerHTML=`<div class="micon ${m.col==='g'?'g':''}">${locked?'🔒':m.icon}</div><div class="minfo"><div class="mnum">Módulo ${m.id}</div><div class="mtitle">${m.title}</div><div class="mdesc">${locked?'Conclua o módulo anterior para desbloquear':m.desc}</div><div class="mpw"><div class="mpf ${done?'done':''}" style="width:${prog}%"></div></div><div class="mpl">${prog}% concluído</div></div><div class="mbadge ${badge}">${badgeText}</div>`;
+    if(!locked)card.onclick=()=>openMod(m);
+    else card.onclick=()=>alert('🔒 Conclua o módulo anterior com nota mínima 6,0 para desbloquear este módulo.');
+    list.appendChild(card);
+  });
+}
+function openMod(m){
+  if(m.type==='mod1'){show('s-mod1');mNav(1);mRender(1);}
+  else if(m.type==='mod2'){show('s-mod2');mNav(2);mRender(2);}
+  else if(m.type==='mod3'){show('s-mod3');mNav(3);mRender(3);}
+  else if(m.type==='mod4'){show('s-mod4');mNav(4);mRender(4);}
+  else if(m.type==='mod5'){show('s-mod5');mNav(5);mRender(5);}
+  else if(m.type==='quiz6'){startQ6();}
+  else if(m.type==='cert'){showCert();}
+}
+function goBack(){renderDash();show('s-dash');}
+
+// ============================================================
+// ENGINE DE MÓDULOS
+// ============================================================
+function mNav(n){
+  const g=getG(n);const labels=navLabels(n);const cls=navCls(n);
+  const nav=document.getElementById('m'+n+'-nav');nav.innerHTML='';
+  labels.forEach((l,i)=>{const d=document.createElement('div');d.className='tpill'+(g.cur===i?' active '+cls:'')+(g.done.has(i)?' tdone':'');d.textContent=l;d.onclick=()=>mGo(n,i);nav.appendChild(d);});
+  const fq=document.createElement('div');fq.className='tpill'+(g.cur===labels.length?' active '+cls:'')+(g.fDone&&g.fScore>=6?' tdone':'');fq.textContent='🏆 Quiz Final';fq.onclick=()=>mGo(n,labels.length);nav.appendChild(fq);
+}
+function mUpdProg(n){
+  const g=getG(n);const tot=getTot(n);const p=Math.round((g.done.size/tot)*100);
+  document.getElementById('m'+n+'-fill').style.width=p+'%';
+  document.getElementById('m'+n+'-pct').textContent=p+'%';
+  document.getElementById('m'+n+'-label').textContent=g.cur<tot?'Tópico '+(g.cur+1)+' de '+tot:'Quiz Final';
+  if(n===2){const sd=[[0,1,2].every(i=>g.done.has(i)),[3,4].every(i=>g.done.has(i)),[5].every(i=>g.done.has(i))];[0,1,2].forEach(i=>{const el=document.getElementById('stk'+i);if(el)el.textContent=sd[i]?'✓':''});}
+}
+function mGo(n,i){
+  const tot=getTot(n);
+  if(i===tot&&getG(n).done.size<tot){alert('Conclua todos os tópicos e responda as perguntas de fixação antes de fazer o Quiz Final!');return;}
+  getG(n).cur=i;getG(n).sel=null;mUpdProg(n);mNav(n);mRender(n);
+}
+function mRender(n){
+  const g=getG(n);const T=getT(n);const tot=getTot(n);
+  const area=document.getElementById('m'+n+'-area');
+  if(g.cur===tot){mFinal(n);return;}
+  const t=T[g.cur];const done=g.done.has(t.id);
+  // Buscar pergunta do banco baseada no CRECI do corretor
+  const _qBanco = getQFixacao('m'+n+'_t'+t.id, G.creci||'0');
+  const _qBase = _qBanco || t.q;
+  const q=getSh(_qBase,'m'+n+'_t'+t.id,g);
+  const cls=tcardCls(n);const qs=qSecCls(n);const cf=cfmCls(n);
+  const bg=navBtnBg(n);const isLast=g.cur===tot-1;
+  let prefix=n===2?getRO(t.step):'';
+  area.innerHTML=prefix+
+    '<div class="tcard"><div class="tcard-head '+cls+'"><div class="tico">'+t.icon+'</div><div><h2>'+t.title+'</h2><p>'+t.sub+'</p></div></div><div class="tcard-body">'+getBody(n,t.body)+'</div></div>'+
+    rQ(q,done,n,qs,cf)+
+    '<div class="navrow">'+(g.cur>0?'<button class="btn-prev" onclick="mGo('+n+','+(g.cur-1)+')">← Anterior</button>':'')+
+    '<button class="btn-adv '+(isLast&&done?'g':'')+'" style="background:'+(isLast&&done?'var(--dourado)':bg)+'" onclick="'+(isLast?'mGo('+n+','+tot+')':'mGo('+n+','+(g.cur+1)+')')+'" '+(done?'':'disabled')+'>'+(isLast?'🏆 Quiz Final':'Próximo →')+'</button></div>';
+}
+function getRO(step){
+  const items={1:['Nunca envie a tabela por e-mail ou WhatsApp','Não simule na frente do cliente','Atendimento presencial sempre','Consulte o Serasa antes'],2:['Apresente de forma lúdica','Explique diferença entre juros e correção (INCC)','Mostre a importância de poucas divisões'],3:['Nunca pressione — o mico fica com o cliente','Feche de forma clara e objetiva','Transmita segurança e confiança']};
+  return'<div class="regra-ouro"><div class="ro-tag">⚠️ Regra de Ouro — Passo '+step+'</div><div class="ro-title">Atenção redobrada neste passo!</div><div class="ro-items">'+items[step].map(i=>'<div class="ro-item"><span class="ro-icon">✦</span><span>'+i+'</span></div>').join('')+'</div></div>';
+}
+
+// ============================================================
+// CONTEÚDOS DOS TÓPICOS
+// ============================================================
+function getBody(n,type){
+  if(type==='overview')return'<div class="igrid"><div class="iitem"><div class="lbl">Incorporadora</div><div class="val">Jerônimo da Veiga</div></div><div class="iitem"><div class="lbl">Total unidades</div><div class="val">480</div><div class="sub">4 blocos · 15 pav. · 8/andar</div></div><div class="iitem"><div class="lbl">Blocos</div><div class="val">4 blocos</div></div><div class="iitem"><div class="lbl">Pavimentos</div><div class="val">15 andares</div></div><div class="iitem"><div class="lbl">Endereço</div><div class="val" style="font-size:12px">Trav. Angelo Biancolin</div><div class="sub">Poá — SP</div></div><div class="iitem"><div class="lbl">Área terreno</div><div class="val">9.253 m²</div></div></div><div class="hbox roxo">🚗 Todos os apartamentos possuem <strong>1 vaga de garagem inclusa</strong>, além de vagas para visitantes.</div>';
+  if(type==='lazer')return'<div class="hbox roxo">🌟 O Conceito Poá conta com <strong>19 espaços de lazer</strong> pensados para toda a família.</div><div class="agrid">'+[['🏊','Piscina Adulto'],['🐣','Piscina Infantil'],['🎉','Salão de Festas'],['🎮','Sala Gamer'],['💪','Academia'],['🌿','Redário'],['🏀','Quadra Poliesportiva'],['🐾','Pet Place'],['🔥','Churrasqueiras'],['🛝','Playground'],['🛒','Mini Market'],['📦','Espaço Delivery']].map(([i,nm])=>'<div class="aitem"><div class="ai">'+i+'</div><div class="an">'+nm+'</div></div>').join('')+'</div>';
+  if(type==='plantas')return'<div class="hbox roxo">📐 Quatro opções de plantas para diferentes perfis de clientes.</div><div class="pitem"><div class="pbadge">TIPO A</div><div class="pinfo"><strong>47,11 m²</strong>2 dormitórios · Sala ampla · Cozinha c/ granito · Varanda</div></div><div class="pitem"><div class="pbadge">TIPO B</div><div class="pinfo"><strong>Final 04</strong>2 dormitórios · Iluminação natural privilegiada · Cerâmica até o teto</div></div><div class="pitem"><div class="pbadge o">GARDEN A</div><div class="pinfo"><strong>62,32 m²</strong>Tipo A + quintal privativo + ponto grill</div></div><div class="pitem"><div class="pbadge o">GARDEN B</div><div class="pinfo"><strong>72,72 m²</strong>Tipo B + quintal privativo ampliado</div></div>';
+  if(type==='diferenciais')return'<ul class="dlist">'+['Água individualizada — sem rateio','Ponto de ar-condicionado em todos os ambientes','Bancadas em granito na cozinha','Garden com quintal privativo','Varanda integrada com ponto grill','Próximo às estações CPTM','1 vaga de garagem inclusa','Vagas para visitantes','19 espaços de lazer completos','Portaria 24h com controle de acesso'].map(d=>'<li><span class="dck">✦</span>'+d+'</li>').join('')+'</ul>';
+  if(type==='localizacao')return'<div class="hbox roxo">📍 <strong>Trav. Angelo Biancolin, Poá — SP</strong></div><div class="dgrp"><h4>🚆 Estações de Trem (CPTM)</h4>'+[['Estação Ferraz de Vasconcelos','8 min'],['Estação Poá','9 min'],['Estação Calmon Viana','13 min']].map(([p,t])=>'<div class="drow"><span class="pl">'+p+'</span><span class="tm">'+t+'</span></div>').join('')+'</div><div class="dgrp"><h4>🛒 Comércio</h4><div class="drow"><span class="pl">Supermercado Nagumo</span><span class="tm">1 min a pé</span></div></div><div class="dgrp"><h4>🎓 Educação</h4>'+[['Colégio Neck','2 min'],['EMEB Vereador Osvaldo Leite','2 min'],['Universidade Cruzeiro do Sul','7 min']].map(([p,t])=>'<div class="drow"><span class="pl">'+p+'</span><span class="tm">'+t+'</span></div>').join('')+'</div>';
+  if(type==='rapport')return'<div class="sbadge p1">Passo 1</div><div class="hbox roxo">Objetivo: colher informações e criar uma <strong>conexão verdadeira</strong> com o cliente.</div><ul class="step-list"><li><div class="sli-num p1">1</div><div class="sli-text"><strong>Criar Rapport</strong>Seja genuíno. Pessoas compram de quem elas confiam.</div></li><li><div class="sli-num p1">2</div><div class="sli-text"><strong>Perguntador Profissional</strong>Perguntas eficazes para entender sonhos e capacidade financeira.</div></li><li><div class="sli-num p1">3</div><div class="sli-text"><strong>Decora ou Virtual?</strong>Visita física ou tour virtual.</div></li><li><div class="sli-num p1">4</div><div class="sli-text"><strong>Técnica 101%</strong>Encontre genuinamente 1% que admira no cliente e foque 100% nisso.</div></li><li><div class="sli-num p1">5</div><div class="sli-text"><strong>Test Drive</strong>Deixe o cliente se imaginar morando no Conceito Poá.</div></li></ul>';
+  if(type==='mesa')return'<div class="sbadge p1">Condicionamento de Mesa</div><div class="hbox roxo"><strong>"Mesmo que você queira muito comprar, eu não consigo te vender sem antes entender sua situação financeira."</strong></div><div class="sim-row"><div class="sim-item jv"><div class="sip">70%</div><div class="sil">Taxa ideal de aprovação</div></div><div class="sim-item bk"><div class="sip">30%</div><div class="sil">Limite SFH da renda bruta</div></div></div>';
+  if(type==='coleta')return'<div class="sbadge p1">Coleta de Dados</div><div class="hbox roxo">Deixe o cliente à vontade enquanto você colhe as informações necessárias.</div><ul class="step-list"><li><div class="sli-num p1">1</div><div class="sli-text"><strong>Renda Bruta</strong>Peça o holerite — use sempre o valor bruto, nunca o líquido.</div></li><li><div class="sli-num p1">2</div><div class="sli-text"><strong>Data de Nascimento</strong>Define o prazo máximo de financiamento.</div></li><li><div class="sli-num p1">3</div><div class="sli-text"><strong>Dependentes</strong>Impacta na capacidade de pagamento mensal.</div></li><li><div class="sli-num p1">4</div><div class="sli-text"><strong>Saldo FGTS</strong>Pode reduzir o valor financiado e facilitar a entrada.</div></li><li><div class="sli-num p1">5</div><div class="sli-text"><strong>Técnica dos 5 Segundos</strong>Após apresentar o valor do ato, fique em silêncio. Deixe o cliente reagir primeiro.</div></li></ul>';
+  if(type==='simulacao')return'<div class="sbadge p2">Passo 2</div><div class="hbox orange"><strong>Técnica 20/80:</strong> Apresente de forma lúdica — nunca na tela do sistema!</div><div class="sim-box"><div class="sp">100%</div><div class="sl">Valor total do imóvel</div></div><div class="sim-row"><div class="sim-item jv"><div class="sip">20%</div><div class="sil">JV — Ato + Parcelas de Obra</div></div><div class="sim-item bk"><div class="sip">80%</div><div class="sil">Financiamento Bancário</div></div></div>';
+  if(type==='gatilhos')return'<div class="sbadge p2">Perguntas Retóricas</div><div class="hbox orange"><em>"Se eu deixar meus documentos aqui, quer dizer que eu comprei?"</em></div><div class="gatilho-grid"><div class="gatilho-item"><div class="gi">⏳</div><div class="gn">Escassez</div></div><div class="gatilho-item"><div class="gi">🎁</div><div class="gn">Recompensa</div></div><div class="gatilho-item"><div class="gi">💡</div><div class="gn">Oportunidade</div></div></div><div class="hbox orange">A pergunta retórica cria na mente do cliente a conclusão de que ele deve avançar.</div>';
+  if(type==='fechamento')return'<div class="sbadge p3">Passo 3</div><div class="hbox green"><strong>Técnica dos 5 SIM — Feche de forma natural e segura</strong></div><ul class="sim5-list"><li><span>✅</span>Você gostou do produto?</li><li><span>✅</span>O pagamento ficou confortável para você?</li><li><span>✅</span>A localização te agradou?</li><li><span>✅</span>Você se imagina morando aqui?</li><li><span>✅</span>Vamos analisar seu crédito juntos?</li></ul>';
+  if(type==='video3')return vThumb(VIDEO_M3,'Simulador Habitacional Caixa — Tutorial Completo','az','💰')+'<div class="hbox azul">Assista ao vídeo completo antes de avançar para o próximo tópico.</div>'+(PDF_M3?'<a href="'+PDF_M3+'" target="_blank" style="text-decoration:none"><div style="background:#f8f8f8;border-radius:9px;padding:11px 13px;display:flex;align-items:center;gap:11px;margin-bottom:7px;border:1px solid #eee"><div style="font-size:22px">📕</div><div><div style="font-size:13px;font-weight:600;color:#222">Guia de Simulação — Dicas e Instruções</div><div style="font-size:11px;color:#888">PDF — Clique para abrir</div></div><div style="margin-left:auto;color:var(--roxo)">↓</div></div></a>':'');
+  if(type==='mcmv')return'<div class="validade-badge">Minha Casa Minha Vida — Novas Regras<span>Válidas a partir de 22 de abril de 2026</span></div><div class="faixas-grid"><div class="faixa-card f1"><div class="faixa-header"><div class="faixa-icon">🏡</div><div class="faixa-title">FAIXA 1</div></div><div class="faixa-body"><div class="faixa-row"><div class="faixa-dot"></div><span><strong>Renda:</strong> até R$ 3.200,00/mês</span></div><div class="faixa-row"><div class="faixa-dot"></div><span><strong>Juros:</strong> 4% a 5,25% ao ano · <strong>Financiamento:</strong> 80%</span></div></div></div><div class="faixa-card f2"><div class="faixa-header"><div class="faixa-icon">🏘️</div><div class="faixa-title">FAIXA 2</div></div><div class="faixa-body"><div class="faixa-row"><div class="faixa-dot"></div><span><strong>Renda:</strong> até R$ 5.500,00/mês (era R$ 4.700,00)</span></div><div class="faixa-row"><div class="faixa-dot"></div><span><strong>Juros:</strong> 4,75% a 7% ao ano · <strong>Financiamento:</strong> 80%</span></div></div></div><div class="faixa-card f3"><div class="faixa-header"><div class="faixa-icon">🏢</div><div class="faixa-title">FAIXA 3</div></div><div class="faixa-body"><div class="faixa-row"><div class="faixa-dot"></div><span><strong>Renda:</strong> até R$ 9.600,00/mês · <strong>Imóveis:</strong> até R$ 400.000</span></div><div class="faixa-row"><div class="faixa-dot"></div><span><strong>Juros:</strong> 7,66% a 8,16% ao ano</span></div><div class="faixa-row"><div class="faixa-dot"></div><span><strong>Norte/NE/CO:</strong> 80% · <strong>Sudeste/Sul:</strong> 65%</span></div></div></div><div class="faixa-card f4"><div class="faixa-header"><div class="faixa-icon">🏬</div><div class="faixa-title">FAIXA 4</div></div><div class="faixa-body"><div class="faixa-row"><div class="faixa-dot"></div><span><strong>Renda:</strong> até R$ 13.000,00/mês · <strong>Imóveis:</strong> até R$ 600.000</span></div><div class="faixa-row"><div class="faixa-dot"></div><span><strong>Juros:</strong> 10% ao ano</span></div><div class="faixa-row"><div class="faixa-dot"></div><span><strong>Norte/NE/CO:</strong> 80% · <strong>Sudeste/Sul (usado):</strong> 60%</span></div></div></div></div><div class="hbox gold">💡 <strong>Atenção:</strong> O Conceito Poá se enquadra na Faixa 3 e Faixa 4 dependendo da renda do cliente!</div>';
+  if(type==='prereqs3')return'<div class="hbox azul">Tenha em mãos todas as informações antes de abrir o simulador da Caixa.</div><ul class="step-list"><li><div class="sli-num az">1</div><div class="sli-text"><strong>CPF do cliente</strong>Necessário para a verificação inicial.</div></li><li><div class="sli-num az">2</div><div class="sli-text"><strong>Renda bruta (holerite)</strong>Use sempre o valor bruto — nunca o líquido.</div></li><li><div class="sli-num az">3</div><div class="sli-text"><strong>Data de nascimento</strong>Define o prazo máximo do financiamento.</div></li><li><div class="sli-num az">4</div><div class="sli-text"><strong>Número de dependentes</strong>Impacta na renda disponível para o financiamento.</div></li><li><div class="sli-num az">5</div><div class="sli-text"><strong>Saldo de FGTS</strong>Pode reduzir o valor financiado e facilitar a entrada.</div></li><li><div class="sli-num az">6</div><div class="sli-text"><strong>Valor do imóvel</strong>Use o valor exato da tabela de vendas.</div></li></ul>';
+  if(type==='passos3')return'<div class="hbox azul">Siga essa sequência exata no simulador da Caixa.</div><ul class="step-list"><li><div class="sli-num az">1</div><div class="sli-text"><strong>Acesse simulador.caixa.gov.br</strong></div></li><li><div class="sli-num az">2</div><div class="sli-text"><strong>Selecione "Habitacional" e a modalidade</strong>MCMV ou SFH conforme a faixa de renda.</div></li><li><div class="sli-num az">3</div><div class="sli-text"><strong>Informe o valor do imóvel</strong>Valor exato da tabela.</div></li><li><div class="sli-num az">4</div><div class="sli-text"><strong>Informe a renda bruta</strong>Valor do holerite — nunca o líquido.</div></li><li><div class="sli-num az">5</div><div class="sli-text"><strong>Informe a data de nascimento</strong>O sistema calcula o prazo máximo automaticamente.</div></li><li><div class="sli-num az">6</div><div class="sli-text"><strong>Marque FGTS se aplicável</strong>Reduz o saldo devedor e a parcela.</div></li><li><div class="sli-num az">7</div><div class="sli-text"><strong>Analise o resultado</strong>Verifique parcela, prazo e percentual aprovado.</div></li></ul>';
+  if(type==='dicas3')return'<div class="regra-ouro"><div class="ro-tag">⚠️ Regra de Ouro — Simulação</div><div class="ro-title">Nunca simule na frente do cliente!</div><div class="ro-items"><div class="ro-item"><span class="ro-icon">✦</span><span>Faça a simulação antes da reunião com o cliente</span></div><div class="ro-item"><span class="ro-icon">✦</span><span>Simulação é estimativa — o banco pode aprovar valor diferente</span></div><div class="ro-item"><span class="ro-icon">✦</span><span>Apresente os resultados de forma lúdica, nunca a tela do sistema</span></div><div class="ro-item"><span class="ro-icon">✦</span><span>Sempre apresente junto com a Técnica 20/80</span></div><div class="ro-item"><span class="ro-icon">✦</span><span>Prepare sempre 2 cenários: com e sem FGTS</span></div></div></div>';
+  if(type==='resposta')return'<div class="hbox gold">🏦 Após a análise da Caixa, existem <strong>3 possíveis respostas</strong>. O próximo passo depende completamente do resultado.</div><div class="resp-grid"><div class="resp-card rep"><div class="resp-header"><div class="resp-icon">❌</div><div class="resp-title">REPROVADO</div></div><div class="resp-body"><strong>Infelizmente não há mais o que fazer nesta venda.</strong> Documente no CV, mantenha o relacionamento — situações financeiras mudam.</div></div><div class="resp-card cond"><div class="resp-header"><div class="resp-icon">⚠️</div><div class="resp-title">CONDICIONADO (ex: 60% ou 70%)</div></div><div class="resp-body"><strong>A Caixa aprovou parcialmente.</strong> Descubra o percentual exato, calcule o Pro Soluto e inicie a montagem do fluxo. <strong>É aqui que começa o trabalho mais importante do corretor!</strong></div></div><div class="resp-card ap"><div class="resp-header"><div class="resp-icon">✅</div><div class="resp-title">APROVADO — 80% (máximo MCMV)</div></div><div class="resp-body"><strong>Melhor cenário possível!</strong> Pro Soluto é apenas 20%. Organize com FGTS, recurso próprio e/ou parcelamento dentro das regras.</div></div></div><div class="hbox amber">💡 <strong>Lembre-se:</strong> A parte mais difícil já foi feita — a aprovação da Caixa! Agora depende do corretor encontrar a solução para o Pro Soluto.</div>';
+  if(type==='prosoluto')return'<div class="hbox gold">O <strong>Pro Soluto</strong> é o valor que sobra do preço do imóvel após o financiamento aprovado pela Caixa. É onde o corretor faz a diferença!</div><div class="calc-box roxo-dark"><div class="calc-title">📊 Exemplo — Imóvel de R$ 300.000,00 · Aprovação 80%</div><div class="calc-row"><div class="calc-label">Valor total do imóvel</div><div class="calc-val">R$ 300.000,00</div></div><div class="calc-row"><div class="calc-label">Financiamento Caixa (80%)</div><div class="calc-val">R$ 240.000,00</div></div><div class="calc-highlight"><div class="cl">Pro Soluto (20%) — a resolver</div><div class="cv">R$ 60.000,00</div></div></div><div class="calc-box laranja"><div class="calc-title">⚠️ Exemplo — Condicionamento de 70%</div><div class="calc-row"><div class="calc-label">Financiamento Caixa (70%)</div><div class="calc-val">R$ 210.000,00</div></div><div class="calc-highlight"><div class="cl">Pro Soluto (30%)</div><div class="cv">R$ 90.000,00</div></div></div><div class="hbox amber">⚡ Quanto maior o condicionamento, maior o Pro Soluto e mais criativo o corretor precisa ser.</div>';
+  if(type==='recursos')return'<div class="hbox gold">Explore <strong>todas as fontes de recurso</strong> antes de concluir que não há solução!</div><div class="parc-grid"><div class="parc-item dest"><div class="pi-icon">💰</div><div class="pi-title">FGTS — Fundo de Garantia</div><div class="pi-desc">Pode ser usado na entrada. Reduz o Pro Soluto sem comprometer a renda mensal.</div></div><div class="parc-item dest"><div class="pi-icon">💵</div><div class="pi-title">Recurso Próprio à Vista</div><div class="pi-desc">Dinheiro em conta, investimentos ou poupança. Quanto mais à vista, melhor para todos.</div></div><div class="parc-item"><div class="pi-icon">👥</div><div class="pi-title">Adicionar Comprador</div><div class="pi-desc">Inclui cônjuge, filho ou familiar — aumenta a renda composta, eleva o valor financiado e reduz o Pro Soluto.</div></div><div class="parc-item"><div class="pi-icon">📅</div><div class="pi-title">Parcelamento c/ Construtora</div><div class="pi-desc">Até 15% do valor do imóvel. Use como complemento, nunca como única solução.</div></div></div><ul class="step-list"><li><div class="sli-num am">1</div><div class="sli-text"><strong>Pergunte sobre o FGTS primeiro</strong>Fonte mais vantajosa — sem juros, não compromete renda.</div></li><li><div class="sli-num am">2</div><div class="sli-text"><strong>Verifique recursos próprios</strong>"Você tem algum valor guardado para a entrada?"</div></li><li><div class="sli-num am">3</div><div class="sli-text"><strong>Avalie adição de comprador</strong>Se o Pro Soluto for alto, uma segunda pessoa pode resolver.</div></li><li><div class="sli-num am">4</div><div class="sli-text"><strong>Monte o parcelamento complementar</strong>Use os 15% disponíveis para cobrir o restante.</div></li></ul>';
+  if(type==='parcelamento')return'<div class="hbox gold">A construtora permite parcelar <strong>até 15% do valor do imóvel</strong> — use como complemento, nunca como base do fluxo.</div><div class="parc-grid"><div class="parc-item"><div class="pi-icon">📆</div><div class="pi-title">Parcelas Mensais</div><div class="pi-desc">Divisão em parcelas mensais durante a obra. Mais flexível para a maioria dos clientes.</div></div><div class="parc-item"><div class="pi-icon">📅</div><div class="pi-title">Parcelas Anuais</div><div class="pi-desc">Pagamentos anuais maiores. Ideal para autônomos e renda variável.</div></div><div class="parc-item"><div class="pi-icon">🗓️</div><div class="pi-title">Parcelas Semestrais</div><div class="pi-desc">A cada 6 meses. Equilíbrio entre flexibilidade e concentração de valor.</div></div><div class="parc-item dest"><div class="pi-icon">🎯</div><div class="pi-title">Combinado (24 ou 48x)</div><div class="pi-desc">Divisão em 24 ou 48 vezes, podendo mesclar mensais com anuais ou semestrais.</div></div></div><div class="hbox amber">⚡ <strong>Regra fundamental:</strong> Limite de 15% com a construtora. O que ultrapassar precisa vir de FGTS ou recurso próprio.</div><div class="calc-box roxo-dark"><div class="calc-title">📊 Exemplo — R$ 300.000 · Pro Soluto 20% = R$ 60.000</div><div class="calc-row"><div class="calc-label">Limite parcelamento (15%)</div><div class="calc-val">R$ 45.000</div></div><div class="calc-row"><div class="calc-label">FGTS ou recurso próprio</div><div class="calc-val">R$ 15.000</div></div><div class="calc-highlight"><div class="cl">Pro Soluto resolvido ✓</div><div class="cv">R$ 60.000</div></div></div>';
+  if(type==='praticas4')return'<div class="regra-ouro"><div class="ro-tag">⚠️ Regra de Ouro — Fluxo de Pagamento</div><div class="ro-title">Seja claro, direto e honesto sobre o potencial real do cliente!</div><div class="ro-items"><div class="ro-item"><span class="ro-icon">✦</span><span>Pergunte objetivamente: "Qual é sua entrada à vista?" e "Tem FGTS disponível?"</span></div><div class="ro-item"><span class="ro-icon">✦</span><span>Não assuma — confirme os números reais antes de montar o fluxo</span></div><div class="ro-item"><span class="ro-icon">✦</span><span>Quanto mais entrada, melhor para o cliente, para a empresa e para a venda</span></div><div class="ro-item"><span class="ro-icon">✦</span><span>Explore todas as fontes antes de dizer que não tem solução</span></div><div class="ro-item"><span class="ro-icon">✦</span><span>Uma venda saudável é aquela que o cliente consegue sustentar com tranquilidade</span></div></div></div><ul class="step-list"><li><div class="sli-num am">1</div><div class="sli-text"><strong>Confirme o percentual aprovado pela Caixa</strong>Saiba o Pro Soluto exato antes de sentar com o cliente.</div></li><li><div class="sli-num am">2</div><div class="sli-text"><strong>Mapeie todos os recursos disponíveis</strong>FGTS, entrada à vista, possibilidade de adicionar comprador.</div></li><li><div class="sli-num am">3</div><div class="sli-text"><strong>Monte o fluxo mais flexível possível</strong>Adapte os prazos e formatos à realidade do cliente.</div></li><li><div class="sli-num am">4</div><div class="sli-text"><strong>Respeite sempre o limite de 15%</strong>O que ultrapassar precisa vir de FGTS ou recurso próprio.</div></li><li><div class="sli-num am">5</div><div class="sli-text"><strong>Documente tudo no CV</strong>Registre o fluxo aprovado, recursos utilizados e proposta final.</div></li><li><div class="sli-num am">6</div><div class="sli-text"><strong>Celebre com o cliente!</strong>A aprovação da Caixa é a parte mais difícil — agora é só organizar os números!</div></li></ul><div class="hbox green">🏆 <strong>Uma venda bem feita começa com uma conversa honesta.</strong> O cliente que entende o fluxo e se compromete com ele é o cliente que não desiste no meio do caminho.</div>';
+  if(type==='video5')return vThumb(VIDEO_M5,'CV Construtor de Vendas — Tutorial Completo','ch','💻')+'<div class="hbox cinza">Assista ao vídeo completo antes de avançar.</div><div class="feat-grid"><div class="feat-item"><div class="fi">📁</div><div class="fn">Pastas</div><div class="fd">Cadastro de clientes</div></div><div class="feat-item"><div class="fi">👥</div><div class="fn">Leads</div><div class="fd">Gestão do funil</div></div><div class="feat-item"><div class="fi">📝</div><div class="fn">Propostas</div><div class="fd">Criação e envio</div></div><div class="feat-item"><div class="fi">📊</div><div class="fn">Relatórios</div><div class="fd">Acompanhamento</div></div></div>';
+  if(type==='pasta')return'<div class="hbox cinza">Subir uma pasta corretamente é essencial para que a venda avance no sistema.</div><div class="pasta-steps"><div class="pasta-step"><div class="pasta-num">1</div><div class="pasta-info"><strong>Acesse o CV — clique em "Nova Pasta"</strong></div></div><div class="pasta-step"><div class="pasta-num">2</div><div class="pasta-info"><strong>Preencha os dados completos do cliente</strong>Nome, CPF, telefone, e-mail e renda.</div></div><div class="pasta-step"><div class="pasta-num">3</div><div class="pasta-info"><strong>Vincule a unidade de interesse</strong>Bloco, andar e unidade específica.</div></div><div class="pasta-step"><div class="pasta-num">4</div><div class="pasta-info"><strong>Anexe a documentação</strong>RG, CPF, holerite e demais documentos.</div></div><div class="pasta-step"><div class="pasta-num">5</div><div class="pasta-info"><strong>Registre o histórico de atendimento</strong>O contato e o próximo passo combinado.</div></div><div class="pasta-step"><div class="pasta-num">6</div><div class="pasta-info"><strong>Salve e aguarde análise</strong>A gestão receberá notificação.</div></div></div><div class="hbox gold">💡 <strong>Pasta incompleta = pasta travada.</strong> Preencha tudo de uma vez!</div>';
+  if(type==='leads')return'<div class="hbox cinza">Acompanhe cada lead em todas as etapas do funil — do primeiro contato ao contrato.</div><div class="feat-grid"><div class="feat-item"><div class="fi">🎯</div><div class="fn">Prospect</div><div class="fd">Primeiro contato</div></div><div class="feat-item"><div class="fi">🔍</div><div class="fn">Qualificado</div><div class="fd">Perfil confirmado</div></div><div class="feat-item"><div class="fi">🤝</div><div class="fn">Em negociação</div><div class="fd">Proposta apresentada</div></div><div class="feat-item"><div class="fi">✅</div><div class="fn">Vendido</div><div class="fd">Contrato assinado</div></div></div><ul class="step-list"><li><div class="sli-num ch">1</div><div class="sli-text"><strong>Registre o lead imediatamente</strong>No mesmo dia — não deixe para depois.</div></li><li><div class="sli-num ch">2</div><div class="sli-text"><strong>Preencha a origem do lead</strong>Portal, indicação, WhatsApp, plantão.</div></li><li><div class="sli-num ch">3</div><div class="sli-text"><strong>Registre cada interação</strong>Toda ligação, visita ou mensagem no histórico.</div></li><li><div class="sli-num ch">4</div><div class="sli-text"><strong>Atualize o status sempre</strong>Mova o lead pelo funil conforme o avanço.</div></li><li><div class="sli-num ch">5</div><div class="sli-text"><strong>Agende o próximo contato</strong>Não deixe nenhum lead esfriar.</div></li></ul>';
+  if(type==='praticas')return'<div class="regra-ouro"><div class="ro-tag">⚠️ Regra de Ouro — Sistema CV</div><div class="ro-title">CV desatualizado = venda invisível!</div><div class="ro-items"><div class="ro-item"><span class="ro-icon">✦</span><span>Registre TUDO — cada ligação, visita e mensagem</span></div><div class="ro-item"><span class="ro-icon">✦</span><span>Pasta incompleta trava o processo</span></div><div class="ro-item"><span class="ro-icon">✦</span><span>Nunca registre a pasta depois da venda — faça em tempo real</span></div><div class="ro-item"><span class="ro-icon">✦</span><span>A gestão só pode apoiar se enxergar o que está acontecendo</span></div></div></div><ul class="step-list"><li><div class="sli-num ch">1</div><div class="sli-text"><strong>✅ Faça</strong>Cadastre o lead no mesmo dia do primeiro contato.</div></li><li><div class="sli-num ch">2</div><div class="sli-text"><strong>✅ Faça</strong>Atualize o status após cada interação.</div></li><li><div class="sli-num ch">3</div><div class="sli-text"><strong>❌ Evite</strong>Leads sem contato por mais de 48h sem registrar.</div></li><li><div class="sli-num ch">4</div><div class="sli-text"><strong>❌ Evite</strong>Subir pasta às pressas sem conferir os dados.</div></li></ul>';
+  return'';
+}
+
+// ============================================================
+// QUIZ FIXAÇÃO
+// ============================================================
+function rQ(q,done,n,qs,cf){
+  return'<div class="qsec '+qs+'"><div class="qsec-head"><h3>💡 Pergunta de Fixação</h3></div><div class="qbody"><div class="qtxt">'+q.t+'</div><div class="qopts" id="m'+n+'-qopts">'+q.o.map((o,i)=>'<button class="qopt '+(done?(i===q.a?'ok':''):'')+'" onclick="mSO('+n+','+i+')" '+(done?'disabled':'')+'>'+o+'</button>').join('')+'</div><div class="qfb '+(done?'ok':'')+'" id="m'+n+'-qfb" style="display:'+(done?'block':'none')+'">'+(done?q.ok:'')+'</div>'+(done?'':'<button class="btn-cfm '+cf+'" id="m'+n+'-cfm" onclick="mCO('+n+')" style="display:none">Confirmar →</button>')+'</div></div>';
+}
+function mSO(n,i){const g=getG(n);if(g.done.has(g.cur))return;g.sel=i;document.querySelectorAll('#m'+n+'-qopts .qopt').forEach((b,j)=>b.classList.toggle('sel',j===i));const c=document.getElementById('m'+n+'-cfm');if(c)c.style.display='block';}
+function mCO(n){
+  const g=getG(n);const T=getT(n);const t=T[g.cur];
+  // Buscar pergunta do banco baseada no CRECI do corretor
+  const _qBanco = getQFixacao('m'+n+'_t'+t.id, G.creci||'0');
+  const _qBase = _qBanco || t.q;
+  const q=getSh(_qBase,'m'+n+'_t'+t.id,g);const ok=g.sel===q.a;
+  document.querySelectorAll('#m'+n+'-qopts .qopt').forEach((b,i)=>{b.classList.remove('sel');if(i===q.a)b.classList.add('ok');else if(i===g.sel&&!ok)b.classList.add('no');b.disabled=true;});
+  const fb=document.getElementById('m'+n+'-qfb');fb.textContent=ok?q.ok:q.no;fb.className='qfb '+(ok?'ok':'no');fb.style.display='block';
+  const c=document.getElementById('m'+n+'-cfm');if(c)c.style.display='none';
+  // Registrar erro de fixação para análise do gestor
+  if(!ok&&G.user&&G.creci){
+    const modNomes={1:'Módulo 1 — Produto',2:'Módulo 2 — Atendimento',3:'Módulo 3 — Simulação Caixa',4:'Módulo 4 — Fluxo de Pagamento',5:'Módulo 5 — Sistema CV'};
+    const erroFixacao={modulo:modNomes[n]||'Módulo '+n,pergunta:t.q.t};
+    if(!G.errosFixacao)G.errosFixacao=[];
+    // Evitar duplicatas na sessão
+    var jatem=G.errosFixacao.some(function(e){return e.pergunta===erroFixacao.pergunta&&e.modulo===erroFixacao.modulo;});
+    if(!jatem) G.errosFixacao.push(erroFixacao);
+    // Salva imediatamente via saveCorretor com campo errosFixacao
+    try{
+      if(window._fbOk){
+        const key=getKey(G.user,G.creci);
+        window._db.collection('corretores').doc(key).get().then(function(snapF){
+          var dadosAtuais=snapF.exists?snapF.data():{};
+          var existentes=dadosAtuais.errosFixacao||[];
+          var jatemFB=existentes.some(function(e){return e.pergunta===erroFixacao.pergunta&&e.modulo===erroFixacao.modulo;});
+          if(!jatemFB){
+            existentes.push(erroFixacao);
+            return window._db.collection('corretores').doc(key).set(
+              Object.assign({},dadosAtuais,{errosFixacao:existentes,updatedAt:new Date().toISOString()})
+            );
+          }
+        }).then(function(){console.log('Erro fixacao salvo:',erroFixacao.pergunta.substring(0,30));})
+          .catch(function(e){console.error('ERRO ao salvar fixacao:',e);});
+      }
+    }catch(e){console.error('Excecao fixacao:',e);}
+  }
+  // Sempre libera para avançar — acerto ou erro — para poder medir dificuldades
+  g.done.add(g.cur);
+  mUpdProg(n);mNav(n);
+  setTimeout(()=>mRender(n),800);
+  g.sel=null;
+}
+
+// ============================================================
+// QUIZ FINAL DO MÓDULO
+// ============================================================
+function mFinal(n){
+  const g=getG(n);const F=getF(n);if(g.fDone){mRes(n);return;}
+  g.fAns=new Array(F.length).fill(null);
+  let h='<div class="fqsec"><div class="fqhead"><h3>🏆 Quiz Final — Módulo '+n+'</h3><p>Responda todas as questões para concluir o módulo</p></div><div class="qbody">';
+  F.forEach((q,i)=>{
+    const sq=getSh(q,'m'+n+'_f'+i,g);
+    h+='<div style="margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid #f0f0f0"><div class="qtxt">'+(i+1)+'. '+sq.t+'</div><div class="qopts" id="m'+n+'fq-'+i+'">'+sq.o.map((o,j)=>'<button class="qopt" onclick="mSF('+n+','+i+','+j+')">'+o+'</button>').join('')+'</div></div>';
+  });
+  h+='</div></div><button class="btn-adv g" style="width:100%;margin-bottom:1rem" onclick="mSub('+n+')">Enviar Respostas →</button>';
+  document.getElementById('m'+n+'-area').innerHTML=h;
+}
+function mSF(n,qi,oi){const g=getG(n);g.fAns[qi]=oi;document.querySelectorAll('#m'+n+'fq-'+qi+' .qopt').forEach((b,j)=>b.classList.toggle('sel',j===oi));}
+function mSub(n){
+  const g=getG(n);const F=getF(n);
+  if(g.fAns.includes(null)){alert('Responda todas as questões antes de enviar!');return;}
+  let s=0;g.erros=[];
+  F.forEach((q,i)=>{const sq=getSh(q,'m'+n+'_f'+i,g);if(g.fAns[i]===sq.a)s++;else g.erros.push(q.t);});
+  g.fScore=Math.round((s/F.length)*10);g.fDone=true;
+  if(G.user&&G.creci){
+    const progAtual=[1,2,3,4,5].filter(m=>getG(m).fDone&&getG(m).fScore>=6).length+(G.q6Done&&G.q6Score>=6?1:0)+(G.modDone.has(7)?1:0);
+    const modNotas={
+      m1:G.m1.fDone?G.m1.fScore:null,
+      m2:G.m2.fDone?G.m2.fScore:null,
+      m3:G.m3.fDone?G.m3.fScore:null,
+      m4:G.m4.fDone?G.m4.fScore:null,
+      m5:G.m5.fDone?G.m5.fScore:null,
+      prova:G.q6Done?G.q6Score:null
+    };
+    updateCorretor(G.user,G.creci,{modNotas:modNotas,prog:progAtual});
+  }
+  mRes(n);
+}
+function mRes(n){
+  const g=getG(n);const pass=g.fScore>=6;
+  document.getElementById('m'+n+'-area').innerHTML='<div class="rbox"><div class="rico">'+(pass?'🎉':'😔')+'</div><div class="rscore '+(pass?'pass':'fail')+'">'+g.fScore+'/10</div><div class="rmsg">'+(pass?'Aprovado! Módulo concluído!':'Nota mínima não atingida')+'</div><div class="rsub">'+(pass?'Você desbloqueou o próximo módulo.':'Nota mínima é 6,0. Revise o conteúdo e tente novamente.')+'</div>'+(pass?'<button class="btn-fin" onclick="goBack()">✓ Voltar ao Menu</button>':'<button class="btn-retry" onclick="mRF('+n+')">Tentar Novamente</button>')+'</div>';
+}
+function mRF(n){const g=getG(n);g.fDone=false;g.fScore=0;g.erros=[];g.fAns=[];g.sh={};mFinal(n);}
+
+// ============================================================
+// PROVA FINAL — 20 QUESTÕES EMBARALHADAS
+// ============================================================
+function startQ6(){G.q6={idx:0,score:0,sel:null,answered:false,erros:[],acertos:[],sh:{}};rQ6();show('s-quiz6');}
+function rQ6(){
+  if(G.q6.idx>=Q6.length){q6Res();return;}
+  const q=Q6[G.q6.idx];const sq=getSh(q,'q6_'+G.q6.idx,G.q6);
+  const p=Math.round((G.q6.idx/Q6.length)*100);
+  document.getElementById('q6-fill').style.width=p+'%';
+  document.getElementById('q6-label').textContent='Questão '+(G.q6.idx+1)+' de '+Q6.length;
+  document.getElementById('q6-pct').textContent=p+'%';
+  document.getElementById('quiz6-body').innerHTML=
+    '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:10px;font-weight:700;background:var(--roxo-light);color:var(--roxo);padding:3px 10px;border-radius:20px">'+q.tema+'</span><span style="font-size:11px;color:#888">Questão '+(G.q6.idx+1)+' de '+Q6.length+'</span></div>'+
+    '<div style="font-size:14px;font-weight:700;color:#222;margin-bottom:1rem;line-height:1.6">'+sq.t+'</div>'+
+    sq.o.map((o,i)=>'<button class="q6-opt" id="q6o-'+i+'" onclick="sQ6('+i+')">'+o+'</button>').join('')+
+    '<button class="q6-next" id="q6n" onclick="nQ6()">Próxima questão →</button>';
+  G.q6.answered=false;G.q6.sel=null;
+}
+function sQ6(i){
+  if(G.q6.answered)return;G.q6.sel=i;
+  document.querySelectorAll('[id^="q6o-"]').forEach((b,j)=>b.classList.toggle('sel',j===i));
+  G.q6.answered=true;
+  const sq=getSh(Q6[G.q6.idx],'q6_'+G.q6.idx,G.q6);
+  setTimeout(()=>{
+    document.querySelectorAll('[id^="q6o-"]').forEach((b,j)=>{b.classList.remove('sel');if(j===sq.a)b.classList.add('ok');else if(j===G.q6.sel&&j!==sq.a)b.classList.add('no');b.onclick=null;});
+    if(G.q6.sel===sq.a){G.q6.score++;G.q6.acertos.push({tema:Q6[G.q6.idx].tema});}
+    else G.q6.erros.push({tema:Q6[G.q6.idx].tema,q:Q6[G.q6.idx].t});
+    document.getElementById('q6n').style.display='block';
+  },400);
+}
+function nQ6(){G.q6.idx++;rQ6();}
+function q6Res(){
+  const nota=Math.round((G.q6.score/Q6.length)*10);const pass=nota>=6;
+  G.q6Done=true;G.q6Score=nota;
+  document.getElementById('q6-fill').style.width='100%';
+  const errosPorTema={};G.q6.erros.forEach(e=>{errosPorTema[e.tema]=(errosPorTema[e.tema]||0)+1;});
+  const areasAlerta=Object.entries(errosPorTema).filter(([,v])=>v>=2).map(([k])=>k);
+  if(G.user&&G.creci){
+    const modNotas={m1:G.m1.fDone?G.m1.fScore:null,m2:G.m2.fDone?G.m2.fScore:null,m3:G.m3.fDone?G.m3.fScore:null,m4:G.m4.fDone?G.m4.fScore:null,m5:G.m5.fDone?G.m5.fScore:null,prova:nota};
+    const progFinal=[1,2,3,4,5].filter(m=>getG(m).fDone&&getG(m).fScore>=6).length+(pass?1:0);
+    updateCorretor(G.user,G.creci,{nota,modNotas,erros:G.q6.erros.map(e=>e.q||e),areas:areasAlerta,prog:progFinal});
+  }
+  document.getElementById('quiz6-body').innerHTML='<div class="rbox"><div class="rico">'+(pass?'🎉':'😔')+'</div><div class="rscore '+(pass?'pass':'fail')+'">'+nota+'/10</div><div class="rmsg">'+(pass?'Aprovado! Parabéns!':'Não atingiu a nota mínima')+'</div><div class="rsub">'+G.q6.score+' de '+Q6.length+' acertos. '+(pass?'Agora retire seu certificado!':'Nota mínima é 6,0.')+'</div>'+(areasAlerta.length>0?'<div style="background:#FFF3CD;border:1px solid #FFCA28;border-radius:9px;padding:12px;margin-bottom:1rem;text-align:left"><div style="font-size:12px;font-weight:700;color:#856404;margin-bottom:6px">⚠️ Áreas com mais erros — revisar:</div>'+areasAlerta.map(a=>'<div style="font-size:11px;color:#856404;margin-bottom:3px">• '+a+'</div>').join('')+'</div>':'')+(pass?'<button class="btn-fin" onclick="passQ6()">🏆 Ir para Certificação</button>':'<button class="btn-retry" onclick="startQ6()">Tentar Novamente</button>')+'</div>';
+}
+function passQ6(){G.modDone.add(6);renderDash();show('s-dash');}
+
+// ============================================================
+// CERTIFICADO
+// ============================================================
+function showCert(){
+  G.modDone.add(7);
+  const now=new Date();
+  document.getElementById('cname').textContent=G.user;
+  document.getElementById('cdate').textContent='Emitido em '+now.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+  const init=G.user?G.user.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase():'?';
+  ['av1','av2','av3','av4','av5','av6','av7'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=init;});
+  if(G.user&&G.creci){
+    const modNotas={m1:G.m1.fDone?G.m1.fScore:null,m2:G.m2.fDone?G.m2.fScore:null,m3:G.m3.fDone?G.m3.fScore:null,m4:G.m4.fDone?G.m4.fScore:null,m5:G.m5.fDone?G.m5.fScore:null,prova:G.q6Done?G.q6Score:null};
+    updateCorretor(G.user,G.creci,{cert:true,prog:7,modNotas});
+  }
+  renderDash();show('s-cert');
+}
+
+// ============================================================
+// ADMIN PANEL
+// ============================================================
+function renderAdmin(){
+  const corretores=getAllCorretores();
+  const cert=corretores.filter(c=>c.data&&c.data.cert).length;
+  const prog=corretores.filter(c=>c.data&&!c.data.cert&&(c.data.prog||0)>0).length;
+  document.getElementById('adm-total').textContent=corretores.length;
+  document.getElementById('adm-cert').textContent=cert;
+  document.getElementById('adm-prog').textContent=prog;
+  if(corretores.length===0){document.getElementById('blist').innerHTML='<div style="text-align:center;padding:2rem;color:#aaa;font-size:13px">Nenhum corretor registrou acesso ainda.</div>';return;}
+  document.getElementById('blist').innerHTML=corretores.map((c,idx)=>{
+    const d=c.data||{};const pct=Math.round(((d.prog||0)/7)*100);
+    const s=d.cert?'c':(d.prog>0?'p':'n');const lb=d.cert?'🏆 Certificado':(d.prog>0?'📚 Em andamento':'⏳ Iniciando');
+    return'<div class="brow" onclick="verRelatorio('+idx+')"><div class="bhead"><div class="bname">'+c.nome+'</div><div class="bstat '+s+'">'+lb+'</div></div><div class="bpw"><div class="bpf '+(d.cert?'c':'')+'" style="width:'+pct+'%"></div></div><div class="bpl">CRECI: '+c.creci+' · '+(d.prog||0)+' de 7 módulos · '+pct+'% · Nota prova: '+(d.nota?d.nota+'/10':'—')+'</div><button class="ver-btn">Ver relatório detalhado →</button></div>';
+  }).join('');
+}
+function verRelatorio(idx){
+  const corretores=getAllCorretores();const c=corretores[idx];const d=c.data||{};
+  const pct=Math.round(((d.prog||0)/7)*100);
+  const notas=d.modNotas||{};
+  const modLabels={m1:'Módulo 1 — Produto',m2:'Módulo 2 — Atendimento',m3:'Módulo 3 — Simulação Caixa',m4:'Módulo 4 — Fluxo de Pagamento',m5:'Módulo 5 — Sistema CV',prova:'Prova Final (20 questões)'};
+  let modsHtml='';
+  Object.entries(modLabels).forEach(([key,label])=>{
+    const nota=notas[key];const nc=nota==null?'pend':nota>=6?'ok':'fail';const nt=nota==null?'Pendente':nota+'/10';
+    modsHtml+='<div class="mod-perf"><div class="mod-perf-head"><div class="mod-perf-title">'+label+'</div><div class="mod-perf-nota '+nc+'">'+nt+'</div></div>'+(nota!=null?'<div class="mod-perf-body" style="color:'+(nota>=6?'var(--verde)':'#A32D2D')+'">'+(nota>=6?'✓ Aprovado com nota '+nota+'/10':'✗ Necessita reforço — nota '+nota+'/10 (mínimo 6,0)')+'</div>':'')+'</div>';
+  });
+  const areas=d.areas||[];
+  const areasHtml=areas.length?'<div style="background:#FFF3CD;border:1px solid #FFCA28;border-radius:9px;padding:12px;margin-bottom:1rem"><div style="font-size:12px;font-weight:700;color:#856404;margin-bottom:8px">⚠️ Áreas que precisam de reforço específico</div></div>'+areas.map(a=>'<div class="area-critica">⚡ '+a+'</div>').join(''):'';
+  const erros=d.erros||[];
+  const errosHtml=erros.length?'<div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin:1rem 0 8px">Questões erradas na prova final</div>'+erros.map(e=>'<div class="erro-item">'+e+'</div>').join(''):'';
+  document.getElementById('rel-body').innerHTML=
+    '<div class="rel-name">'+c.nome+'</div>'+
+    '<div class="rel-sub">CRECI: '+c.creci+' · Progresso: '+pct+'% · '+(d.cert?'✅ Certificado emitido':'📚 Em andamento')+'</div>'+
+    '<div class="rel-grid"><div class="rel-card total"><div class="rv">'+(d.prog||0)+'/7</div><div class="rl">Módulos concluídos</div></div><div class="rel-card nota"><div class="rv">'+(d.nota?d.nota+'/10':'—')+'</div><div class="rl">Nota na prova final</div></div><div class="rel-card tempo"><div class="rv">'+(d.cert?'✓':'⏳')+'</div><div class="rl">'+(d.cert?'Certificado':'Pendente')+'</div></div></div>'+
+    areasHtml+
+    '<div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Desempenho por módulo</div>'+
+    modsHtml+errosHtml;
+  show('s-relatorio');
+}
+
+// ============================================================
+// INIT
+// ============================================================
+[1,2,3,4,5].forEach(n=>{getG(n).cur=0;});
+
+</script>
+</body>
+</html>
