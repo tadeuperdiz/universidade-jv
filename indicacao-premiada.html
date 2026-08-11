@@ -365,14 +365,15 @@
     const body = new URLSearchParams(new FormData(form)).toString();
 
     fetch('/', { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body })
-      .then(() => {
+      .then((res) => {
+        if(!res.ok) throw new Error('Falha no envio: ' + res.status);
         document.getElementById('s_nome').textContent = nome.split(' ')[0];
         document.getElementById('s_indicado').textContent = indicadoNome;
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         document.getElementById('step-success').classList.add('active');
         window.scrollTo({top:0, behavior:'smooth'});
       })
-      .catch(() => alert('Não foi possível enviar agora. Tenta de novo em instantes.'));
+      .catch((err) => { console.error(err); alert('Não foi possível enviar agora. Tenta de novo em instantes.'); });
   }
 
   function reiniciar(){
