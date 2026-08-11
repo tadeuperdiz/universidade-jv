@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indicação Premiada · Conceito Poá</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple: #6B2D8B;
+    --purple-dark: #4A1D63;
+    --orange: #E8600A;
+    --orange-light: #FFA25C;
+    --cream: #FBF7F2;
+    --text-dark: #2A1B45;
+    --text-muted: #7A6E8C;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Inter',sans-serif;
+    background: linear-gradient(160deg, var(--purple) 0%, var(--purple-dark) 100%);
+    min-height:100vh;
+    color:#fff;
+  }
+  .wrap{
+    max-width:520px;
+    margin:0 auto;
+    padding: 32px 20px 60px;
+  }
+  .brand-row{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    margin-bottom:8px;
+  }
+  .brand-row span{
+    font-weight:800; letter-spacing:0.05em; font-size:13px;
+    color: var(--orange-light);
+  }
+  .badge{
+    display:block; text-align:center;
+    font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+    color:#fff; background: rgba(255,255,255,0.12);
+    border-radius:100px; padding:8px 18px;
+    width:fit-content; margin:18px auto 20px;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-size: clamp(30px, 6vw, 40px);
+    text-align:center;
+    line-height:1.15;
+    margin-bottom:14px;
+  }
+  .lead{
+    text-align:center;
+    color: rgba(255,255,255,0.85);
+    font-size:15px;
+    line-height:1.6;
+    margin-bottom:28px;
+  }
+  .prize-row{
+    display:flex; gap:12px;
+    margin-bottom:32px;
+  }
+  .prize-chip{
+    flex:1;
+    background: rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18);
+    border-radius:14px;
+    padding:16px 10px;
+    text-align:center;
+  }
+  .prize-chip .ic{ font-size:22px; margin-bottom:6px; }
+  .prize-chip .val{ font-weight:800; font-size:15px; }
+  .prize-chip .lb{ font-size:11px; color: rgba(255,255,255,0.7); }
+
+  .card{
+    background:#fff;
+    border-radius:22px;
+    padding: 30px 26px;
+    color: var(--text-dark);
+    box-shadow: 0 30px 70px -20px rgba(0,0,0,0.5);
+  }
+  .steps{
+    display:flex; align-items:center; gap:8px;
+    margin-bottom:24px;
+  }
+  .step-dot{
+    width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:800;
+    background: #EFE6F5; color: var(--purple);
+    flex-shrink:0;
+  }
+  .step-dot.active{ background: var(--purple); color:#fff; }
+  .step-dot.done{ background: var(--orange); color:#fff; }
+  .step-line{ flex:1; height:2px; background:#EFE6F5; }
+  .step-label{ font-size:11px; color: var(--text-muted); }
+
+  .card h2{
+    font-family:'Fraunces', serif;
+    font-size:22px;
+    margin-bottom:6px;
+    color: var(--text-dark);
+  }
+  .card .sub{
+    font-size:13.5px; color: var(--text-muted);
+    margin-bottom:22px;
+  }
+
+  .field{ margin-bottom:16px; }
+  .field label{
+    display:block; font-size:12px; font-weight:700;
+    color: var(--text-muted); margin-bottom:6px;
+    text-transform:uppercase; letter-spacing:0.03em;
+  }
+  .field input, .field select, .field textarea{
+    width:100%; padding:12px 14px;
+    border:1.5px solid #E4DCEE; border-radius:10px;
+    font-family:'Inter',sans-serif; font-size:14.5px;
+    color: var(--text-dark);
+    outline:none;
+    transition: border-color .15s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{ border-color: var(--purple); }
+  .field-row{ display:flex; gap:12px; }
+  .field-row .field{ flex:1; }
+
+  .btn{
+    width:100%;
+    padding:15px;
+    border:none; border-radius:12px;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:15px;
+    cursor:pointer;
+    background: var(--orange); color:#fff;
+    transition: filter .15s, transform .15s;
+  }
+  .btn:hover{ filter:brightness(1.08); transform:translateY(-1px); }
+  .btn-ghost{
+    background:none; border:none;
+    color: var(--text-muted); font-weight:700; font-size:14px;
+    cursor:pointer; margin-bottom:16px;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+
+  .prize-option{
+    border:2px solid #E4DCEE; border-radius:14px;
+    padding:16px; margin-bottom:14px;
+    display:flex; align-items:center; gap:14px;
+    cursor:pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .prize-option.selected{ border-color: var(--orange); background:#FFF6EE; }
+  .prize-option .ic{ font-size:26px; }
+  .prize-option h3{ font-size:15px; margin-bottom:2px; }
+  .prize-option p{ font-size:12.5px; color: var(--text-muted); }
+  .check{
+    margin-left:auto; width:22px; height:22px; border-radius:50%;
+    border:2px solid #E4DCEE; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .prize-option.selected .check{ border-color: var(--orange); background: var(--orange); color:#fff; }
+
+  .rules{
+    background: var(--cream);
+    border-radius:12px;
+    padding:16px 18px;
+    margin: 18px 0 22px;
+  }
+  .rules h4{ font-size:12.5px; margin-bottom:8px; color: var(--text-dark); }
+  .rules ul{ padding-left:18px; }
+  .rules li{ font-size:12px; color: var(--text-muted); line-height:1.6; }
+
+  .step{ display:none; }
+  .step.active{ display:block; }
+
+  .success{ text-align:center; padding: 10px 0 4px; }
+  .success .emoji{ font-size:52px; margin-bottom:14px; }
+  .success h2{ margin-bottom:10px; }
+  .success p{ font-size:14px; color: var(--text-muted); line-height:1.6; margin-bottom:18px; }
+  .timer-badge{
+    display:inline-block; background: var(--cream); color: var(--purple);
+    font-size:12.5px; font-weight:700; padding:10px 16px; border-radius:100px;
+    margin-bottom:22px;
+  }
+
+  footer{
+    text-align:center; margin-top:26px;
+    font-size:12px; color: rgba(255,255,255,0.6);
+  }
+
+  @media (max-width:420px){
+    .field-row{ flex-direction:column; gap:0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="brand-row">
+    <span>CONCEITO POÁ</span><span style="color:rgba(255,255,255,0.5)">by JV</span>
+  </div>
+  <div class="badge">🏆 Programa exclusivo · Conceito Poá · Jerônimo da Veiga</div>
+  <h1>Indique e ganhe!</h1>
+  <p class="lead">Você já comprou seu apartamento. Agora indique um amigo e ganhe prêmios incríveis!</p>
+
+  <div class="prize-row">
+    <div class="prize-chip"><div class="ic">🏷️</div><div class="val">R$ 1.500</div><div class="lb">Desconto</div></div>
+    <div class="prize-chip"><div class="ic">🎁</div><div class="val">R$ 1.000</div><div class="lb">Cartão</div></div>
+    <div class="prize-chip"><div class="ic">⭐</div><div class="val">Você</div><div class="lb">decide!</div></div>
+  </div>
+
+  <div class="card">
+
+    <!-- STEP 1 -->
+    <div class="step active" id="step-1">
+      <div class="steps">
+        <div class="step-dot active">1</div><div class="step-line"></div>
+        <div class="step-dot">2</div><div class="step-line"></div>
+        <div class="step-dot">3</div>
+      </div>
+      <h2>Seus dados de comprador</h2>
+      <p class="sub">Confirme seus dados como cliente Jerônimo da Veiga.</p>
+
+      <div class="field"><label>Nome completo *</label><input type="text" id="c_nome" required></div>
+      <div class="field-row">
+        <div class="field"><label>Telefone *</label><input type="tel" id="c_telefone" required placeholder="(11) 90000-0000"></div>
+        <div class="field"><label>CPF *</label><input type="text" id="c_cpf" required></div>
+      </div>
+      <div class="field"><label>E-mail *</label><input type="email" id="c_email" required></div>
+      <div class="field"><label>Empreendimento onde comprou *</label><input type="text" id="c_empreendimento" required placeholder="Ex: Conceito Poá"></div>
+      <div class="field-row">
+        <div class="field"><label>Bloco</label><input type="text" id="c_bloco"></div>
+        <div class="field"><label>Unidade</label><input type="text" id="c_unidade"></div>
+      </div>
+
+      <button class="btn" onclick="irPara(2)">Continuar →</button>
+      <p style="text-align:center; font-size:11.5px; color:var(--text-muted); margin-top:14px;">Somente clientes que já assinaram com a Caixa Econômica podem participar</p>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" id="step-2">
+      <div class="steps">
+        <div class="step-dot done">✓</div><div class="step-line" style="background:var(--orange)"></div>
+        <div class="step-dot active">2</div><div class="step-line"></div>
+        <div class="step-dot">3</div>
+      </div>
+      <button class="btn-ghost" onclick="irPara(1)">← Voltar</button>
+      <h2>Dados do seu indicado</h2>
+      <p class="sub">👤 Quem você vai indicar?</p>
+
+      <div class="field"><label>Nome completo *</label><input type="text" id="i_nome" required></div>
+      <div class="field-row">
+        <div class="field"><label>Telefone *</label><input type="tel" id="i_telefone" required></div>
+        <div class="field"><label>CPF *</label><input type="text" id="i_cpf" required></div>
+      </div>
+      <div class="field"><label>E-mail *</label><input type="email" id="i_email" required></div>
+      <div class="field-row">
+        <div class="field"><label>Data de nascimento</label><input type="date" id="i_nascimento"></div>
+        <div class="field">
+          <label>Renda mensal aprox.</label>
+          <select id="i_renda">
+            <option value="">Selecione</option>
+            <option>Até R$ 3.000</option>
+            <option>R$ 3.001 – R$ 6.000</option>
+            <option>R$ 6.001 – R$ 10.000</option>
+            <option>Acima de R$ 10.000</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label>Cidade / Bairro</label><input type="text" id="i_cidade"></div>
+      <div class="field"><label>Observações (opcional)</label><textarea id="i_obs" rows="2"></textarea></div>
+
+      <button class="btn" onclick="irPara(3)">Próximo: escolher prêmio →</button>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" id="step-3">
+      <div class="steps">
+        <div class="step-dot done">✓</div><div class="step-line" style="background:var(--orange)"></div>
+        <div class="step-dot done">✓</div><div class="step-line" style="background:var(--orange)"></div>
+        <div class="step-dot active">3</div>
+      </div>
+      <button class="btn-ghost" onclick="irPara(2)">← Voltar</button>
+      <h2>Escolha seu prêmio</h2>
+      <p class="sub">Qual prêmio você quer receber quando seu indicado assinar com a Caixa?</p>
+
+      <div class="prize-option selected" id="opt-desconto" onclick="selecionarPremio('desconto')">
+        <div class="ic">🏷️</div>
+        <div><h3>Desconto nas parcelas</h3><p>R$ 1.500 abatidos das suas últimas parcelas com a construtora</p></div>
+        <div class="check">✓</div>
+      </div>
+      <div class="prize-option" id="opt-cartao" onclick="selecionarPremio('cartao')">
+        <div class="ic">💳</div>
+        <div><h3>Cartão presente</h3><p>R$ 1.000 para usar onde quiser</p></div>
+        <div class="check"></div>
+      </div>
+
+      <div class="rules">
+        <h4>⚠️ Regras importantes</h4>
+        <ul>
+          <li>Participam somente clientes que já assinaram com a Caixa Econômica Federal</li>
+          <li>Prêmio liberado em até 60 dias após o indicado assinar com a Caixa</li>
+          <li>Desconto de R$ 1.500 é abatido das últimas parcelas com a construtora</li>
+          <li>Se não houver parcelas, o prêmio é automaticamente o cartão de R$ 1.000</li>
+          <li>Uma indicação válida por CPF do indicado</li>
+        </ul>
+      </div>
+
+      <button class="btn" onclick="enviarIndicacao()">Enviar indicação ✓</button>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="step" id="step-success">
+      <div class="success">
+        <div class="emoji">🎉</div>
+        <h2>Tudo certo, <span id="s_nome"></span>!</h2>
+        <p>Sua indicação de <strong id="s_indicado"></strong> foi registrada e enviada à equipe do Conceito Poá. Quando seu amigo assinar com a Caixa Econômica, seu prêmio será processado.</p>
+        <div class="timer-badge">⏱ Prêmio liberado em até 60 dias após a assinatura</div>
+        <button class="btn" onclick="reiniciar()">+ Fazer outra indicação</button>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>Dúvidas? Fale com a equipe de vendas Jerônimo da Veiga.</footer>
+</div>
+
+<!-- Form oculto → Web3Forms -->
+<form id="fsend" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
+  <input type="hidden" name="access_key" value="b320611c-e475-45d1-8f87-3c162874f677">
+  <input type="hidden" name="subject" value="🏠 Nova Indicação Premiada – Conceito Poá">
+  <input type="hidden" name="from_name" value="Indicação Premiada Conceito Poá">
+</form>
+
+<script>
+  let premioEscolhido = 'desconto';
+
+  function irPara(n){
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step-' + n).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function selecionarPremio(p){
+    premioEscolhido = p;
+    document.getElementById('opt-desconto').classList.toggle('selected', p==='desconto');
+    document.getElementById('opt-cartao').classList.toggle('selected', p==='cartao');
+  }
+
+  function enviarIndicacao(){
+    const nome = document.getElementById('c_nome').value.trim();
+    const indicadoNome = document.getElementById('i_nome').value.trim();
+
+    if(!nome || !document.getElementById('c_telefone').value || !document.getElementById('c_cpf').value || !document.getElementById('c_email').value){
+      alert('Preencha todos os campos obrigatórios do comprador.');
+      irPara(1);
+      return;
+    }
+    if(!indicadoNome || !document.getElementById('i_telefone').value || !document.getElementById('i_cpf').value || !document.getElementById('i_email').value){
+      alert('Preencha todos os campos obrigatórios do indicado.');
+      irPara(2);
+      return;
+    }
+
+    const form = document.getElementById('fsend');
+    const campos = {
+      'Comprador - Nome': nome,
+      'Comprador - Telefone': document.getElementById('c_telefone').value,
+      'Comprador - CPF': document.getElementById('c_cpf').value,
+      'Comprador - E-mail': document.getElementById('c_email').value,
+      'Empreendimento': document.getElementById('c_empreendimento').value,
+      'Bloco': document.getElementById('c_bloco').value,
+      'Unidade': document.getElementById('c_unidade').value,
+      'Indicado - Nome': indicadoNome,
+      'Indicado - Telefone': document.getElementById('i_telefone').value,
+      'Indicado - CPF': document.getElementById('i_cpf').value,
+      'Indicado - E-mail': document.getElementById('i_email').value,
+      'Indicado - Nascimento': document.getElementById('i_nascimento').value,
+      'Indicado - Renda': document.getElementById('i_renda').value,
+      'Indicado - Cidade': document.getElementById('i_cidade').value,
+      'Observações': document.getElementById('i_obs').value,
+      'Prêmio escolhido': premioEscolhido === 'desconto' ? 'Desconto R$ 1.500' : 'Cartão R$ 1.000',
+    };
+    Object.entries(campos).forEach(([k,v]) => {
+      const inp = document.createElement('input');
+      inp.type = 'hidden'; inp.name = k; inp.value = v;
+      form.appendChild(inp);
+    });
+
+    fetch(form.action, { method:'POST', body:new FormData(form), headers:{'Accept':'application/json'} })
+      .then(() => {
+        document.getElementById('s_nome').textContent = nome.split(' ')[0];
+        document.getElementById('s_indicado').textContent = indicadoNome;
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById('step-success').classList.add('active');
+        window.scrollTo({top:0, behavior:'smooth'});
+      })
+      .catch(() => alert('Não foi possível enviar agora. Tenta de novo em instantes.'));
+  }
+
+  function reiniciar(){
+    document.querySelectorAll('input, select, textarea').forEach(el => { if(el.type!=='hidden') el.value=''; });
+    premioEscolhido = 'desconto';
+    selecionarPremio('desconto');
+    irPara(1);
+  }
+</script>
+
+</body>
+</html>
