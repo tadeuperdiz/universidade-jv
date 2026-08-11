@@ -208,7 +208,9 @@
     <div class="prize-chip"><div class="ic">⭐</div><div class="val">Você</div><div class="lb">decide!</div></div>
   </div>
 
-  <div class="card">
+  <form class="card" id="indicacao-form" name="indicacao-premiada" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onsubmit="return false;">
+    <input type="hidden" name="form-name" value="indicacao-premiada">
+    <p style="display:none;"><label>Não preencha: <input name="bot-field"></label></p>
 
     <!-- STEP 1 -->
     <div class="step active" id="step-1">
@@ -220,16 +222,16 @@
       <h2>Seus dados de comprador</h2>
       <p class="sub">Confirme seus dados como cliente Jerônimo da Veiga.</p>
 
-      <div class="field"><label>Nome completo *</label><input type="text" id="c_nome" required></div>
+      <div class="field"><label>Nome completo *</label><input type="text" id="c_nome" name="c_nome" required></div>
       <div class="field-row">
-        <div class="field"><label>Telefone *</label><input type="tel" id="c_telefone" required placeholder="(11) 90000-0000"></div>
-        <div class="field"><label>CPF *</label><input type="text" id="c_cpf" required></div>
+        <div class="field"><label>Telefone *</label><input type="tel" id="c_telefone" name="c_telefone" required placeholder="(11) 90000-0000"></div>
+        <div class="field"><label>CPF *</label><input type="text" id="c_cpf" name="c_cpf" required></div>
       </div>
-      <div class="field"><label>E-mail *</label><input type="email" id="c_email" required></div>
-      <div class="field"><label>Empreendimento onde comprou *</label><input type="text" id="c_empreendimento" required placeholder="Ex: Conceito Poá"></div>
+      <div class="field"><label>E-mail *</label><input type="email" id="c_email" name="c_email" required></div>
+      <div class="field"><label>Empreendimento onde comprou *</label><input type="text" id="c_empreendimento" name="c_empreendimento" required placeholder="Ex: Conceito Poá"></div>
       <div class="field-row">
-        <div class="field"><label>Bloco</label><input type="text" id="c_bloco"></div>
-        <div class="field"><label>Unidade</label><input type="text" id="c_unidade"></div>
+        <div class="field"><label>Bloco</label><input type="text" id="c_bloco" name="c_bloco"></div>
+        <div class="field"><label>Unidade</label><input type="text" id="c_unidade" name="c_unidade"></div>
       </div>
 
       <button class="btn" onclick="irPara(2)">Continuar →</button>
@@ -247,17 +249,17 @@
       <h2>Dados do seu indicado</h2>
       <p class="sub">👤 Quem você vai indicar?</p>
 
-      <div class="field"><label>Nome completo *</label><input type="text" id="i_nome" required></div>
+      <div class="field"><label>Nome completo *</label><input type="text" id="i_nome" name="i_nome" required></div>
       <div class="field-row">
-        <div class="field"><label>Telefone *</label><input type="tel" id="i_telefone" required></div>
-        <div class="field"><label>CPF *</label><input type="text" id="i_cpf" required></div>
+        <div class="field"><label>Telefone *</label><input type="tel" id="i_telefone" name="i_telefone" required></div>
+        <div class="field"><label>CPF *</label><input type="text" id="i_cpf" name="i_cpf" required></div>
       </div>
-      <div class="field"><label>E-mail *</label><input type="email" id="i_email" required></div>
+      <div class="field"><label>E-mail *</label><input type="email" id="i_email" name="i_email" required></div>
       <div class="field-row">
-        <div class="field"><label>Data de nascimento</label><input type="date" id="i_nascimento"></div>
+        <div class="field"><label>Data de nascimento</label><input type="date" id="i_nascimento" name="i_nascimento"></div>
         <div class="field">
           <label>Renda mensal aprox.</label>
-          <select id="i_renda">
+          <select id="i_renda" name="i_renda">
             <option value="">Selecione</option>
             <option>Até R$ 3.000</option>
             <option>R$ 3.001 – R$ 6.000</option>
@@ -266,8 +268,8 @@
           </select>
         </div>
       </div>
-      <div class="field"><label>Cidade / Bairro</label><input type="text" id="i_cidade"></div>
-      <div class="field"><label>Observações (opcional)</label><textarea id="i_obs" rows="2"></textarea></div>
+      <div class="field"><label>Cidade / Bairro</label><input type="text" id="i_cidade" name="i_cidade"></div>
+      <div class="field"><label>Observações (opcional)</label><textarea id="i_obs" name="i_obs" rows="2"></textarea></div>
 
       <button class="btn" onclick="irPara(3)">Próximo: escolher prêmio →</button>
     </div>
@@ -319,17 +321,10 @@
       </div>
     </div>
 
-  </div>
+  </form>
 
   <footer>Dúvidas? Fale com a equipe de vendas Jerônimo da Veiga.</footer>
 </div>
-
-<!-- Form oculto → Web3Forms -->
-<form id="fsend" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
-  <input type="hidden" name="access_key" value="b320611c-e475-45d1-8f87-3c162874f677">
-  <input type="hidden" name="subject" value="🏠 Nova Indicação Premiada – Conceito Poá">
-  <input type="hidden" name="from_name" value="Indicação Premiada Conceito Poá">
-</form>
 
 <script>
   let premioEscolhido = 'desconto';
@@ -361,32 +356,15 @@
       return;
     }
 
-    const form = document.getElementById('fsend');
-    const campos = {
-      'Comprador - Nome': nome,
-      'Comprador - Telefone': document.getElementById('c_telefone').value,
-      'Comprador - CPF': document.getElementById('c_cpf').value,
-      'Comprador - E-mail': document.getElementById('c_email').value,
-      'Empreendimento': document.getElementById('c_empreendimento').value,
-      'Bloco': document.getElementById('c_bloco').value,
-      'Unidade': document.getElementById('c_unidade').value,
-      'Indicado - Nome': indicadoNome,
-      'Indicado - Telefone': document.getElementById('i_telefone').value,
-      'Indicado - CPF': document.getElementById('i_cpf').value,
-      'Indicado - E-mail': document.getElementById('i_email').value,
-      'Indicado - Nascimento': document.getElementById('i_nascimento').value,
-      'Indicado - Renda': document.getElementById('i_renda').value,
-      'Indicado - Cidade': document.getElementById('i_cidade').value,
-      'Observações': document.getElementById('i_obs').value,
-      'Prêmio escolhido': premioEscolhido === 'desconto' ? 'Desconto R$ 1.500' : 'Cartão R$ 1.000',
-    };
-    Object.entries(campos).forEach(([k,v]) => {
-      const inp = document.createElement('input');
-      inp.type = 'hidden'; inp.name = k; inp.value = v;
-      form.appendChild(inp);
-    });
+    const form = document.getElementById('indicacao-form');
+    const hiddenPremio = document.createElement('input');
+    hiddenPremio.type = 'hidden'; hiddenPremio.name = 'premio_escolhido';
+    hiddenPremio.value = premioEscolhido === 'desconto' ? 'Desconto R$ 1.500' : 'Cartão R$ 1.000';
+    form.appendChild(hiddenPremio);
 
-    fetch(form.action, { method:'POST', body:new FormData(form), headers:{'Accept':'application/json'} })
+    const body = new URLSearchParams(new FormData(form)).toString();
+
+    fetch('/', { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body })
       .then(() => {
         document.getElementById('s_nome').textContent = nome.split(' ')[0];
         document.getElementById('s_indicado').textContent = indicadoNome;
