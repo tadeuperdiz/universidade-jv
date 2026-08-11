@@ -200,21 +200,24 @@
   }
   .nav-links a:hover{color:var(--gold);}
   .nav-cta{
-    padding:11px 22px;
-    background: rgba(245,217,138,0.12);
-    border:1px solid var(--glass-border-strong);
+    padding:12px 24px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+    border:none;
     border-radius:100px;
-    color:var(--gold);
+    color:#221338;
     font-size:13.5px;
-    font-weight:700;
+    font-weight:800;
     text-decoration:none;
-    backdrop-filter: blur(10px);
-    transition: background .15s, transform .15s;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    transition: transform .15s, box-shadow .15s;
     cursor:pointer;
     white-space:nowrap;
     flex-shrink:0;
+    box-shadow: 0 8px 20px -6px rgba(245,217,138,0.6);
   }
-  .nav-cta:hover{background:rgba(245,217,138,0.2); transform:translateY(-1px);}
+  .nav-cta:hover{ transform:translateY(-2px); box-shadow: 0 12px 26px -6px rgba(245,217,138,0.75); }
   .nav-cta-outline{
     background: rgba(255,255,255,0.06);
     border-color: rgba(255,255,255,0.3);
