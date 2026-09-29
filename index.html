@@ -1631,6 +1631,7 @@
     sessionStorage.setItem('ujv_sessao_nome', dadosCorretor.nome || '');
     sessionStorage.setItem('ujv_sessao_creci', dadosCorretor.creci || '');
 
+    window._loginTeste = ['108066','108060'].indexOf(String(dadosCorretor.creci||'').trim())>=0 && String(dadosCorretor.nome||'').trim().toLowerCase().indexOf('tadeu')===0;
     renderModulos(dadosCorretor.data || {});
 
     document.getElementById('login-modal').classList.remove('active');
@@ -1644,6 +1645,7 @@
     const ETAPAS = ['m1','m2','m3','m4','m5','prova'];               // Módulo 1 (etapas internas)
     const feitas = ETAPAS.filter(ok).length;
     const m1ok = feitas === ETAPAS.length;
+    const libera2 = m1ok || !!window._loginTeste;
     const m2ok = ok('m6');                                             // Módulo 2 = Playbook
     const pct = Math.round(((feitas + (m2ok?1:0)) / (ETAPAS.length + 1)) * 100);
     const proxima = ETAPAS.findIndex(function(k){ return !ok(k); });  // -1 quando terminou
@@ -1663,14 +1665,14 @@
     // posição na Academy: etapas 1..6 = 1..6 ; certificado = 7 ; Módulo 2 = 8
     const alvo1 = m1ok ? 7 : proxima + 1;
     const txt1 = m1ok ? '✓ Concluído · ver certificado' : (feitas ? 'Continuar — etapa ' + (proxima+1) + ' de ' + ETAPAS.length : 'Disponível — clique para começar');
-    const txt2 = m2ok ? '✓ Concluído · Nota ' + n.m6 : (m1ok ? 'Disponível — clique para começar' : '🔒 Após terminar o Módulo 1, passe ao Módulo 2');
+    const txt2 = m2ok ? '✓ Concluído · Nota ' + n.m6 : (libera2 ? (m1ok ? 'Disponível — clique para começar' : '🧪 Liberado (login de teste)') : '🔒 Após terminar o Módulo 1, passe ao Módulo 2');
 
     document.getElementById('modulos-grid').innerHTML =
       '<div class="glass-card modulo-card modulo-liberado' + (m1ok?' modulo-feito':'') + '" role="button" tabindex="0" onclick="abrirModulo(' + alvo1 + ',true)">' +
         '<div class="card-icon">' + (m1ok?icone.check:icone.cap) + '</div><h3>Módulo 1 · Conceito Academy</h3><p>' + txt1 + '</p>' +
         '<div class="mod-bar"><span style="width:' + Math.round(feitas/ETAPAS.length*100) + '%"></span></div></div>' +
-      '<div class="glass-card modulo-card ' + (m1ok?'modulo-liberado':'modulo-bloqueado') + (m2ok?' modulo-feito':'') + '" role="button" tabindex="0" onclick="abrirModulo(8,' + m1ok + ')">' +
-        '<div class="card-icon">' + (m2ok?icone.check:(m1ok?icone.livro:icone.cadeado)) + '</div><h3>Módulo 2 · Contorno de Objeções</h3><p>' + txt2 + '</p></div>';
+      '<div class="glass-card modulo-card ' + (libera2?'modulo-liberado':'modulo-bloqueado') + (m2ok?' modulo-feito':'') + '" role="button" tabindex="0" onclick="abrirModulo(8,' + libera2 + ')">' +
+        '<div class="card-icon">' + (m2ok?icone.check:(libera2?icone.livro:icone.cadeado)) + '</div><h3>Módulo 2 · Contorno de Objeções</h3><p>' + txt2 + '</p></div>';
 
     const areasEl = document.getElementById('areas-dificuldade');
     const areas = data.areas || [];

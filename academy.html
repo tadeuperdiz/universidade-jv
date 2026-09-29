@@ -533,6 +533,9 @@ async function checkAdm(){
 // ============================================================
 // LOGIN / LOGOUT
 // ============================================================
+// ===== LOGIN DE TESTE (coordenador) — libera todas as etapas e módulos, sem marcar nada como concluído =====
+const LOGINS_TESTE=['108066','108060'];
+function isTeste(){return !!(G.user&&G.creci&&LOGINS_TESTE.indexOf(String(G.creci).trim())>=0&&G.user.trim().toLowerCase().indexOf('tadeu')===0);}
 function doLogin(){
   const n=document.getElementById('inp-name').value.trim();
   const c=document.getElementById('inp-creci').value.trim();
@@ -950,7 +953,7 @@ function isMDone(m){
   if(m===8)return G.m6.fDone&&G.m6.fScore>=6;
   return G.modDone.has(m);
 }
-function isMLocked(m){if(G.isAdm)return false;if(m===8)return!isMDone(6);const i=MODS.findIndex(x=>x.id===m);if(i<=0)return false;return!isMDone(MODS[i-1].id);}
+function isMLocked(m){if(G.isAdm||isTeste())return false;if(m===8)return!isMDone(6);const i=MODS.findIndex(x=>x.id===m);if(i<=0)return false;return!isMDone(MODS[i-1].id);}
 function getMProg(m){
   if(m===1)return isMDone(1)?100:Math.round((G.m1.done.size/5)*100);
   if(m===2)return isMDone(2)?100:Math.round((G.m2.done.size/6)*100);
@@ -983,6 +986,12 @@ function renderDash(){
   const c2=document.createElement('div');c2.className='mcard'+(m2ok?' mdone':m2lock?' mlocked':'');
   c2.innerHTML=`<div class="micon">${m2lock?'🔒':'📖'}</div><div class="minfo"><div class="mnum">Módulo 2</div><div class="mtitle">Contorno de Objeções</div><div class="mdesc">${m2lock?'Após terminar o Módulo 1, passe ao Módulo 2':'Playbook de vendas JV'}</div><div class="mpw"><div class="mpf ${m2ok?'done':''}" style="width:${m2lock?0:p2}%"></div></div><div class="mpl">${m2lock?'Bloqueado':p2+'% concluído'}</div></div><div class="mbadge ${m2ok?'done':m2lock?'locked':'next'}">${m2ok?'✓ Concluído':m2lock?'🔒 Bloqueado':'→ Começar'}</div>`;
   c2.onclick=abrirModulo2;list.appendChild(c2);
+  if(isTeste()){
+    const t=document.createElement('div');t.style.cssText='margin-top:6px;padding:14px;border:1.5px dashed #c9b8ef;border-radius:14px;background:#faf8ff';
+    t.innerHTML='<div style="font-size:11px;font-weight:800;letter-spacing:.12em;color:#4B2A8C;margin-bottom:10px">🧪 MODO TESTE · abrir qualquer etapa</div><div style="display:flex;flex-wrap:wrap;gap:8px">'+
+      MODS.map((m,i)=>'<button onclick="openMod(MODS['+i+'])" style="border:1px solid #ddd3f3;background:#fff;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;color:#3C3489;cursor:pointer">'+(m.id===8?'Módulo 2':(m.id===7?'Certificado':'Etapa '+m.id))+' · '+m.title.split(' — ')[0]+'</button>').join('')+'</div>';
+    list.appendChild(t);
+  }
 }
 function openMod(m){
   if(m.type==='mod1'){show('s-mod1');mNav(1);mRender(1);}
@@ -1014,7 +1023,7 @@ function mUpdProg(n){
 }
 function mGo(n,i){
   const tot=getTot(n);
-  if(i===tot&&getG(n).done.size<tot){alert('Conclua todos os tópicos e responda as perguntas de fixação antes de fazer o Quiz Final!');return;}
+  if(i===tot&&getG(n).done.size<tot&&!isTeste()){alert('Conclua todos os tópicos e responda as perguntas de fixação antes de fazer o Quiz Final!');return;}
   getG(n).cur=i;getG(n).sel=null;mUpdProg(n);mNav(n);mRender(n);
 }
 function mRender(n){
@@ -1033,7 +1042,7 @@ function mRender(n){
     '<div class="tcard"><div class="tcard-head '+cls+'"><div class="tico">'+t.icon+'</div><div><h2>'+t.title+'</h2><p>'+t.sub+'</p></div></div><div class="tcard-body">'+getBody(n,t.body)+'</div></div>'+
     rQ(q,done,n,qs,cf)+
     '<div class="navrow">'+(g.cur>0?'<button class="btn-prev" onclick="mGo('+n+','+(g.cur-1)+')">← Anterior</button>':'')+
-    '<button class="btn-adv '+(isLast&&done?'g':'')+'" style="background:'+(isLast&&done?'var(--dourado)':bg)+'" onclick="'+(isLast?'mGo('+n+','+tot+')':'mGo('+n+','+(g.cur+1)+')')+'" '+(done?'':'disabled')+'>'+(isLast?'🏆 Quiz Final':'Próximo →')+'</button></div>';
+    '<button class="btn-adv '+(isLast&&done?'g':'')+'" style="background:'+(isLast&&done?'var(--dourado)':bg)+'" onclick="'+(isLast?'mGo('+n+','+tot+')':'mGo('+n+','+(g.cur+1)+')')+'" '+(done||isTeste()?'':'disabled')+'>'+(isLast?'🏆 Quiz Final':'Próximo →')+'</button></div>';
 }
 function getRO(step){
   const items={1:['Nunca envie a tabela por e-mail ou WhatsApp','Não simule na frente do cliente','Atendimento presencial sempre','Consulte o Serasa antes'],2:['Apresente de forma lúdica','Explique diferença entre juros e correção (INCC)','Mostre a importância de poucas divisões'],3:['Nunca pressione — o mico fica com o cliente','Feche de forma clara e objetiva','Transmita segurança e confiança']};
