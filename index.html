@@ -1642,7 +1642,7 @@
   function renderModulos(data){
     const n = data.modNotas || {};
     const ok = function(k){ return n[k] !== undefined && n[k] !== null && n[k] >= 6; };
-    const ETAPAS = ['m1','m2','m3','m4','m5','prova'];               // Módulo 1 (etapas internas)
+    const ETAPAS = ['m2','m3','m4','m5','prova'];                    // Módulo 1 (etapas internas)
     const feitas = ETAPAS.filter(ok).length;
     const m1ok = feitas === ETAPAS.length;
     const libera2 = m1ok || !!window._loginTeste;
@@ -1662,17 +1662,21 @@
       check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>',
       cadeado:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>' };
 
-    // posição na Academy: etapas 1..6 = 1..6 ; certificado = 7 ; Módulo 2 = 8
-    const alvo1 = m1ok ? 7 : proxima + 1;
+    // posição na Academy: etapas 1..5 = 1..5 ; certificado = 6 ; Módulo 2 = 7
+    const alvo1 = m1ok ? 6 : proxima + 1;
     const txt1 = m1ok ? '✓ Concluído · ver certificado' : (feitas ? 'Continuar — etapa ' + (proxima+1) + ' de ' + ETAPAS.length : 'Disponível — clique para começar');
+    const prods = [['m1','Poá'],['m7','Taboão'],['m8','Califórnia'],['m9','Samba']].filter(function(p){ return n[p[0]] !== undefined && n[p[0]] !== null; });
+    const txtProd = prods.length ? prods.map(function(p){ return p[1] + ' ' + n[p[0]]; }).join(' · ') : 'Módulo extra · o produto da sua cidade';
     const txt2 = m2ok ? '✓ Concluído · Nota ' + n.m6 : (libera2 ? (m1ok ? 'Disponível — clique para começar' : '🧪 Liberado (login de teste)') : '🔒 Após terminar o Módulo 1, passe ao Módulo 2');
 
     document.getElementById('modulos-grid').innerHTML =
       '<div class="glass-card modulo-card modulo-liberado' + (m1ok?' modulo-feito':'') + '" role="button" tabindex="0" onclick="abrirModulo(' + alvo1 + ',true)">' +
         '<div class="card-icon">' + (m1ok?icone.check:icone.cap) + '</div><h3>Módulo 1 · Conceito Academy</h3><p>' + txt1 + '</p>' +
         '<div class="mod-bar"><span style="width:' + Math.round(feitas/ETAPAS.length*100) + '%"></span></div></div>' +
-      '<div class="glass-card modulo-card ' + (libera2?'modulo-liberado':'modulo-bloqueado') + (m2ok?' modulo-feito':'') + '" role="button" tabindex="0" onclick="abrirModulo(8,' + libera2 + ')">' +
-        '<div class="card-icon">' + (m2ok?icone.check:(libera2?icone.livro:icone.cadeado)) + '</div><h3>Módulo 2 · Contorno de Objeções</h3><p>' + txt2 + '</p></div>';
+      '<div class="glass-card modulo-card ' + (libera2?'modulo-liberado':'modulo-bloqueado') + (m2ok?' modulo-feito':'') + '" role="button" tabindex="0" onclick="abrirModulo(7,' + libera2 + ')">' +
+        '<div class="card-icon">' + (m2ok?icone.check:(libera2?icone.livro:icone.cadeado)) + '</div><h3>Módulo 2 · Contorno de Objeções</h3><p>' + txt2 + '</p></div>' +
+      '<div class="glass-card modulo-card modulo-liberado" role="button" tabindex="0" onclick="window.location.href=\'academy.html?area=produtos\'">' +
+        '<div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg></div><h3>Conhecendo Produtos JV</h3><p>' + txtProd + '</p></div>';
 
     const areasEl = document.getElementById('areas-dificuldade');
     const areas = data.areas || [];
