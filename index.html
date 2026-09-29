@@ -1722,7 +1722,7 @@
     // posição na Academy: etapas 1..5 = 1..5 ; certificado = 6 ; Módulo 2 = 7
     const alvo1 = m1ok ? 6 : proxima + 1;
     const txt1 = m1ok ? '✓ Concluído · ver certificado' : (feitas ? 'Continuar — etapa ' + (proxima+1) + ' de ' + ETAPAS.length : 'Disponível — clique para começar');
-    const prods = [['m1','Poá'],['m7','Taboão'],['m8','Califórnia'],['m9','Samba']].filter(function(p){ return n[p[0]] !== undefined && n[p[0]] !== null; });
+    const prods = [['m1','Poá'],['m7','Essenza'],['m10','Signature'],['m8','Califórnia'],['m11','Super'],['m9','Samba']].filter(function(p){ return n[p[0]] !== undefined && n[p[0]] !== null; });
     const txtProd = prods.length ? prods.map(function(p){ return p[1] + ' ' + n[p[0]]; }).join(' · ') : 'Módulo extra · o produto da sua cidade';
     const txt2 = m2ok ? '✓ Concluído · Nota ' + n.m6 : (libera2 ? (m1ok ? 'Disponível — clique para começar' : '🧪 Liberado (login de teste)') : '🔒 Após terminar o Módulo 1, passe ao Módulo 2');
 
