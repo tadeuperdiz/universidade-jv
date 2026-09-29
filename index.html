@@ -1050,6 +1050,21 @@
   .jv-footer-sm{ font-size:12px; color:#8A93AB; }
   @media (max-width:1100px){ .jv-stats{ grid-template-columns:repeat(3,1fr); } }
   @media (max-width:560px){ .jv-stats{ grid-template-columns:repeat(2,1fr); } }
+
+  /* ===== Transição entre assuntos: faixas alternadas, divisor numerado e entrada suave ===== */
+  #login-screen .page-section{ position:relative; padding:72px 0 64px; }
+  #login-screen .page-section.band-alt{ background:#EAF0FB !important; box-shadow:0 0 0 100vmax #EAF0FB; clip-path:inset(0 -100vmax); }
+  #login-screen .page-section.band-alt .glass-card, #login-screen .page-section.band-alt .trail-card,
+  #login-screen .page-section.band-alt .jv-stats div, #login-screen .page-section.band-alt .jv-emps span{ background:#fff; }
+  #login-screen .page-section:not(.band-alt){ background:#FFFFFF !important; box-shadow:0 0 0 100vmax #FFFFFF; clip-path:inset(0 -100vmax); }
+  .sec-divider{ display:flex; align-items:center; gap:14px; margin-bottom:22px; }
+  .sec-divider .sec-num{ font-family:'Fraunces',serif; font-weight:700; font-size:15px; color:#1226AA; letter-spacing:.04em; }
+  .sec-divider .sec-line{ height:3px; width:0; background:linear-gradient(90deg,#1226AA,#38A8E8); border-radius:3px; transition:width .9s cubic-bezier(.2,.8,.2,1) .15s; }
+  .sec-divider .sec-total{ font-size:12px; color:#8A93AB; font-weight:600; }
+  .page-section.in-view .sec-line{ width:88px; }
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in-view{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } .sec-divider .sec-line{ width:88px; transition:none; } }
 </style>
 </head>
 <body>
@@ -1545,6 +1560,24 @@
 
 <script>
   // ===== Menu lateral: rolar até a seção, menu no celular e item ativo =====
+  // ===== Transição entre assuntos: numera, alterna faixas e revela as seções ao rolar =====
+  (function(){
+    const secs=[...document.querySelectorAll('#login-screen .page-section')];
+    secs.forEach(function(sec,i){
+      if(i%2===1) sec.classList.add('band-alt');
+      const head=sec.querySelector('.features-head');
+      if(head && !sec.querySelector('.sec-divider')){
+        const d=document.createElement('div'); d.className='sec-divider';
+        d.innerHTML='<span class="sec-num">'+String(i+1).padStart(2,'0')+'</span><span class="sec-line"></span><span class="sec-total">de '+String(secs.length).padStart(2,'0')+'</span>';
+        head.parentNode.insertBefore(d,head);
+      }
+      [...sec.children].forEach(function(el,k){ if(!el.classList.contains('sec-divider')){ el.classList.add('reveal'); el.style.transitionDelay=Math.min(k*0.08,0.4)+'s'; } });
+    });
+    if(!('IntersectionObserver' in window)){ document.querySelectorAll('.reveal,.page-section').forEach(function(e){e.classList.add('in-view');}); return; }
+    const io=new IntersectionObserver(function(ents){ ents.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in-view'); io.unobserve(en.target);} }); },{rootMargin:'0px 0px -12% 0px',threshold:0.08});
+    secs.forEach(function(s){ io.observe(s); s.querySelectorAll('.reveal').forEach(function(e){ io.observe(e); }); });
+  })();
+
   function irPara(id){
     const el=document.getElementById(id); if(!el) return;
     toggleMenu(false);
