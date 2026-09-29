@@ -27,9 +27,9 @@
 </script>
 <style>
   :root{
-    --purple-deep: #2d1657;
-    --purple-mid: #452280;
-    --purple-soft: #5c2ea3;
+    --purple-deep: #0A1255;
+    --purple-mid: #0E1C86;
+    --purple-soft: #1226AA;
     --gold: #F5D98A;
     --gold-bright: #EFC65E;
     --ink: #F6F3FC;
@@ -41,8 +41,8 @@
     --shadow-deep: 0 30px 80px -20px rgba(0,0,0,0.45);
     --cream: #F7F2E9;
     --cream-soft: #FBF8F2;
-    --text-dark: #2A1B45;
-    --text-dark-muted: #6E6280;
+    --text-dark: #101935;
+    --text-dark-muted: #5B647A;
   }
 
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -55,7 +55,7 @@
   }
 
   body{
-    background: linear-gradient(165deg, var(--purple-deep) 0%, var(--purple-mid) 60%, #3a1c6e 100%);
+    background: linear-gradient(165deg, var(--purple-deep) 0%, var(--purple-mid) 60%, #0B1766 100%);
     min-height:100vh;
   }
 
@@ -74,7 +74,7 @@
   .page-section{
     padding: 80px 5vw;
     background: var(--cream);
-    border-top: 1px solid rgba(42,27,69,0.08);
+    border-top: 1px solid rgba(16,25,53,0.08);
   }
   .page-section:nth-of-type(even){
     background: var(--cream-soft);
@@ -233,7 +233,7 @@
     align-items:center;
     padding: 90px 5vw 60px;
     background-image:
-      linear-gradient(90deg, rgba(20,10,40,0.30) 0%, rgba(20,10,40,0.05) 62%),
+      linear-gradient(90deg, rgba(8,14,62,0.30) 0%, rgba(8,14,62,0.05) 62%),
       url('https://images.pexels.com/photos/36733323/pexels-photo-36733323.jpeg?auto=compress&cs=tinysrgb&w=1920');
     background-size:cover;
     background-position:center;
@@ -282,7 +282,7 @@
     font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
     font-weight:700; color:var(--purple-mid);
     padding:7px 14px;
-    background: rgba(69,34,128,0.08);
+    background: rgba(18,38,170,0.08);
     border-radius:100px;
   }
   .hero-actions{
@@ -471,7 +471,7 @@
     display:flex; align-items:center; justify-content:space-between;
     gap:20px;
     padding: 18px 5vw;
-    background: rgba(20,11,42,0.65);
+    background: rgba(8,14,62,0.72);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border-bottom:1px solid rgba(245,217,138,0.10);
@@ -597,22 +597,22 @@
 
   .glass-card{
     background: #fff;
-    border:1px solid rgba(42,27,69,0.08);
+    border:1px solid rgba(16,25,53,0.08);
     border-radius:16px;
     padding:28px;
-    box-shadow: 0 4px 18px rgba(42,27,69,0.06);
+    box-shadow: 0 4px 18px rgba(16,25,53,0.06);
     transition: border-color .2s, box-shadow .2s, transform .2s;
   }
   .modulo-card{ cursor:pointer; }
-  .mod-bar{ height:6px; background:#EDE7F8; border-radius:99px; margin-top:14px; overflow:hidden; }
-  .mod-bar span{ display:block; height:100%; background:#4B2A8C; border-radius:99px; }
+  .mod-bar{ height:6px; background:#E4EAF8; border-radius:99px; margin-top:14px; overflow:hidden; }
+  .mod-bar span{ display:block; height:100%; background:#1226AA; border-radius:99px; }
   #modulos-grid{ grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); max-width:720px; }
   .modulo-card.modulo-bloqueado{ filter:grayscale(.35) brightness(.9); }
   .modulo-card.modulo-bloqueado{ opacity:.6; cursor:not-allowed; }
-  .modulo-card.modulo-liberado:not(.modulo-feito) p{ color:#4B2A8C; font-weight:600; }
+  .modulo-card.modulo-liberado:not(.modulo-feito) p{ color:#1226AA; font-weight:600; }
   .glass-card:hover{
-    border-color: rgba(69,34,128,0.25);
-    box-shadow: 0 10px 30px rgba(42,27,69,0.12);
+    border-color: rgba(18,38,170,0.25);
+    box-shadow: 0 10px 30px rgba(16,25,53,0.12);
     transform: translateY(-2px);
   }
 
@@ -649,7 +649,7 @@
     left:38px;
     top:8px; bottom:8px;
     width:1px;
-    background: rgba(69,34,128,0.18);
+    background: rgba(18,38,170,0.18);
   }
   .agenda-item{
     display:flex;
@@ -680,8 +680,8 @@
   }
   .agenda-content{
     background: #fff;
-    border:1px solid rgba(42,27,69,0.08);
-    box-shadow: 0 4px 18px rgba(42,27,69,0.06);
+    border:1px solid rgba(16,25,53,0.08);
+    box-shadow: 0 4px 18px rgba(16,25,53,0.06);
     border-radius:14px;
     padding:18px 22px;
     flex:1;
@@ -706,10 +706,10 @@
   }
   .birthday-month-card{
     background:#fff;
-    border:1px solid rgba(42,27,69,0.08);
+    border:1px solid rgba(16,25,53,0.08);
     border-radius:16px;
     padding:22px 24px;
-    box-shadow: 0 4px 18px rgba(42,27,69,0.06);
+    box-shadow: 0 4px 18px rgba(16,25,53,0.06);
   }
   .birthday-month-title{
     font-family:'Fraunces', serif;
@@ -719,7 +719,7 @@
     text-transform:uppercase;
     margin-bottom:14px;
     padding-bottom:10px;
-    border-bottom:1px solid rgba(42,27,69,0.08);
+    border-bottom:1px solid rgba(16,25,53,0.08);
   }
   .birthday-row{
     display:flex; align-items:center; gap:12px;
@@ -729,7 +729,7 @@
   .birthday-day{
     width:32px; height:32px; flex-shrink:0;
     border-radius:50%;
-    background: rgba(69,34,128,0.08);
+    background: rgba(18,38,170,0.08);
     color: var(--purple-mid);
     font-weight:700; font-size:13px;
     display:flex; align-items:center; justify-content:center;
@@ -746,14 +746,14 @@
   }
   .campaign-card{
     background:#fff;
-    border:1px solid rgba(42,27,69,0.08);
+    border:1px solid rgba(16,25,53,0.08);
     border-radius:16px;
     overflow:hidden;
-    box-shadow: 0 4px 18px rgba(42,27,69,0.06);
+    box-shadow: 0 4px 18px rgba(16,25,53,0.06);
     transition: box-shadow .2s, transform .2s;
   }
   .campaign-card:hover{
-    box-shadow: 0 10px 30px rgba(42,27,69,0.12);
+    box-shadow: 0 10px 30px rgba(16,25,53,0.12);
     transform: translateY(-2px);
   }
   .campaign-img{
@@ -796,7 +796,7 @@
     position:fixed; inset:0; z-index:200;
     align-items:center; justify-content:center;
     padding:24px;
-    background: rgba(20,10,40,0.72);
+    background: rgba(8,14,62,0.72);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
   }
@@ -845,7 +845,7 @@
     display:flex; justify-content:space-between; align-items:center;
     margin-top:24px;
     padding-top:20px;
-    border-top:1px solid rgba(42,27,69,0.08);
+    border-top:1px solid rgba(16,25,53,0.08);
   }
   .playbook-nav-btn{
     background:none; border:none;
@@ -927,7 +927,7 @@
   .empty-state{
     text-align:center;
     padding: 80px 20px;
-    border-top:1px solid rgba(42,27,69,0.08);
+    border-top:1px solid rgba(16,25,53,0.08);
   }
   .empty-state .crest-lg{width:40px;height:40px; margin:0 auto 22px; opacity:0.55;}
   .empty-state h3{
@@ -954,7 +954,7 @@
   }
 
   /* =================== REDESIGN · PAINEL COM MENU LATERAL =================== */
-  :root{ --side-w:264px; --bg-app:#F6F4FB; --line:#E9E4F4; --roxo:#4B2A8C; --roxo-2:#5B33A8; }
+  :root{ --side-w:264px; --bg-app:#F5F7FB; --line:#E3E8F2; --roxo:#1226AA; --roxo-2:#2447C7; }
   #login-screen{ background:var(--bg-app); }
   .side-nav{ position:fixed; top:0; left:0; bottom:0; width:var(--side-w); background:#fff; border-right:1px solid var(--line);
     padding:26px 18px; display:flex; flex-direction:column; gap:2px; z-index:60; overflow-y:auto; }
@@ -962,14 +962,14 @@
   .side-logo{ height:38px; width:auto; align-self:flex-start; }
   .side-brand-name{ font-family:'Fraunces',serif; font-size:17px; color:var(--text-dark); letter-spacing:.02em; }
   .side-brand-name b{ color:var(--roxo); }
-  .side-label{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#9A93AE; font-weight:700; margin:14px 12px 8px; }
+  .side-label{ font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:#8A93AB; font-weight:700; margin:14px 12px 8px; }
   .side-link{ display:flex; align-items:center; gap:12px; padding:11px 12px; border-radius:12px; font-size:14px; font-weight:600;
-    color:#4A4560; cursor:pointer; text-decoration:none; transition:background .15s,color .15s; }
-  .side-link svg{ flex-shrink:0; color:#8E86A8; transition:color .15s; }
-  .side-link:hover{ background:#F4F0FC; color:var(--roxo); }
+    color:#3E4660; cursor:pointer; text-decoration:none; transition:background .15s,color .15s; }
+  .side-link svg{ flex-shrink:0; color:#7F89A3; transition:color .15s; }
+  .side-link:hover{ background:#F1F5FE; color:var(--roxo); }
   .side-link:hover svg, .side-link.active svg{ color:var(--roxo); }
-  .side-link.active{ background:#EFE9FB; color:var(--roxo); }
-  .side-cta{ margin-top:auto; display:block; text-align:center; background:var(--gold); color:#2A1558; font-weight:800; font-size:14px;
+  .side-link.active{ background:#E8EEFC; color:var(--roxo); }
+  .side-cta{ margin-top:auto; display:block; text-align:center; background:var(--gold); color:#0A1255; font-weight:800; font-size:14px;
     padding:13px 14px; border-radius:12px; text-decoration:none; box-shadow:0 8px 20px -8px rgba(201,146,10,.6); }
   .side-cta:hover{ filter:brightness(1.04); }
   .mobile-bar, .side-backdrop{ display:none; }
@@ -979,17 +979,17 @@
 
   /* Banner de boas-vindas */
   .hero-banner{ display:grid; grid-template-columns:1.25fr 1fr; gap:36px; align-items:center; padding:44px;
-    border-radius:26px; color:#fff; background:linear-gradient(120deg,#35196F 0%,#4B2A8C 55%,#5B33A8 100%);
+    border-radius:26px; color:#fff; background:linear-gradient(120deg,#0B1766 0%,#1226AA 55%,#2447C7 100%);
     box-shadow:0 24px 60px -28px rgba(45,22,87,.55); overflow:hidden; }
-  .hb-eyebrow{ font-size:12px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:var(--gold); }
+  .hb-eyebrow{ font-size:12px; letter-spacing:.16em; text-transform:uppercase; font-weight:700; color:#7CC8F2; }
   .hb-title{ font-family:'Fraunces',serif; font-weight:600; font-size:clamp(32px,3.4vw,48px); line-height:1.08; margin:12px 0 14px; color:#fff; }
-  .hb-title em{ color:var(--gold); }
-  .hb-sub{ color:#DCCFF7; font-size:16px; line-height:1.6; max-width:480px; }
+  .hb-title em{ color:#7CC8F2; }
+  .hb-sub{ color:#D5E0FF; font-size:16px; line-height:1.6; max-width:480px; }
   .hb-actions{ display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; }
-  .hb-btn{ background:#fff; color:#35196F; font-weight:800; font-size:14.5px; padding:14px 22px; border-radius:12px; cursor:pointer; text-decoration:none; }
+  .hb-btn{ background:#fff; color:#0B1766; font-weight:800; font-size:14.5px; padding:14px 22px; border-radius:12px; cursor:pointer; text-decoration:none; }
   .hb-btn.ghost{ background:transparent; color:#fff; border:1.5px solid rgba(255,255,255,.45); }
   .hb-btn:hover{ transform:translateY(-1px); }
-  .hb-photo{ height:270px; border-radius:18px; background:#6b5a96 url('https://images.pexels.com/photos/36733323/pexels-photo-36733323.jpeg?auto=compress&cs=tinysrgb&w=1920') center/cover no-repeat; }
+  .hb-photo{ height:270px; border-radius:18px; background:#4F5F96 url('https://images.pexels.com/photos/36733323/pexels-photo-36733323.jpeg?auto=compress&cs=tinysrgb&w=1920') center/cover no-repeat; }
 
   /* Seções: todas no mesmo alinhamento e espaçamento */
   #login-screen .page-section{ background:transparent !important; border-top:none; padding:56px 0 8px; }
@@ -1000,17 +1000,17 @@
   #login-screen .doc-subhead{ margin-top:8px; }
   #login-screen .card-grid{ grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px; }
   #login-screen .pillars-grid{ grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); }
-  #login-screen .glass-card{ border:1px solid var(--line); border-radius:18px; box-shadow:0 2px 10px rgba(42,27,69,.04); }
-  #login-screen .glass-card:hover{ border-color:#CDBFEE; box-shadow:0 12px 30px -14px rgba(75,42,140,.35); }
+  #login-screen .glass-card{ border:1px solid var(--line); border-radius:18px; box-shadow:0 2px 10px rgba(16,25,53,.04); }
+  #login-screen .glass-card:hover{ border-color:#B9C8F3; box-shadow:0 12px 30px -14px rgba(18,38,170,.35); }
   #login-screen .culture-quote{ margin-bottom:28px; }
 
   /* Trilha "Por onde começar" */
   .trail-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
   .trail-card{ position:relative; display:flex; flex-direction:column; gap:4px; background:#fff; border:1px solid var(--line); border-radius:18px;
     padding:22px; cursor:pointer; text-decoration:none; color:var(--text-dark); transition:border-color .2s, box-shadow .2s, transform .2s; }
-  .trail-card:hover{ border-color:#CDBFEE; box-shadow:0 12px 30px -14px rgba(75,42,140,.35); transform:translateY(-2px); }
-  .trail-num{ position:absolute; top:14px; right:18px; font-family:'Fraunces',serif; font-size:38px; font-weight:700; color:#E6DEF7; line-height:1; }
-  .trail-icon{ width:46px; height:46px; border-radius:14px; background:#EFE9FB; color:var(--roxo); display:grid; place-items:center; margin-bottom:12px; }
+  .trail-card:hover{ border-color:#B9C8F3; box-shadow:0 12px 30px -14px rgba(18,38,170,.35); transform:translateY(-2px); }
+  .trail-num{ position:absolute; top:14px; right:18px; font-family:'Fraunces',serif; font-size:38px; font-weight:700; color:#DCE5FA; line-height:1; }
+  .trail-icon{ width:46px; height:46px; border-radius:14px; background:#E8EEFC; color:var(--roxo); display:grid; place-items:center; margin-bottom:12px; }
   .trail-card strong{ font-size:16px; }
   .trail-card small{ color:var(--text-dark-muted); font-size:13.5px; line-height:1.5; }
   .trail-go{ margin-top:10px; color:var(--roxo); font-weight:700; font-size:13px; }
@@ -1021,7 +1021,7 @@
   @media (max-width:980px){
     .side-nav{ transform:translateX(-100%); transition:transform .25s; box-shadow:0 0 40px rgba(0,0,0,.2); }
     body.menu-open .side-nav{ transform:none; }
-    body.menu-open .side-backdrop{ display:block; position:fixed; inset:0; background:rgba(20,10,40,.4); z-index:55; }
+    body.menu-open .side-backdrop{ display:block; position:fixed; inset:0; background:rgba(8,14,62,.4); z-index:55; }
     .mobile-bar{ display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50;
       background:#fff; border-bottom:1px solid var(--line); padding:10px 16px; }
     .menu-btn{ background:none; border:0; color:var(--roxo); padding:6px; cursor:pointer; }
@@ -1032,6 +1032,23 @@
     .hb-photo{ height:190px; }
   }
   @media (max-width:560px){ .trail-grid{ grid-template-columns:1fr; } }
+
+  /* ===== Identidade Jeronimo da Veiga (site institucional) ===== */
+  .jv-stats{ display:grid; grid-template-columns:repeat(5,1fr); gap:14px; }
+  .jv-stats div{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px; }
+  .jv-stats b{ display:block; font-family:'Fraunces',serif; font-size:26px; color:#1226AA; line-height:1.1; }
+  .jv-stats span{ font-size:13px; color:var(--text-dark-muted); }
+  .jv-emps{ display:flex; flex-wrap:wrap; gap:10px; }
+  .jv-emps span{ background:#fff; border:1px solid var(--line); border-radius:999px; padding:8px 14px; font-size:13px; color:#5B647A; }
+  .jv-emps b{ color:#101935; margin-right:6px; }
+  .jv-site{ display:inline-block; margin-top:22px; color:#1226AA; font-weight:800; font-size:14px; text-decoration:none; border:1.5px solid #B9C8F3; padding:11px 18px; border-radius:12px; }
+  .jv-site:hover{ background:#E8EEFC; }
+  .jv-footer{ max-width:1180px; margin:64px auto 0; padding:26px 0 8px; border-top:1px solid var(--line); font-size:13px; color:#5B647A; line-height:1.8; }
+  .jv-footer a{ color:#1226AA; font-weight:700; text-decoration:none; }
+  .jv-footer b{ color:#101935; }
+  .jv-footer-sm{ font-size:12px; color:#8A93AB; }
+  @media (max-width:1100px){ .jv-stats{ grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:560px){ .jv-stats{ grid-template-columns:repeat(2,1fr); } }
 </style>
 </head>
 <body>
@@ -1053,6 +1070,7 @@
     </div>
     <div class="side-label">Navegação</div>
     <a class="side-link active" data-sec="topo" onclick="irPara('topo')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span>Início</span></a>
+    <a class="side-link" data-sec="empresa" onclick="irPara('empresa')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg><span>A empresa</span></a>
     <a class="side-link" data-sec="cultura" onclick="irPara('cultura')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.35-9.5-8.5C.7 8.8 2.5 5 6 5c2 0 3.3 1 4 2 .7-1 2-2 4-2 3.5 0 5.3 3.8 3.5 7.5C19 16.65 12 21 12 21z"/></svg><span>Cultura JV</span></a>
     <a class="side-link" data-sec="escola" onclick="irPara('escola')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z"/><path d="M7 10.5V16c0 1.5 2.5 3 5 3s5-1.5 5-3v-5.5"/></svg><span>Escola de Vendas</span></a>
     <a class="side-link" data-sec="documentos" onclick="irPara('documentos')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg><span>Documentos</span></a>
@@ -1116,6 +1134,27 @@
         <span class="trail-go">Acessar →</span>
       </a>
     </div>
+  </section>
+
+  <section class="page-section" id="empresa">
+    <div class="features-head">
+      <div class="section-eyebrow">A empresa</div>
+      <h2 class="section-title">Jeronimo da Veiga · Criamos espaços</h2>
+      <p class="section-lead">Mais de 20 anos transformando sonhos em endereços. É isso que o nosso time leva para cada atendimento.</p>
+    </div>
+    <div class="jv-stats">
+      <div><b>2003</b><span>ano de fundação</span></div>
+      <div><b>200 mil m²</b><span>entregues</span></div>
+      <div><b>40+</b><span>empreendimentos</span></div>
+      <div><b>3 estados</b><span>SP, RJ e MG</span></div>
+      <div><b>160+</b><span>colaboradores</span></div>
+    </div>
+    <div class="doc-subhead" style="margin-top:26px;">Empreendimentos em destaque</div>
+    <div class="jv-emps">
+      <span><b>Conceito Poá</b> Poá · SP</span><span><b>Essenza Conceito Taboão</b> Taboão da Serra · SP</span><span><b>Signature Conceito Taboão</b> Taboão da Serra · SP</span>
+      <span><b>Conceito Califórnia</b> Nova Iguaçu · RJ</span><span><b>Super Conceito Califórnia</b> Nova Iguaçu · RJ</span><span><b>Samba Residencial</b> Grajaú · RJ</span>
+    </div>
+    <a class="jv-site" href="https://www.jeronimodaveiga.com.br/" target="_blank" rel="noopener">Conhecer o site institucional ↗</a>
   </section>
 
   <section class="page-section" id="cultura">
@@ -1423,6 +1462,12 @@
     </div>
   </section>
 
+  <footer class="jv-footer">
+    <div><b>Jeronimo da Veiga</b> · Criamos espaços · <a href="https://www.jeronimodaveiga.com.br/" target="_blank" rel="noopener">jeronimodaveiga.com.br</a></div>
+    <div>São Paulo: Rua Jeronimo da Veiga, 164, 7º andar · Itaim Bibi · (11) 3079-4940 &nbsp;|&nbsp; Rio de Janeiro: Av. Rio Branco, 138 · Centro · (21) 2516-5168</div>
+    <div class="jv-footer-sm">Universidade JV · plataforma interna de formação do time comercial</div>
+  </footer>
+
   </div>
   <!-- /.site-content -->
 
@@ -1521,7 +1566,7 @@
     document.body.classList.toggle('menu-open',open);
   }
   (function(){
-    const ids=['topo','cultura','escola','documentos','agenda','aniversariantes','campanhas'];
+    const ids=['topo','empresa','cultura','escola','documentos','agenda','aniversariantes','campanhas'];
     function marcar(){
       let atual='topo';
       ids.forEach(function(id){ const el=document.getElementById(id); if(el && el.getBoundingClientRect().top<window.innerHeight*0.35) atual=id; });
