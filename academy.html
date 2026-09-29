@@ -576,8 +576,21 @@ async function carregarProgressoCorretor(nome,creci){
 
   renderDash();
   show('s-dash');
+
+  // Veio da Universidade JV com ?mod=N — abre o módulo direto, se estiver liberado
+  if(G.abrirAposLogin){
+    const alvo=MODS.find(function(m){return m.id===G.abrirAposLogin;});
+    G.abrirAposLogin=null;
+    if(alvo){
+      if(isMLocked(alvo.id))alert('🔒 Conclua o módulo anterior com nota mínima 6,0 para desbloquear este módulo.');
+      else openMod(alvo);
+    }
+  }
 }
-function doLogout(){location.reload();}
+function doLogout(){
+  try{localStorage.removeItem('ujv_sessao_nome');localStorage.removeItem('ujv_sessao_creci');}catch(e){}
+  location.href=location.pathname;
+}
 
 // ============================================================
 // SHUFFLE (questões embaralhadas por corretor)
@@ -1215,6 +1228,21 @@ async function verRelatorio(idx){
 // INIT
 // ============================================================
 [1,2,3,4,5].forEach(n=>{getG(n).cur=0;});
+
+// Login automático quando o corretor já entrou pela Universidade JV
+(function(){
+  try{
+    const nome=localStorage.getItem('ujv_sessao_nome');
+    const creci=localStorage.getItem('ujv_sessao_creci');
+    const mod=parseInt(new URLSearchParams(location.search).get('mod'),10);
+    if(nome&&creci){
+      if(mod>=1&&mod<=7)G.abrirAposLogin=mod;
+      document.getElementById('inp-name').value=nome;
+      document.getElementById('inp-creci').value=creci;
+      doLogin();
+    }
+  }catch(e){console.warn('Auto-login:',e);}
+})();
 
 </script>
 </body>

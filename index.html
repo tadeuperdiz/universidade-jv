@@ -603,6 +603,9 @@
     box-shadow: 0 4px 18px rgba(42,27,69,0.06);
     transition: border-color .2s, box-shadow .2s, transform .2s;
   }
+  .modulo-card{ cursor:pointer; }
+  .modulo-card.modulo-bloqueado{ opacity:.6; cursor:not-allowed; }
+  .modulo-card.modulo-liberado:not(.modulo-feito) p{ color:#4B2A8C; font-weight:600; }
   .glass-card:hover{
     border-color: rgba(69,34,128,0.25);
     box-shadow: 0 10px 30px rgba(42,27,69,0.12);
@@ -1566,7 +1569,7 @@
 
   // Mesma lógica de identidade do Conceito Academy: chave = nome+creci
   function getKey(nome, creci){
-    return (nome + creci).toLowerCase().replace(/[^a-z0-9]/g, '');
+    return (nome + creci).toLowerCase().replace(/\s/g, ''); // igual ao academy.html
   }
 
   async function fazerLogin(){
@@ -1649,11 +1652,21 @@
     grid.innerHTML = MOD_ORDER.map(function(modKey, i){
       const nota = modNotas[modKey];
       const feito = nota !== undefined && nota !== null;
-      const statusTxt = feito ? 'Nota: ' + nota : (i === prog ? 'Próximo módulo' : 'Pendente');
-      const iconCheck = feito
+      const aprovado = feito && nota >= 6;
+      const anterior = i === 0 ? null : modNotas[MOD_ORDER[i-1]];
+      const liberado = i === 0 || (anterior !== undefined && anterior !== null && anterior >= 6);
+      const statusTxt = aprovado ? '✓ Concluído · Nota ' + nota
+        : feito ? 'Nota ' + nota + ' · refazer'
+        : liberado ? 'Disponível — clique para começar'
+        : '🔒 Conclua o módulo anterior';
+      const iconCheck = aprovado
         ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>'
-        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z"/><path d="M7 10.5V16c0 1.5 2.5 3 5 3s5-1.5 5-3v-5.5"/></svg>';
-      return '<div class="glass-card' + (feito ? ' modulo-feito' : '') + '">' +
+        : liberado
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z"/><path d="M7 10.5V16c0 1.5 2.5 3 5 3s5-1.5 5-3v-5.5"/></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>';
+      return '<div class="glass-card modulo-card' + (aprovado ? ' modulo-feito' : '') + (liberado ? ' modulo-liberado' : ' modulo-bloqueado') + '"' +
+        ' role="button" tabindex="0" onclick="abrirModulo(' + (i+1) + ',' + liberado + ')"' +
+        ' onkeydown="if(event.key===\'Enter\')abrirModulo(' + (i+1) + ',' + liberado + ')">' +
         '<div class="card-icon">' + iconCheck + '</div>' +
         '<h3>' + MOD_LABELS[modKey] + '</h3>' +
         '<p>' + statusTxt + '</p>' +
@@ -1668,6 +1681,15 @@
     } else {
       areasEl.style.display = 'none';
     }
+  }
+
+  // Abre o módulo direto no Conceito Academy (já logado com o mesmo nome/CRECI)
+  function abrirModulo(n, liberado){
+    if(!liberado){
+      alert('🔒 Conclua o módulo anterior com nota mínima 6,0 para desbloquear este módulo.');
+      return;
+    }
+    window.location.href = 'academy.html?mod=' + n;
   }
 
   function fazerLogout(){
