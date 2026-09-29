@@ -6,7 +6,7 @@
 <title>Universidade JV</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
@@ -1065,6 +1065,27 @@
   .reveal{ opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
   .reveal.in-view{ opacity:1; transform:none; }
   @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } .sec-divider .sec-line{ width:88px; transition:none; } }
+
+  /* ===== Cabeçalho D · Boas-vindas + atalhos ===== */
+  .hero-welcome{ background:#fff; border:1px solid var(--line); border-radius:26px; overflow:hidden; box-shadow:0 24px 60px -34px rgba(8,14,62,.45); }
+  .hw-top{ display:grid; grid-template-columns:1.25fr 1fr; align-items:stretch; }
+  .hw-text{ padding:44px 44px 40px; }
+  .hw-eyebrow{ font-family:'Poppins',sans-serif; font-size:12px; letter-spacing:.18em; text-transform:uppercase; font-weight:700; color:#1226AA; }
+  .hw-title{ font-family:'Poppins',sans-serif; font-weight:700; font-size:clamp(30px,3.2vw,42px); line-height:1.14; letter-spacing:-.01em; color:#101935; margin:12px 0 14px; }
+  .hw-title span{ color:#1226AA; }
+  .hw-sub{ font-family:'Poppins',sans-serif; color:#5B647A; font-size:16px; line-height:1.6; max-width:500px; }
+  .hw-photo{ min-height:290px; background:#0B1766 url('capa-essenza.jpg') center 42%/cover no-repeat; }
+  .hw-bar{ display:grid; grid-template-columns:repeat(4,1fr); background:#0E1C86; }
+  .hw-bar a{ display:flex; gap:12px; align-items:flex-start; padding:18px 22px; color:#fff; cursor:pointer; text-decoration:none; border-right:1px solid rgba(255,255,255,.14); transition:background .15s; font-family:'Poppins',sans-serif; }
+  .hw-bar a:last-child{ border-right:0; }
+  .hw-bar a:hover{ background:#1226AA; }
+  .hw-bar svg{ flex-shrink:0; margin-top:2px; color:#7CC8F2; }
+  .hw-bar b{ display:block; font-size:14.5px; font-weight:600; }
+  .hw-bar small{ display:block; color:#A9C2FF; font-size:12.5px; margin-top:2px; }
+  @media (max-width:980px){
+    .hw-top{ grid-template-columns:1fr; } .hw-text{ padding:28px 22px; } .hw-photo{ min-height:200px; }
+    .hw-bar{ grid-template-columns:repeat(2,1fr); } .hw-bar a:nth-child(2){ border-right:0; } .hw-bar a:nth-child(-n+2){ border-bottom:1px solid rgba(255,255,255,.14); }
+  }
 </style>
 </head>
 <body>
@@ -1101,17 +1122,21 @@
 
   <div class="site-content">
 
-  <header class="hero-banner" id="topo">
-    <div class="hb-text">
-      <div class="hb-eyebrow">Universidade JV</div>
-      <h1 class="hb-title">O conhecimento que move <em>cada venda</em>.</h1>
-      <p class="hb-sub">Cultura, formação e ferramentas do time comercial — organizados passo a passo, num só lugar.</p>
-      <div class="hb-actions">
-        <a class="hb-btn" onclick="irPara('destaques')">Começar minha trilha →</a>
-        <a class="hb-btn ghost" onclick="abrirLogin()">Entrar na Academy</a>
+  <header class="hero-welcome" id="topo">
+    <div class="hw-top">
+      <div class="hw-text">
+        <div class="hw-eyebrow">Bem-vindo à Universidade JV</div>
+        <h1 class="hw-title">O seu caminho para<br><span>vender mais e melhor</span>.</h1>
+        <p class="hw-sub">Escolha por onde começar: a formação completa do time comercial Jeronimo da Veiga está a um clique.</p>
       </div>
+      <div class="hw-photo" role="img" aria-label="Fachada do Essenza Conceito Taboão ao entardecer"></div>
     </div>
-    <div class="hb-photo" role="img" aria-label="Corretores em reunião"></div>
+    <nav class="hw-bar">
+      <a onclick="abrirLogin()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z"/><path d="M7 10.5V16c0 1.5 2.5 3 5 3s5-1.5 5-3v-5.5"/></svg><span><b>Conceito Academy</b><small>Módulos 1 e 2 + produtos</small></span></a>
+      <a onclick="irPara('cultura')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.35-9.5-8.5C.7 8.8 2.5 5 6 5c2 0 3.3 1 4 2 .7-1 2-2 4-2 3.5 0 5.3 3.8 3.5 7.5C19 16.65 12 21 12 21z"/></svg><span><b>Cultura JV</b><small>Os 5 pilares do time</small></span></a>
+      <a onclick="irPara('documentos')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg><span><b>Documentos</b><small>Modelos e links úteis</small></span></a>
+      <a onclick="irPara('campanhas')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-7-7 18-3-8-8-3z"/></svg><span><b>Campanhas</b><small>Incentivos e anúncios</small></span></a>
+    </nav>
   </header>
 
   <section class="page-section" id="destaques">
