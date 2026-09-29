@@ -383,7 +383,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#F0EFF8;min-heigh
 
 <div id="s-mod6" class="screen">
   <div class="hdr"><div class="hlogo">CONCEITO <span>ACADEMY</span></div><div class="avatar" id="av8">?</div></div>
-  <div class="mod-hero p1"><button class="back-btn" onclick="goBack()">&#8592; Voltar</button><div class="mtag">Módulo 2</div><h1>&#128214; Contorno de Objeções</h1><p>Playbook de vendas JV</p></div>
+  <div class="mod-hero p1"><button class="back-btn" onclick="goBack()">&#8592; Voltar</button><div class="mtag">Módulo 2</div><h1>&#128214; Contorno de Objeções</h1><p>Playbook de vendas JV · <a href="apostila-objecoes.pdf" download="Apostila_Modulo2_Contorno_de_Objecoes.pdf" style="color:#fff;font-weight:700">📄 Baixar apostila (PDF)</a></p></div>
   <div class="oprog"><div class="oprog-head"><span id="m6-label">Tópico 1 de 7</span><strong id="m6-pct">0%</strong></div><div class="obar"><div class="obar-fill" id="m6-fill" style="width:0%"></div></div></div>
   <div class="tnav" id="m6-nav"></div><div class="carea" id="m6-area"></div>
 </div>
@@ -1038,6 +1038,16 @@ function renderDash(){
     const c=document.createElement('div');c.className='mcard'+(ok?' mdone':'');
     c.innerHTML='<div class="micon">'+p.icon+'</div><div class="minfo"><div class="mnum">'+p.cidade+'</div><div class="mtitle">'+p.nome+'</div><div class="mdesc">'+(g.fDone?'Nota '+g.fScore+'/10':p.sub)+'</div><div class="mpw"><div class="mpf '+(ok?'done':'')+'" style="width:'+pr+'%"></div></div><div class="mpl">'+pr+'% concluído</div></div><div class="mbadge '+(ok?'done':'next')+'">'+(ok?'✓ Concluído':(pr>0?'→ Continuar':'→ Começar'))+'</div>';
     c.onclick=function(){abrirProduto(p.n);};list.appendChild(c);});
+  // Material de apoio: apostila e vídeos, liberados para consulta a qualquer momento
+  const mh=document.createElement('div');mh.className='prod-head';mh.id='area-material';
+  mh.innerHTML='<div class="prod-eyebrow">Consulta rápida</div><div class="prod-title">Material de apoio</div><div class="prod-lead">Apostila e vídeos para rever sempre que precisar — sem precisar refazer as etapas.</div>';
+  list.appendChild(mh);
+  [{ic:'📄',tag:'PDF · Módulo 2',t:'Apostila · Contorno de Objeções',d:'Os 7 tópicos do Playbook para baixar e consultar.',b:'↓ Baixar',go:function(){const a=document.createElement('a');a.href='apostila-objecoes.pdf';a.download='Apostila_Modulo2_Contorno_de_Objecoes.pdf';document.body.appendChild(a);a.click();a.remove();}},
+   {ic:'▶',tag:'Vídeo · Etapa 2',t:'Simulador Habitacional Caixa',d:'Tutorial completo do simulador da Caixa.',b:'▶ Assistir',go:function(){openLB(VIDEO_M3,'💰 Simulador Habitacional Caixa — Tutorial Completo');}},
+   {ic:'▶',tag:'Vídeo · Etapa 4',t:'CV Construtor de Vendas — como subir a pasta',d:'Tutorial do sistema CV: pastas, leads e propostas.',b:'▶ Assistir',go:function(){openLB(VIDEO_M5,'💻 CV Construtor de Vendas — Tutorial Completo');}}
+  ].forEach(function(m){const c=document.createElement('div');c.className='mcard';
+    c.innerHTML='<div class="micon">'+m.ic+'</div><div class="minfo"><div class="mnum">'+m.tag+'</div><div class="mtitle">'+m.t+'</div><div class="mdesc">'+m.d+'</div></div><div class="mbadge next">'+m.b+'</div>';
+    c.onclick=m.go;list.appendChild(c);});
   if(isTeste()){
     const t=document.createElement('div');t.style.cssText='margin-top:6px;padding:14px;border:1.5px dashed #B9C8F3;border-radius:14px;background:#F7F9FF';
     t.innerHTML='<div style="font-size:11px;font-weight:800;letter-spacing:.12em;color:#1226AA;margin-bottom:10px">🧪 MODO TESTE · abrir qualquer etapa</div><div style="display:flex;flex-wrap:wrap;gap:8px">'+
