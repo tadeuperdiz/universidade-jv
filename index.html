@@ -1093,7 +1093,7 @@
         <span class="trail-num">2</span>
         <span class="trail-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z"/><path d="M7 10.5V16c0 1.5 2.5 3 5 3s5-1.5 5-3v-5.5"/></svg></span>
         <strong>Faça a Conceito Academy</strong>
-        <small>7 módulos, prova final e certificado.</small>
+        <small>6 módulos, prova final e certificado.</small>
         <span class="trail-go">Acessar →</span>
       </a>
       <a class="trail-card" onclick="irPara('documentos')">
@@ -1194,15 +1194,9 @@
       <div class="glass-card doc-card doc-link" style="cursor:pointer;" onclick="abrirLogin()">
         <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z"/><path d="M7 10.5V16c0 1.5 2.5 3 5 3s5-1.5 5-3v-5.5"/></svg></div>
         <h3>Conceito Academy</h3>
-        <p>Trilha completa: 6 módulos, prova final e certificado.</p>
+        <p>Trilha completa: 6 módulos (incluindo o Playbook de Objeções), prova final e certificado.</p>
         <span class="doc-download">Entrar na Academy →</span>
       </div>
-      <a class="glass-card doc-card doc-link" href="academy.html?mod=6" style="cursor:pointer;">
-        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
-        <h3>Playbook de Objeções</h3>
-        <p>Módulo 6 da Academy · 7 tópicos com fixação e quiz final.</p>
-        <span class="doc-download">Iniciar módulo →</span>
-      </a>
     </div>
 
     <div class="doc-subhead" style="margin-top:40px;">Material de apoio · Playbook</div>
@@ -1211,7 +1205,7 @@
       <div class="card-icon" style="margin-bottom:0; flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></div>
       <div>
         <h3 style="margin-bottom:2px;">Baixar módulo completo (PDF)</h3>
-        <span class="doc-download">Módulo 1 · Tema: Objeções ↓</span>
+        <span class="doc-download">Apostila do Módulo 2 · Objeções ↓</span>
       </div>
     </a>
 
@@ -1531,8 +1525,8 @@
     window.addEventListener('scroll',marcar,{passive:true}); window.addEventListener('load',marcar);
   })();
 
-  const MOD_LABELS = { m1:'M1 · Produto', m2:'M2 · Atendimento', m3:'M3 · Simulação', m4:'M4 · Fluxo Pgto', m5:'M5 · CV', m6:'M6 · Objeções', prova:'M7 · Prova Final' };
-  const MOD_ORDER = ['m1','m2','m3','m4','m5','m6','prova'];
+  const MOD_LABELS = { m1:'M1 · Produto', m6:'M2 · Objeções', m2:'M3 · Atendimento', m3:'M4 · Simulação', m4:'M5 · Fluxo Pgto', m5:'M6 · CV', prova:'M7 · Prova Final' };
+  const MOD_ORDER = ['m1','m6','m2','m3','m4','m5','prova'];
 
   function abrirLogin(){
     document.getElementById('login-modal').classList.add('active');
@@ -1641,7 +1635,7 @@
 
   function renderModulos(data){
     const modNotas = data.modNotas || {};
-    const prog = data.prog || 0;
+    const prog = MOD_ORDER.filter(function(k){ return modNotas[k] !== undefined && modNotas[k] !== null && modNotas[k] >= 6; }).length;
     const cert = !!data.cert;
     const totalModulos = MOD_ORDER.length;
     const pct = Math.min(100, Math.round((prog / totalModulos) * 100));
