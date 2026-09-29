@@ -1061,6 +1061,7 @@
     <a class="side-link" data-sec="campanhas" onclick="irPara('campanhas')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-7-7 18-3-8-8-3z"/></svg><span>Campanhas</span></a>
     <div class="side-label">Formação</div>
     <a class="side-link" onclick="abrirLogin()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg><span>Entrar na Academy</span></a>
+    <a class="side-link" href="academy.html?adm=1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg><span>Painel do gestor</span></a>
     <a class="side-cta" href="/indicacao-premiada.html" target="_blank" rel="noopener">🏆 Indicação Premiada</a>
   </aside>
 
@@ -1627,8 +1628,8 @@
     document.getElementById('home-user-name').textContent = primeiroNome;
     document.getElementById('user-mini-name').textContent = primeiroNome;
     document.getElementById('avatar-mini').textContent = nome.trim().charAt(0).toUpperCase() || '?';
-    localStorage.setItem('ujv_sessao_nome', dadosCorretor.nome || '');
-    localStorage.setItem('ujv_sessao_creci', dadosCorretor.creci || '');
+    sessionStorage.setItem('ujv_sessao_nome', dadosCorretor.nome || '');
+    sessionStorage.setItem('ujv_sessao_creci', dadosCorretor.creci || '');
 
     renderModulos(dadosCorretor.data || {});
 
@@ -1691,8 +1692,8 @@
   }
 
   function fazerLogout(){
-    localStorage.removeItem('ujv_sessao_nome');
-    localStorage.removeItem('ujv_sessao_creci');
+    sessionStorage.removeItem('ujv_sessao_nome');
+    sessionStorage.removeItem('ujv_sessao_creci');
     document.getElementById('app-shell').classList.remove('active');
     document.getElementById('login-screen').classList.remove('hidden');
     document.getElementById('nome-input').value = '';
@@ -1701,9 +1702,10 @@
   }
 
   // Mantém logado se já tiver sessão salva neste navegador — busca dados atualizados
+  try{ localStorage.removeItem('ujv_sessao_nome'); localStorage.removeItem('ujv_sessao_creci'); }catch(e){}
   window.addEventListener('DOMContentLoaded', async () => {
-    const nomeSalvo = localStorage.getItem('ujv_sessao_nome');
-    const creciSalvo = localStorage.getItem('ujv_sessao_creci');
+    const nomeSalvo = sessionStorage.getItem('ujv_sessao_nome');
+    const creciSalvo = sessionStorage.getItem('ujv_sessao_creci');
     if(nomeSalvo && creciSalvo){
       const dados = await buscarOuCriarCorretor(nomeSalvo, creciSalvo);
       entrarNaAcademy(dados);

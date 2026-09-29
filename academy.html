@@ -281,6 +281,8 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#F0EFF8;min-heigh
 .pb-body ul{margin:0 0 12px 18px;font-size:13px;line-height:1.7;color:#333}
 .pb-body li{margin-bottom:4px}
 .pb-body em{color:var(--roxo-dark)}
+.site-back{background:#fff;border-bottom:1px solid #ece8f5;padding:10px 20px}.site-back a{font-size:13px;font-weight:700;color:var(--roxo);text-decoration:none}.site-back a:hover{text-decoration:underline}
+.bacc{font-size:11px;color:#8a84a0;margin-top:3px}
 </style>
   
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -326,11 +328,13 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#F0EFF8;min-heigh
     <button class="btn-pri" onclick="doLogin()">Entrar na Academy</button>
     <div class="lerr" id="login-err">Por favor preencha seu nome e CRECI.</div>
     <div class="alink" onclick="openAdmModal()">Acesso administrador</div>
+    <a class="alink" href="index.html" style="display:block;margin-top:6px;text-decoration:none">&#8592; Voltar ao site</a>
   </div>
 </div>
 
 <div id="s-dash" class="screen">
   <div class="hdr"><div class="hlogo">CONCEITO <span>ACADEMY</span></div><div class="hright"><div class="avatar" id="av1">?</div><div><div class="hname" id="hname">Corretor</div><button class="btn-out" onclick="doLogout()">Sair</button></div></div></div>
+  <div class="site-back"><a href="index.html">&#8592; Voltar ao site</a></div>
   <div class="dash-hero"><h1 id="dash-ola">Bem-vindo</h1><p>Faça o Módulo 1 etapa por etapa. Ao concluir, o Módulo 2 é liberado.</p><div class="dpbar-wrap"><div class="dpbar-fill" id="dpfill" style="width:0%"></div></div><div class="dpbar-label" id="dplabel">Módulo 1: 0 de 6 etapas</div></div>
   <div class="mods-list" id="mods-list"></div>
 </div>
@@ -480,7 +484,7 @@ function updateCorretor(nome,creci,updates){
 }
 
 async function getAllCorretores(){
-  try{if(window._fbOk){var s=await window._db.collection('corretores').get();if(!s.empty){return s.docs.map(function(d){return d.data();}).sort(function(a,b){return b.ts-a.ts;});}}}catch(e){console.warn(e);}
+  try{if(window._fbOk){var s=await window._db.collection('corretores').get();if(!s.empty){return s.docs.map(function(d){return d.data();}).sort(function(a,b){return String(b.ultimoAcesso||b.updatedAt||'').localeCompare(String(a.ultimoAcesso||a.updatedAt||''))||(b.ts||0)-(a.ts||0);});}}}catch(e){console.warn(e);}
   return Object.values(getDB()).sort(function(a,b){return b.ts-a.ts;});
 }
 
@@ -539,10 +543,19 @@ function doLogin(){
   ['av1','av2','av3','av4','av5','av6','av7','av8'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=init;});
   document.getElementById('hname').textContent=n.split(' ')[0];
   document.getElementById('dash-ola').textContent='Olá, '+n.split(' ')[0]+'! 👋';
+  try{sessionStorage.setItem('ujv_sessao_nome',n);sessionStorage.setItem('ujv_sessao_creci',c);}catch(e){}
   // Tenta carregar progresso salvo antes de criar novo registro
   carregarProgressoCorretor(n,c);
 }
 
+// Registra cada entrada do corretor: último acesso e total de acessos (aparece no painel do gestor)
+function registrarAcesso(nome,creci){
+  try{
+    const key=getKey(nome,creci);const agora=new Date().toISOString();
+    const db=getDB();if(db[key]){db[key].ultimoAcesso=agora;db[key].acessos=(db[key].acessos||0)+1;saveDB(db);}
+    if(window._fbOk){window._db.collection('corretores').doc(key).set({nome:nome,creci:creci,ultimoAcesso:agora,acessos:firebase.firestore.FieldValue.increment(1)},{merge:true}).catch(function(e){console.warn('acesso:',e);});}
+  }catch(e){console.warn('acesso:',e);}
+}
 async function carregarProgressoCorretor(nome,creci){
   const key=(nome+creci).toLowerCase().replace(/\s/g,'');
   let dadosSalvos=null;
@@ -590,6 +603,7 @@ async function carregarProgressoCorretor(nome,creci){
     saveCorretor(nome,creci,{prog:0,cert:false,nota:null,modNotas:{m1:null,m2:null,m3:null,m4:null,m5:null,m6:null,prova:null},erros:[],areas:[]});
   }
 
+  registrarAcesso(nome,creci); // depois do cadastro existir, para não ser sobrescrito
   renderDash();
   show('s-dash');
 
@@ -604,7 +618,7 @@ async function carregarProgressoCorretor(nome,creci){
   }
 }
 function doLogout(){
-  try{localStorage.removeItem('ujv_sessao_nome');localStorage.removeItem('ujv_sessao_creci');}catch(e){}
+  try{sessionStorage.removeItem('ujv_sessao_nome');sessionStorage.removeItem('ujv_sessao_creci');localStorage.removeItem('ujv_sessao_nome');localStorage.removeItem('ujv_sessao_creci');}catch(e){}
   location.href=location.pathname;
 }
 
@@ -1226,9 +1240,12 @@ async function renderAdmin(){
   document.getElementById('adm-prog').textContent=prog;
   if(corretores.length===0){document.getElementById('blist').innerHTML='<div style="text-align:center;padding:2rem;color:#aaa;font-size:13px">Nenhum corretor registrou acesso ainda.</div>';return;}
   document.getElementById('blist').innerHTML=corretores.map((c,idx)=>{
-    const d=c.data||{};const pct=Math.round(((d.prog||0)/8)*100);
-    const s=d.cert?'c':(d.prog>0?'p':'n');const lb=d.cert?'🏆 Certificado':(d.prog>0?'📚 Em andamento':'⏳ Iniciando');
-    return'<div class="brow" onclick="verRelatorio('+idx+')"><div class="bhead"><div class="bname">'+c.nome+'</div><div class="bstat '+s+'">'+lb+'</div></div><div class="bpw"><div class="bpf '+(d.cert?'c':'')+'" style="width:'+pct+'%"></div></div><div class="bpl">CRECI: '+c.creci+' · '+(d.prog||0)+' de 7 módulos · '+pct+'% · Nota prova: '+(d.nota?d.nota+'/10':'—')+'</div><button class="ver-btn">Ver relatório detalhado →</button></div>';
+    const d=c.data||{};const nt=d.modNotas||{};const okk=k=>nt[k]!=null&&nt[k]>=6;
+    const et=['m1','m2','m3','m4','m5','prova'].filter(okk).length;const m2=okk('m6');
+    const pct=Math.round(((et+(m2?1:0))/7)*100);
+    const s=m2?'c':(et>0?'p':'n');const lb=m2?'🏆 Módulos 1 e 2':(et===6?'🎓 Módulo 1 concluído':(et>0?'📚 Em andamento':'⏳ Iniciando'));
+    const ua=c.ultimoAcesso?new Date(c.ultimoAcesso).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):'—';
+    return'<div class="brow" onclick="verRelatorio('+idx+')"><div class="bhead"><div class="bname">'+c.nome+'</div><div class="bstat '+s+'">'+lb+'</div></div><div class="bpw"><div class="bpf '+(m2?'c':'')+'" style="width:'+pct+'%"></div></div><div class="bpl">CRECI: '+c.creci+' · Módulo 1: '+et+'/6 etapas · Módulo 2: '+(nt.m6!=null?nt.m6+'/10':'—')+' · Prova: '+(nt.prova!=null?nt.prova+'/10':'—')+'</div><div class="bacc">Último acesso: '+ua+(c.acessos?' · '+c.acessos+' acesso(s)':'')+'</div><button class="ver-btn">Ver relatório detalhado →</button></div>';
   }).join('');
 }
 async function verRelatorio(idx){
@@ -1263,10 +1280,11 @@ async function verRelatorio(idx){
 // Login automático quando o corretor já entrou pela Universidade JV
 (function(){
   try{
-    const nome=localStorage.getItem('ujv_sessao_nome');
-    const creci=localStorage.getItem('ujv_sessao_creci');
+    const nome=sessionStorage.getItem('ujv_sessao_nome');
+    const creci=sessionStorage.getItem('ujv_sessao_creci');
     const mod=parseInt(new URLSearchParams(location.search).get('mod'),10);
     if(mod>=1&&mod<=MODS.length)G.abrirAposLogin=mod;
+    if(new URLSearchParams(location.search).get('adm')){setTimeout(openAdmModal,200);return;}
     if(nome&&creci){
       document.getElementById('inp-name').value=nome;
       document.getElementById('inp-creci').value=creci;
